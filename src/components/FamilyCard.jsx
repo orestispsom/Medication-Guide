@@ -22,7 +22,7 @@ export default function FamilyCard({ family }) {
   return (
     <button
       onClick={() => navigate(`/family/${family.id}`)}
-      className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 text-left border border-gray-100 group relative overflow-hidden"
+      className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-lg transition-all hover:-translate-y-1 text-left border border-gray-100 dark:border-gray-700 group relative overflow-hidden"
     >
       <div
         className="absolute top-0 left-0 right-0 h-1"
@@ -37,10 +37,10 @@ export default function FamilyCard({ family }) {
           {drugCount} drugs
         </span>
       </div>
-      <h3 className="font-bold text-gray-900 text-sm leading-tight mb-1 group-hover:text-gray-700">
+      <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight mb-1 group-hover:text-gray-700 dark:group-hover:text-gray-200">
         {family.name}
       </h3>
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-gray-400 dark:text-gray-500">
         {subgroupCount} subgroup{subgroupCount !== 1 ? 's' : ''}
       </p>
     </button>

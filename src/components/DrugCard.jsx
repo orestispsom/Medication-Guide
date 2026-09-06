@@ -7,36 +7,36 @@ export default function DrugCard({ drug }) {
   return (
     <button
       onClick={() => navigate(`/drug/${drug.id}`)}
-      className="bg-white rounded-2xl p-4 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all text-left border border-gray-100 group w-full"
+      className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xs hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-500/50 transition-all text-left border border-gray-100 dark:border-gray-700 group w-full"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="font-extrabold text-gray-900 text-sm group-hover:text-indigo-600 transition-colors">
+            <h3 className="font-extrabold text-gray-900 dark:text-white text-sm group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
               {drug.name}
             </h3>
             {drug.blackBox && (
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200" title="Boxed Warning">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800" title="Boxed Warning">
                 ⚠️
               </span>
             )}
             {drug.foodRequirement && drug.foodRequirement.toLowerCase().includes('meal') && (
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100" title={drug.foodRequirement}>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800" title={drug.foodRequirement}>
                 🍽️
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-400 mt-0.5 truncate">{drug.brand}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">{drug.brand}</p>
         </div>
 
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
           {drug.targetDose && (
-            <span className="text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2 py-0.5 rounded-lg whitespace-nowrap">
+            <span className="text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800 px-2 py-0.5 rounded-lg whitespace-nowrap">
               🎯 {drug.targetDose.split('·')[0]}
             </span>
           )}
           {drug.halfLife && (
-            <span className="text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-lg whitespace-nowrap">
+            <span className="text-[10px] font-medium bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-lg whitespace-nowrap">
               ⏱️ {drug.halfLife.split('(')[0].trim()}
             </span>
           )}

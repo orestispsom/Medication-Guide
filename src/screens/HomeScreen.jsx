@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import FamilyCard from '../components/FamilyCard'
+import { useTheme } from '../context/ThemeContext'
 
 const QUICK_CHIPS = [
   { label: 'Clozapine Titration', query: 'Clozapine' },
@@ -16,6 +17,7 @@ const QUICK_CHIPS = [
 
 export default function HomeScreen() {
   const navigate = useNavigate()
+  const { theme, toggleTheme } = useTheme()
   const [searchQuery, setSearchQuery] = useState('')
   const searchInputRef = useRef(null)
 
@@ -61,22 +63,32 @@ export default function HomeScreen() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 pb-24">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold mb-3">
+    <div className="max-w-2xl mx-auto px-4 py-6 pb-28">
+      {/* Top Header with Theme Toggle */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
           <span>📚</span>
           <span>12-Module Master Psychopharmacology Compendium</span>
         </div>
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-300 hover:text-amber-500 dark:hover:text-yellow-400 hover:border-amber-300 transition-all shadow-2xs text-xs"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+        </button>
+      </div>
+
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Psychiatric Medication Guide
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Evidence-Based Pharmacodynamics, Titration & Deprescribing
         </p>
 
         {/* Stats Pill */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-[11px] font-semibold text-gray-400">
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-[11px] font-semibold text-gray-400 dark:text-gray-500">
           <span>{data.drugs.length} Monographs</span>
           <span>•</span>
           <span>{data.protocols?.length || 20} Transition Protocols</span>
@@ -91,7 +103,7 @@ export default function HomeScreen() {
       <div className="relative mb-3">
         <div className="relative flex items-center">
           <svg
-            className="w-5 h-5 text-gray-400 absolute left-4 pointer-events-none"
+            className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 pointer-events-none"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -105,17 +117,17 @@ export default function HomeScreen() {
             onChange={e => setSearchQuery(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             placeholder="Search 170+ drugs, brands (e.g. Cobenfy, Vyvanse), press / to focus..."
-            className="w-full bg-white border border-gray-200 rounded-2xl pl-11 pr-10 py-3.5 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400"
+            className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-11 pr-10 py-3.5 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
           />
           {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 text-gray-400 hover:text-gray-600 p-1 text-xs rounded-full bg-gray-100 hover:bg-gray-200"
+              className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700"
             >
               ✕
             </button>
           ) : (
-            <span className="absolute right-4 text-xs font-mono font-semibold text-gray-300 pointer-events-none border border-gray-200 rounded px-1.5 py-0.5">
+            <span className="absolute right-4 text-xs font-mono font-semibold text-gray-300 dark:text-gray-600 pointer-events-none border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5">
               /
             </span>
           )}
@@ -123,7 +135,7 @@ export default function HomeScreen() {
 
         {/* Live Search Dropdown */}
         {searchQuery.trim() && (
-          <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-30 divide-y divide-gray-50">
+          <div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-30 divide-y divide-gray-50 dark:divide-gray-700">
             {searchResults.length > 0 ? (
               searchResults.map(drug => {
                 const family = data.families.find(f => f.id === drug.familyId)
@@ -134,20 +146,20 @@ export default function HomeScreen() {
                       setSearchQuery('')
                       navigate(`/drug/${drug.id}`)
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-indigo-50/50 transition-colors flex items-center justify-between group"
+                    className="w-full px-4 py-3 text-left hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-gray-900 text-sm group-hover:text-indigo-600">
+                        <span className="font-bold text-gray-900 dark:text-white text-sm group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
                           {drug.name}
                         </span>
                         {drug.brand && (
-                          <span className="text-xs text-gray-400">
+                          <span className="text-xs text-gray-400 dark:text-gray-500">
                             ({drug.brand.split('·')[0].replace('US:', '').trim()})
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">{drug.subgroup}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{drug.subgroup}</p>
                     </div>
                     <span
                       className="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0"
@@ -162,7 +174,7 @@ export default function HomeScreen() {
                 )
               })
             ) : (
-              <div className="p-4 text-center text-sm text-gray-500">
+              <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
                 No medications matching &quot;{searchQuery}&quot;
               </div>
             )}
@@ -172,7 +184,7 @@ export default function HomeScreen() {
                   navigate(`/all-drugs?search=${encodeURIComponent(searchQuery)}`)
                   setSearchQuery('')
                 }}
-                className="w-full py-2.5 px-4 bg-gray-50 hover:bg-gray-100 text-center text-xs font-semibold text-indigo-600 transition-colors"
+                className="w-full py-2.5 px-4 bg-gray-50 dark:bg-gray-800/90 hover:bg-gray-100 dark:hover:bg-gray-700 text-center text-xs font-semibold text-indigo-600 dark:text-indigo-400 transition-colors"
               >
                 View all results in A-Z Directory →
               </button>
@@ -183,7 +195,7 @@ export default function HomeScreen() {
 
       {/* High-Yield Clinical Quick Prescribing Chips */}
       <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-5">
-        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap mr-1">
+        <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap mr-1">
           Quick Picks:
         </span>
         {QUICK_CHIPS.map(chip => (
@@ -196,7 +208,7 @@ export default function HomeScreen() {
                 setSearchQuery(chip.query)
               }
             }}
-            className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-white border border-gray-200 text-gray-700 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 shadow-2xs transition-all"
+            className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 shadow-2xs transition-all"
           >
             {chip.label}
           </button>
@@ -207,46 +219,46 @@ export default function HomeScreen() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
         <button
           onClick={() => navigate('/all-drugs')}
-          className="bg-white border border-gray-200 hover:border-indigo-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
             <span className="text-xl">📋</span>
-            <span className="text-xs font-extrabold text-gray-900 group-hover:text-indigo-600">All Drugs</span>
+            <span className="text-xs font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">All Drugs</span>
           </div>
-          <p className="text-[11px] text-gray-400 mt-1">Complete A–Z index</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">Complete A–Z index</p>
         </button>
 
         <button
           onClick={() => navigate('/cross-titration')}
-          className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 hover:border-indigo-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
+          className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/40 border border-indigo-200 dark:border-indigo-800/60 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
             <span className="text-xl">🔄</span>
-            <span className="text-xs font-extrabold text-indigo-900 group-hover:text-indigo-700">Cross-Titration</span>
+            <span className="text-xs font-extrabold text-indigo-900 dark:text-indigo-200 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">Cross-Titration</span>
           </div>
-          <p className="text-[11px] text-indigo-500 mt-1">20 Switch Protocols</p>
+          <p className="text-[11px] text-indigo-500 dark:text-indigo-400 mt-1">20 Switch Protocols</p>
         </button>
 
         <button
           onClick={() => navigate('/receptors')}
-          className="bg-white border border-gray-200 hover:border-indigo-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
             <span className="text-xl">🧬</span>
-            <span className="text-xs font-extrabold text-gray-900 group-hover:text-indigo-600">Receptors</span>
+            <span className="text-xs font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Receptors</span>
           </div>
-          <p className="text-[11px] text-gray-400 mt-1">44 Molecular Targets</p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">44 Molecular Targets</p>
         </button>
 
         <button
           onClick={() => navigate('/family/antidotes-interventional')}
-          className="bg-rose-50 border border-rose-200 hover:border-rose-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
+          className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 hover:border-rose-400 dark:hover:border-rose-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
             <span className="text-xl">🚨</span>
-            <span className="text-xs font-extrabold text-rose-900 group-hover:text-rose-700">Antidotes</span>
+            <span className="text-xs font-extrabold text-rose-900 dark:text-rose-200 group-hover:text-rose-700 dark:group-hover:text-rose-300">Antidotes</span>
           </div>
-          <p className="text-[11px] text-rose-500 mt-1">Emergency Rescues</p>
+          <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1">Emergency Rescues</p>
         </button>
       </div>
 
@@ -321,12 +333,12 @@ export default function HomeScreen() {
 
       {/* Clinical Families Section */}
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+        <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
           Clinical Domains & Drug Families
         </h2>
         <button
           onClick={() => navigate('/all-drugs')}
-          className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+          className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
         >
           Browse All ({data.drugs.length}) →
         </button>

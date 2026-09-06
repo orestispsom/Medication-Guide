@@ -81,24 +81,24 @@ export default function DrugDetailScreen() {
   const getSeverityBadge = (severity) => {
     const s = (severity || '').toLowerCase()
     if (s.includes('severe')) {
-      return { bg: 'bg-red-100 text-red-800 border-red-200', dot: 'bg-red-600' }
+      return { bg: 'bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-200 dark:border-red-900/50', dot: 'bg-red-600 dark:bg-red-500' }
     }
     if (s.includes('very high')) {
-      return { bg: 'bg-orange-100 text-orange-900 border-orange-200', dot: 'bg-orange-600' }
+      return { bg: 'bg-orange-100 dark:bg-orange-950/40 text-orange-900 dark:text-orange-300 border-orange-200 dark:border-orange-900/50', dot: 'bg-orange-600 dark:bg-orange-500' }
     }
     if (s.includes('high')) {
-      return { bg: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-600' }
+      return { bg: 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50', dot: 'bg-amber-600 dark:bg-amber-500' }
     }
     if (s.includes('mod')) {
-      return { bg: 'bg-yellow-100 text-yellow-800 border-yellow-200', dot: 'bg-yellow-500' }
+      return { bg: 'bg-yellow-100 dark:bg-yellow-950/40 text-yellow-800 dark:text-yellow-300 border-yellow-200 dark:border-yellow-900/50', dot: 'bg-yellow-500' }
     }
     if (s.includes('low')) {
-      return { bg: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500' }
+      return { bg: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900/50', dot: 'bg-emerald-500' }
     }
     if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) {
-      return { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-400' }
+      return { bg: 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/50', dot: 'bg-blue-400' }
     }
-    return { bg: 'bg-gray-100 text-gray-700 border-gray-200', dot: 'bg-gray-400' }
+    return { bg: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700', dot: 'bg-gray-400' }
   }
 
   return (
@@ -107,7 +107,7 @@ export default function DrugDetailScreen() {
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
       {/* Sticky Section Jump Bar */}
-      <div className="sticky top-2 z-30 bg-white/95 backdrop-blur-md rounded-2xl shadow-xs border border-gray-200/80 p-1.5 mb-5 flex items-center gap-1 overflow-x-auto hide-scrollbar">
+      <div className="sticky top-2 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-2xl shadow-xs border border-gray-200/80 dark:border-gray-800 p-1.5 mb-5 flex items-center gap-1 overflow-x-auto hide-scrollbar">
         {[
           { id: 'overview', label: 'Overview' },
           { id: 'benchmarks', label: 'Benchmarks' },
@@ -123,7 +123,7 @@ export default function DrugDetailScreen() {
             className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               activeSection === tab.id
                 ? 'bg-indigo-600 text-white shadow-2xs'
-                : 'text-gray-600 hover:text-indigo-600 hover:bg-gray-100'
+                : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
             {tab.label}
@@ -151,7 +151,7 @@ export default function DrugDetailScreen() {
             {drug.subgroupId && (
               <button
                 onClick={() => navigate(`/subgroup/${drug.subgroupId}`)}
-                className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               >
                 {drug.subgroup}
               </button>
@@ -167,8 +167,8 @@ export default function DrugDetailScreen() {
               }}
               className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all border ${
                 starred
-                  ? 'bg-amber-100 text-amber-800 border-amber-300 shadow-2xs'
-                  : 'bg-gray-100 text-gray-600 border-gray-200 hover:text-amber-600'
+                  ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800 shadow-2xs'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:text-amber-600 dark:hover:text-amber-400'
               }`}
               title={starred ? 'Starred in Favorites' : 'Add to Favorites'}
             >
@@ -178,7 +178,7 @@ export default function DrugDetailScreen() {
 
             <button
               onClick={handleCopyTitration}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 text-gray-700 text-xs font-semibold transition-all border border-gray-200"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 hover:text-indigo-600 dark:hover:text-indigo-300 text-gray-700 dark:text-gray-300 text-xs font-semibold transition-all border border-gray-200 dark:border-gray-700"
               title="Copy titration schedule and warnings to clipboard"
             >
               <span>📋</span>
@@ -187,7 +187,7 @@ export default function DrugDetailScreen() {
           </div>
         </div>
 
-        <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-1">
+        <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-1">
           {drug.name}
         </h1>
 
@@ -279,7 +279,7 @@ export default function DrugDetailScreen() {
         </div>
 
         {drug.brand && (
-          <p className="text-sm font-medium text-gray-500 mb-3">
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
             {drug.brand}
           </p>
         )}
@@ -287,15 +287,15 @@ export default function DrugDetailScreen() {
         {/* Target Maintenance & Max Ceiling Banners */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
           {drug.targetDose && (
-            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-3.5 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/40 dark:to-blue-950/30 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl p-3.5 flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
                 🎯
               </div>
               <div>
-                <p className="text-[10px] font-bold text-indigo-900 uppercase tracking-wider">
+                <p className="text-[10px] font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider">
                   Target Maintenance Dose
                 </p>
-                <p className="text-sm font-black text-indigo-950">
+                <p className="text-sm font-black text-indigo-950 dark:text-white">
                   {drug.targetDose}
                 </p>
               </div>
@@ -303,15 +303,15 @@ export default function DrugDetailScreen() {
           )}
 
           {drug.maxDose && (
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 rounded-2xl p-3.5 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/40 dark:to-pink-950/30 border border-purple-100 dark:border-purple-900/50 rounded-2xl p-3.5 flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
                 ⚡
               </div>
               <div>
-                <p className="text-[10px] font-bold text-purple-900 uppercase tracking-wider">
+                <p className="text-[10px] font-bold text-purple-900 dark:text-purple-300 uppercase tracking-wider">
                   Max Approved Ceiling
                 </p>
-                <p className="text-sm font-black text-purple-950 truncate">
+                <p className="text-sm font-black text-purple-950 dark:text-white truncate">
                   {drug.maxDose}
                 </p>
               </div>
@@ -323,7 +323,7 @@ export default function DrugDetailScreen() {
       {/* 4-Card Benchmark Metrics Grid */}
       {drug.benchmarkMetrics && drug.benchmarkMetrics.length > 0 && (
         <div id="benchmarks" className="mb-6 scroll-mt-20">
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
             <span>📐</span>
             <span>Clinical Benchmark Metrics</span>
           </h2>
@@ -331,18 +331,18 @@ export default function DrugDetailScreen() {
             {drug.benchmarkMetrics.map((bm, i) => (
               <div
                 key={i}
-                className="bg-white border border-gray-100 rounded-2xl p-3.5 shadow-xs hover:border-gray-200 transition-all flex flex-col justify-between"
+                className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-3.5 shadow-xs hover:border-gray-200 dark:hover:border-gray-600 transition-all flex flex-col justify-between"
               >
                 <div>
-                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">
+                  <span className="text-[10px] font-black text-gray-400 dark:text-gray-400 uppercase tracking-wider block mb-1">
                     {bm.label}
                   </span>
-                  <p className="text-sm font-black text-gray-900 leading-snug">
+                  <p className="text-sm font-black text-gray-900 dark:text-white leading-snug">
                     {bm.value}
                   </p>
                 </div>
                 {bm.detail && (
-                  <p className="text-[11px] font-medium text-indigo-600 mt-2 pt-2 border-t border-gray-50">
+                  <p className="text-[11px] font-medium text-indigo-600 dark:text-indigo-400 mt-2 pt-2 border-t border-gray-50 dark:border-gray-700/50">
                     {bm.detail}
                   </p>
                 )}
@@ -354,7 +354,7 @@ export default function DrugDetailScreen() {
 
       {/* Black Box Warning / Critical Alerts */}
       {drug.blackBox && (
-        <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 mb-6 shadow-xs">
+        <div className="bg-rose-50 dark:bg-rose-950/30 border-2 border-rose-300 dark:border-rose-800/80 rounded-2xl p-4 mb-6 shadow-xs">
           <div className="flex items-start gap-3">
             <span className="text-2xl flex-shrink-0">⚠️</span>
             <div>
@@ -362,11 +362,11 @@ export default function DrugDetailScreen() {
                 <span className="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider">
                   Boxed Warning
                 </span>
-                <h3 className="font-black text-rose-950 text-xs uppercase tracking-wide">
+                <h3 className="font-black text-rose-950 dark:text-rose-200 text-xs uppercase tracking-wide">
                   {drug.blackBox.title || 'CRITICAL CLINICAL ALERT'}
                 </h3>
               </div>
-              <p className="text-xs text-rose-950 leading-relaxed font-medium">
+              <p className="text-xs text-rose-950 dark:text-rose-200 leading-relaxed font-medium">
                 {drug.blackBox.warning}
               </p>
             </div>
@@ -376,13 +376,13 @@ export default function DrugDetailScreen() {
 
       {/* Food & Administration Mandate */}
       {drug.foodRequirement && (
-        <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3 shadow-xs">
+        <div className="bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/50 rounded-2xl p-4 mb-6 flex items-start gap-3 shadow-xs">
           <span className="text-xl flex-shrink-0">🍽️</span>
           <div>
-            <h3 className="text-xs font-extrabold text-amber-900 uppercase tracking-wider mb-0.5">
+            <h3 className="text-xs font-extrabold text-amber-900 dark:text-amber-300 uppercase tracking-wider mb-0.5">
               Food & Administration Requirements
             </h3>
-            <p className="text-xs text-amber-950 font-semibold leading-relaxed">
+            <p className="text-xs text-amber-950 dark:text-amber-200 font-semibold leading-relaxed">
               {drug.foodRequirement}
             </p>
           </div>
@@ -391,15 +391,15 @@ export default function DrugDetailScreen() {
 
       {/* Molecular Receptor Binding Profile */}
       {drug.receptors && drug.receptors.length > 0 && (
-        <div id="receptors" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
+        <div id="receptors" className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6 scroll-mt-20">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+            <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
               <span>🧬</span>
               <span>Receptor Binding Profile & Occupancy</span>
             </h2>
             <button
               onClick={() => navigate('/receptors')}
-              className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
             >
               Receptor Guide →
             </button>
@@ -412,12 +412,12 @@ export default function DrugDetailScreen() {
               const width = Math.min(Math.max(r.occupancy || 50, 15), 100)
 
               return (
-                <div key={r.receptor} className="bg-gray-50/60 rounded-2xl p-3 border border-gray-100">
+                <div key={r.receptor} className="bg-gray-50/60 dark:bg-gray-900/60 rounded-2xl p-3 border border-gray-100 dark:border-gray-700/60">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
                       <ReceptorTag receptorId={r.receptor} />
                       {r.rawTarget && (
-                        <span className="text-xs font-semibold text-gray-700">
+                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
                           {r.rawTarget}
                         </span>
                       )}
@@ -425,12 +425,12 @@ export default function DrugDetailScreen() {
 
                     <div className="flex items-center gap-2">
                       {r.ki && (
-                        <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-900/50">
                           Ki: {r.ki}
                         </span>
                       )}
                       {r.action && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-gray-200 text-gray-800">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                           {r.action}
                         </span>
                       )}
@@ -438,7 +438,7 @@ export default function DrugDetailScreen() {
                   </div>
 
                   {/* Occupancy Bar */}
-                  <div className="h-4 bg-gray-200 rounded-full overflow-hidden mb-2">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
                     <div
                       className="h-full rounded-full transition-all flex items-center justify-end pr-2"
                       style={{
@@ -455,8 +455,8 @@ export default function DrugDetailScreen() {
 
                   {/* Clinical Action explanation */}
                   {r.clinicalAction && (
-                    <p className="text-xs text-gray-600 font-medium leading-relaxed mt-1">
-                      <span className="font-bold text-gray-800">Clinical Action:</span> {r.clinicalAction}
+                    <p className="text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed mt-1">
+                      <span className="font-bold text-gray-800 dark:text-gray-200">Clinical Action:</span> {r.clinicalAction}
                     </p>
                   )}
                 </div>
@@ -468,12 +468,12 @@ export default function DrugDetailScreen() {
 
       {/* Adverse Effect Risk Footprint (8 Domains) */}
       {drug.adverseFootprint && drug.adverseFootprint.length > 0 && (
-        <div id="adverse" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div id="adverse" className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6 scroll-mt-20">
+          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>🛡️</span>
             <span>Adverse Effect Risk Footprint</span>
           </h2>
-          <p className="text-xs text-gray-500 mb-4">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
             Standardized 8-domain clinical risk profile according to compendium pharmacology benchmarks:
           </p>
 
@@ -483,9 +483,9 @@ export default function DrugDetailScreen() {
               return (
                 <div
                   key={i}
-                  className="bg-gray-50/70 border border-gray-100 rounded-2xl p-3 flex items-center justify-between gap-2"
+                  className="bg-gray-50/70 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-700/60 rounded-2xl p-3 flex items-center justify-between gap-2"
                 >
-                  <span className="text-xs font-bold text-gray-800">
+                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200">
                     {af.domain}
                   </span>
                   <span className={`text-[10px] font-black px-2.5 py-1 rounded-full border flex items-center gap-1.5 flex-shrink-0 ${badge.bg}`}>
@@ -501,15 +501,15 @@ export default function DrugDetailScreen() {
 
       {/* Structured 4-Step Titration Schedule */}
       {drug.titrationSchedule && drug.titrationSchedule.length > 0 && (
-        <div id="titration" className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
+        <div id="titration" className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs mb-6 scroll-mt-20">
           <div className="flex items-center justify-between gap-2 mb-4">
-            <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+            <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
               <span>📈</span>
               <span>Structured 4-Step Titration Schedule</span>
             </h2>
             <button
               onClick={handleCopyTitration}
-              className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
             >
               Copy Protocol →
             </button>
@@ -519,23 +519,23 @@ export default function DrugDetailScreen() {
             {drug.titrationSchedule.map((step, idx) => (
               <div
                 key={idx}
-                className="bg-gray-50/70 border border-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-indigo-50/20 transition-colors"
+                className="bg-gray-50/70 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-700/60 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/30 transition-colors"
               >
                 <div className="flex items-start gap-3">
                   <span className="px-2.5 py-1 rounded-xl bg-indigo-600 text-white font-black text-xs flex-shrink-0 shadow-2xs">
                     {step.step || `STEP ${idx + 1}`}
                   </span>
                   <div>
-                    <h3 className="font-extrabold text-sm text-gray-900">
+                    <h3 className="font-extrabold text-sm text-gray-900 dark:text-white">
                       {step.dose}
                     </h3>
                     {step.timing && (
-                      <p className="text-xs font-semibold text-indigo-700 mt-0.5">
+                      <p className="text-xs font-semibold text-indigo-700 dark:text-indigo-400 mt-0.5">
                         ⏱️ {step.timing}
                       </p>
                     )}
                     {step.directive && (
-                      <p className="text-xs text-gray-600 mt-1">
+                      <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
                         {step.directive}
                       </p>
                     )}
@@ -549,52 +549,52 @@ export default function DrugDetailScreen() {
 
       {/* Special Populations & Organ Impairment */}
       {drug.specialPopulations && (
-        <div id="special" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div id="special" className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6 scroll-mt-20">
+          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>👥</span>
             <span>Special Populations & Organ Adjustments</span>
           </h2>
 
           <div className="space-y-2.5">
             {drug.specialPopulations.perinatal && (
-              <div className="bg-pink-50/40 rounded-2xl p-3 border border-pink-100">
-                <span className="text-[10px] font-black text-pink-700 uppercase tracking-wider block mb-0.5">
+              <div className="bg-pink-50/40 dark:bg-pink-950/20 rounded-2xl p-3 border border-pink-100 dark:border-pink-900/40">
+                <span className="text-[10px] font-black text-pink-700 dark:text-pink-400 uppercase tracking-wider block mb-0.5">
                   Perinatal & Pregnancy
                 </span>
-                <p className="text-xs text-gray-700 font-medium">
+                <p className="text-xs text-gray-700 dark:text-gray-300 font-medium">
                   {drug.specialPopulations.perinatal}
                 </p>
               </div>
             )}
 
             {drug.specialPopulations.pediatric && (
-              <div className="bg-blue-50/40 rounded-2xl p-3 border border-blue-100">
-                <span className="text-[10px] font-black text-blue-700 uppercase tracking-wider block mb-0.5">
+              <div className="bg-blue-50/40 dark:bg-blue-950/20 rounded-2xl p-3 border border-blue-100 dark:border-blue-900/40">
+                <span className="text-[10px] font-black text-blue-700 dark:text-blue-400 uppercase tracking-wider block mb-0.5">
                   Pediatric Considerations
                 </span>
-                <p className="text-xs text-gray-700 font-medium">
+                <p className="text-xs text-gray-700 dark:text-gray-300 font-medium">
                   {drug.specialPopulations.pediatric}
                 </p>
               </div>
             )}
 
             {drug.specialPopulations.geriatric && (
-              <div className="bg-amber-50/40 rounded-2xl p-3 border border-amber-100">
-                <span className="text-[10px] font-black text-amber-700 uppercase tracking-wider block mb-0.5">
+              <div className="bg-amber-50/40 dark:bg-amber-950/20 rounded-2xl p-3 border border-amber-100 dark:border-amber-900/40">
+                <span className="text-[10px] font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider block mb-0.5">
                   Geriatric & Beers Criteria
                 </span>
-                <p className="text-xs text-gray-700 font-medium">
+                <p className="text-xs text-gray-700 dark:text-gray-300 font-medium">
                   {drug.specialPopulations.geriatric}
                 </p>
               </div>
             )}
 
             {drug.specialPopulations.organImpairment && (
-              <div className="bg-purple-50/40 rounded-2xl p-3 border border-purple-100">
-                <span className="text-[10px] font-black text-purple-700 uppercase tracking-wider block mb-0.5">
+              <div className="bg-purple-50/40 dark:bg-purple-950/20 rounded-2xl p-3 border border-purple-100 dark:border-purple-900/40">
+                <span className="text-[10px] font-black text-purple-700 dark:text-purple-400 uppercase tracking-wider block mb-0.5">
                   Renal & Hepatic Impairment
                 </span>
-                <p className="text-xs text-gray-700 font-medium">
+                <p className="text-xs text-gray-700 dark:text-gray-300 font-medium">
                   {drug.specialPopulations.organImpairment}
                 </p>
               </div>
@@ -604,8 +604,8 @@ export default function DrugDetailScreen() {
       )}
 
       {/* Indications & Off-Label */}
-      <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
-        <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
+        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <span>🎯</span>
           <span>Indications & Clinical Utility</span>
         </h2>
@@ -617,7 +617,7 @@ export default function DrugDetailScreen() {
             </p>
             <div className="space-y-1.5">
               {drug.indications.map((ind, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-gray-800">
+                <div key={i} className="flex items-start gap-2 text-xs text-gray-800 dark:text-gray-200">
                   <span className="text-emerald-500 font-bold mt-0.5">✓</span>
                   <span className="font-semibold">{ind}</span>
                 </div>
@@ -633,7 +633,7 @@ export default function DrugDetailScreen() {
             </p>
             <div className="space-y-1.5">
               {drug.offLabel.map((ind, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                <div key={i} className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
                   <span className="text-gray-400 mt-0.5">○</span>
                   <span>{ind}</span>
                 </div>
@@ -645,15 +645,15 @@ export default function DrugDetailScreen() {
 
       {/* Clinical Pearls */}
       {drug.clinicalPearls && drug.clinicalPearls.length > 0 && (
-        <div id="pearls" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div id="pearls" className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6 scroll-mt-20">
+          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>💡</span>
             <span>High-Yield Clinical Practice Pearls</span>
           </h2>
           <div className="space-y-2.5">
             {drug.clinicalPearls.map((pearl, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-xs text-gray-700 bg-indigo-50/40 rounded-2xl p-3 border border-indigo-100/50">
-                <span className="text-indigo-600 font-black text-sm">✓</span>
+              <div key={i} className="flex items-start gap-2.5 text-xs text-gray-700 dark:text-gray-300 bg-indigo-50/40 dark:bg-indigo-950/20 rounded-2xl p-3 border border-indigo-100/50 dark:border-indigo-900/40">
+                <span className="text-indigo-600 dark:text-indigo-400 font-black text-sm">✓</span>
                 <span className="leading-relaxed font-medium">{pearl}</span>
               </div>
             ))}
@@ -698,7 +698,7 @@ export default function DrugDetailScreen() {
 
       {/* DataSource Footer */}
       <div className="mt-8 text-center pb-6">
-        <span className="text-[11px] px-3 py-1 rounded-full bg-gray-100 text-gray-500 font-medium">
+        <span className="text-[11px] px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">
           Source: {drug.dataSource || '12-Module Master Psychopharmacology Reference Compendium'}
         </span>
       </div>

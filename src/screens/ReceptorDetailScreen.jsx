@@ -75,26 +75,26 @@ export default function ReceptorDetailScreen() {
             <h1 className="text-2xl font-black" style={{ color: receptor.color }}>
               {receptor.id}
             </h1>
-            <p className="text-sm font-semibold text-gray-700">{receptor.fullName}</p>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{receptor.fullName}</p>
           </div>
         </div>
 
-        <div className="space-y-3 pt-2 border-t border-gray-200/60">
+        <div className="space-y-3 pt-2 border-t border-gray-200/60 dark:border-gray-700/60">
           <div>
             <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5" style={{ color: receptor.color }}>
               Molecular Mechanism & Neurobiology
             </span>
-            <p className="text-xs text-gray-800 font-medium leading-relaxed">
+            <p className="text-xs text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
               {receptor.action}
             </p>
           </div>
 
           {receptor.therapeuticEffect && (
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5 text-emerald-700">
+              <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5 text-emerald-700 dark:text-emerald-400">
                 Therapeutic Efficacy Profile
               </span>
-              <p className="text-xs text-gray-800 font-medium leading-relaxed">
+              <p className="text-xs text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
                 {receptor.therapeuticEffect}
               </p>
             </div>
@@ -102,19 +102,19 @@ export default function ReceptorDetailScreen() {
 
           {receptor.sideEffects && (
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5 text-rose-700">
+              <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5 text-rose-700 dark:text-rose-400">
                 Adverse Liabilities & Risks
               </span>
-              <p className="text-xs text-gray-800 font-medium leading-relaxed">
+              <p className="text-xs text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
                 {receptor.sideEffects}
               </p>
             </div>
           )}
         </div>
 
-        <div className="mt-4 pt-3 border-t border-gray-200/40 flex items-center justify-between text-[11px] text-gray-500">
+        <div className="mt-4 pt-3 border-t border-gray-200/40 dark:border-gray-700/40 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
           <span>Target Category: Molecular Psychopharmacology</span>
-          <span className="px-2 py-0.5 rounded-full bg-white/70 text-gray-600 font-semibold">
+          <span className="px-2 py-0.5 rounded-full bg-white/70 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 font-semibold">
             {drugsWithBinding.length} drugs documented
           </span>
         </div>
@@ -123,19 +123,19 @@ export default function ReceptorDetailScreen() {
       {/* Drugs Section Header */}
       <div className="flex items-center justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
+          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
             Drugs with {receptor.id} Affinity ({drugsWithBinding.length})
           </h2>
-          <p className="text-[11px] text-gray-500">
+          <p className="text-[11px] text-gray-500 dark:text-gray-400">
             Binding affinities and occupancy percentages documented in the compendium
           </p>
         </div>
 
-        <div className="flex bg-gray-100 p-1 rounded-xl flex-shrink-0 text-xs font-bold">
+        <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-xl flex-shrink-0 text-xs font-bold">
           <button
             onClick={() => setSortBy('occupancy')}
             className={`px-2.5 py-1 rounded-lg transition-all ${
-              sortBy === 'occupancy' ? 'bg-white text-indigo-700 shadow-xs' : 'text-gray-500 hover:text-gray-900'
+              sortBy === 'occupancy' ? 'bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 shadow-xs' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
             Occupancy %
@@ -143,7 +143,7 @@ export default function ReceptorDetailScreen() {
           <button
             onClick={() => setSortBy('name')}
             className={`px-2.5 py-1 rounded-lg transition-all ${
-              sortBy === 'name' ? 'bg-white text-indigo-700 shadow-xs' : 'text-gray-500 hover:text-gray-900'
+              sortBy === 'name' ? 'bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 shadow-xs' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
             A–Z
@@ -162,7 +162,7 @@ export default function ReceptorDetailScreen() {
                   className="w-2 h-2 rounded-full"
                   style={{ backgroundColor: famObj?.color || '#6366f1' }}
                 />
-                <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+                <h3 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                   {familyName} ({drugs.length})
                 </h3>
               </div>
@@ -175,26 +175,26 @@ export default function ReceptorDetailScreen() {
                     <div
                       key={drug.id}
                       onClick={() => navigate(`/drug/${drug.id}`)}
-                      className="bg-white rounded-2xl p-3.5 border border-gray-100 shadow-xs hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer group"
+                      className="bg-white dark:bg-gray-800 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-700 shadow-xs hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-500/50 transition-all cursor-pointer group"
                     >
                       <div className="flex items-start justify-between gap-3 mb-1.5">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-extrabold text-sm text-gray-900 group-hover:text-indigo-600 transition-colors">
+                            <span className="font-extrabold text-sm text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                               {drug.name}
                             </span>
                             {drug.brand && (
-                              <span className="text-xs text-gray-400 font-medium">
+                              <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
                                 ({drug.brand.replace('US:', '').split('·')[0].trim()})
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-gray-500">{drug.subgroup}</p>
+                          <p className="text-[11px] text-gray-500 dark:text-gray-400">{drug.subgroup}</p>
                         </div>
 
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {b?.ki && (
-                            <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
                               Ki: {b.ki}
                             </span>
                           )}
@@ -208,7 +208,7 @@ export default function ReceptorDetailScreen() {
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden mb-2">
+                      <div className="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
                         <div
                           className="h-full rounded-full"
                           style={{
@@ -220,8 +220,8 @@ export default function ReceptorDetailScreen() {
 
                       {/* Clinical Action Note */}
                       {b?.clinicalAction && (
-                        <p className="text-[11px] text-gray-600 line-clamp-2">
-                          <span className="font-semibold text-gray-700">Clinical Action:</span> {b.clinicalAction}
+                        <p className="text-[11px] text-gray-600 dark:text-gray-300 line-clamp-2">
+                          <span className="font-semibold text-gray-700 dark:text-gray-200">Clinical Action:</span> {b.clinicalAction}
                         </p>
                       )}
                     </div>
@@ -232,8 +232,8 @@ export default function ReceptorDetailScreen() {
           )
         })
       ) : (
-        <div className="bg-white rounded-2xl p-8 text-center border border-gray-100">
-          <p className="text-sm text-gray-500">No drugs documented with primary affinity for {receptor.id}.</p>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700">
+          <p className="text-sm text-gray-500 dark:text-gray-400">No drugs documented with primary affinity for {receptor.id}.</p>
         </div>
       )}
     </div>

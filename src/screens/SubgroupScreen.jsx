@@ -20,8 +20,8 @@ export default function SubgroupScreen() {
           {family?.name}
         </p>
       </div>
-      <h1 className="text-2xl font-extrabold text-gray-900 mb-1">{subgroup.name}</h1>
-      <p className="text-sm text-gray-500 mb-5">{drugs.length} medication{drugs.length !== 1 ? 's' : ''}</p>
+      <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-1">{subgroup.name}</h1>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">{drugs.length} medication{drugs.length !== 1 ? 's' : ''}</p>
 
       <div className="space-y-3">
         {drugs.map(drug => (
