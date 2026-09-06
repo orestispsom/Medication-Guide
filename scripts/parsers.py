@@ -1,57 +1,97 @@
-﻿# scripts/parsers.py
+# scripts/parsers.py
 import re
 
 def clean(t):
     if not t: return ''
     return re.sub(r'\s+', ' ', t).strip()
 
-def map_receptor_id(raw_name):
+def normalize_text(text):
+    if not text:
+        return ""
+    subs = {
+        '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4',
+        '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9',
+        'ₐ': 'A', 'ᵦ': 'B', 'ᵧ': 'C',
+        '꜀': 'C', 'ᶜ': 'C',
+        'α': 'Alpha', 'Α': 'Alpha',
+        'β': 'Beta', 'Β': 'Beta',
+        'γ': 'Gamma', 'Γ': 'Gamma',
+        '𝐾𝑖': 'Ki', 'Ki': 'Ki', 'Κi': 'Ki',
+        '–': '-', '—': '-'
+    }
+    for k, v in subs.items():
+        text = text.replace(k, v)
+    return text
+
+def extract_receptor_ids(raw_name):
     n = raw_name.upper()
-    if '5-HT1A' in n or '5HT1A' in n: return '5HT1A'
-    if '5-HT1B' in n or '5HT1B' in n: return '5HT1B'
-    if '5-HT1D' in n or '5HT1D' in n: return '5HT1D'
-    if '5-HT2A' in n or '5HT2A' in n: return '5HT2A'
-    if '5-HT2C' in n or '5HT2C' in n: return '5HT2C'
-    if '5-HT3' in n or '5HT3' in n: return '5HT3'
-    if '5-HT6' in n or '5HT6' in n: return '5HT6'
-    if '5-HT7' in n or '5HT7' in n: return '5HT7'
-    if 'D1' in n: return 'D1'
-    if 'D2' in n: return 'D2'
-    if 'D3' in n: return 'D3'
-    if 'D4' in n: return 'D4'
-    if 'H1' in n: return 'H1'
-    if 'H3' in n: return 'H3'
-    if 'M1' in n: return 'M1'
-    if 'M2' in n: return 'M2'
-    if 'M3' in n: return 'M3'
-    if 'M4' in n: return 'M4'
-    if 'ALPHA-1' in n or 'ALPHA1' in n or 'Α1' in n: return 'Alpha1'
-    if 'ALPHA-2' in n or 'ALPHA2' in n or 'Α2' in n: return 'Alpha2A'
-    if 'GABA-A' in n or 'GABAA' in n: return 'GABAA'
-    if 'GABA-B' in n or 'GABAB' in n: return 'GABAB'
-    if 'OREXIN' in n or 'OX1R' in n or 'OX2R' in n: return 'OX1R_OX2R'
-    if 'NMDA' in n: return 'NMDA'
-    if 'AMPA' in n: return 'AMPA'
-    if 'MELATONIN' in n or 'MT1' in n or 'MT2' in n: return 'MT1MT2'
-    if 'SIGMA' in n or 'SIGMA-1' in n: return 'Sigma1'
-    if 'MU-OPIOID' in n or 'MOR' in n: return 'MOR'
-    if 'KAPPA-OPIOID' in n or 'KOR' in n: return 'KOR'
-    if 'DELTA-OPIOID' in n or 'DOR' in n: return 'DOR'
-    if 'SERT' in n or 'SEROTONIN TRANSPORTER' in n: return 'SERT'
-    if 'NET' in n or 'NOREPINEPHRINE TRANSPORTER' in n: return 'NET'
-    if 'DAT' in n or 'DOPAMINE TRANSPORTER' in n: return 'DAT'
-    if 'VMAT2' in n: return 'VMAT2'
-    if 'SV2A' in n: return 'SV2A'
-    if 'SODIUM' in n or 'NAV' in n or 'NA+' in n: return 'Nav'
-    if 'CALCIUM' in n or 'CAV' in n or 'CA2+' in n: return 'Cav'
-    if 'HERG' in n: return 'hERG'
-    if 'RYANODINE' in n or 'RYR1' in n: return 'RyR1'
-    if 'ACHE' in n or 'ACETYLCHOLINESTERASE' in n: return 'AChE'
-    if 'BUCHE' in n or 'BUTYRYLCHOLINESTERASE' in n: return 'BuChE'
-    if 'MAO-A' in n: return 'MAO-A'
-    if 'MAO-B' in n: return 'MAO-B'
-    if 'ALDH' in n or 'ALDEHYDE' in n: return 'ALDH'
-    return None
+    found = []
+    
+    # 5-HT
+    for sub in ['1A', '1B', '1D', '2A', '2C', '3', '6', '7']:
+        if f'5-HT{sub}' in n or f'5HT{sub}' in n or f'5 - HT{sub}' in n or f'5 -HT{sub}' in n:
+            found.append(f'5HT{sub}')
+            
+    # Dopamine
+    for d in ['1', '2', '3', '4', '5']:
+        if f'D{d}' in n or f'D {d}' in n or f'DOPAMINE D{d}' in n:
+            found.append(f'D{d}')
+            
+    # Histamine
+    for h in ['1', '2', '3', '4']:
+        if f'H{h}' in n or f'H {h}' in n or f'HISTAMINE H{h}' in n:
+            found.append(f'H{h}')
+            
+    # Muscarinic
+    for m in ['1', '2', '3', '4', '5']:
+        if f'M{m}' in n or f'M {m}' in n or f'MUSCARINIC M{m}' in n:
+            found.append(f'M{m}')
+            
+    # Adrenergic
+    if 'ALPHA-1' in n or 'ALPHA 1' in n or 'ALPHA1' in n or 'ADRENERGIC ALPHA-1' in n:
+        found.append('Alpha1')
+    if 'ALPHA-2' in n or 'ALPHA 2' in n or 'ALPHA2' in n or 'ADRENERGIC ALPHA-2' in n:
+        found.append('Alpha2A')
+    if 'BETA-1' in n or 'BETA1' in n:
+        found.append('Beta1')
+        
+    # GABA
+    if 'GABA-A' in n or 'GABAA' in n or 'GABA A' in n:
+        found.append('GABAA')
+    if 'GABA-B' in n or 'GABAB' in n or 'GABA B' in n:
+        found.append('GABAB')
+        
+    # Transporters
+    if 'SERT' in n or 'SEROTONIN TRANSPORTER' in n or 'SEROTONIN REUPTAKE' in n or 'SEROTONERGIC REUPTAKE' in n:
+        found.append('SERT')
+    if 'NET' in n or 'NOREPINEPHRINE TRANSPORTER' in n or 'NOREPINEPHRINE REUPTAKE' in n:
+        found.append('NET')
+    if 'DAT' in n or 'DOPAMINE TRANSPORTER' in n or 'DOPAMINE REUPTAKE' in n or 'DOPAMINERGIC REUPTAKE' in n:
+        found.append('DAT')
+    if 'VMAT2' in n or 'VMAT-2' in n:
+        found.append('VMAT2')
+        
+    # Glutamate / Channels / Enzymes / Others
+    if 'NMDA' in n: found.append('NMDA')
+    if 'AMPA' in n: found.append('AMPA')
+    if 'OX1R' in n or 'OX2R' in n or 'OREXIN' in n: found.append('OX1R_OX2R')
+    if 'MT1' in n or 'MT2' in n or 'MELATONIN' in n: found.append('MT1MT2')
+    if 'SIGMA' in n: found.append('Sigma1')
+    if 'MOR' in n or 'MU-OPIOID' in n: found.append('MOR')
+    if 'KOR' in n or 'KAPPA-OPIOID' in n: found.append('KOR')
+    if 'DOR' in n or 'DELTA-OPIOID' in n: found.append('DOR')
+    if 'SV2A' in n: found.append('SV2A')
+    if 'SODIUM' in n or 'NAV' in n: found.append('Nav')
+    if 'CALCIUM' in n or 'CAV' in n or 'ALPHA-2-DELTA' in n: found.append('Cav')
+    if 'HERG' in n: found.append('hERG')
+    if 'RYANODINE' in n or 'RYR1' in n: found.append('RyR1')
+    if 'ACHE' in n or 'ACETYLCHOLINESTERASE' in n: found.append('AChE')
+    if 'BUCHE' in n or 'BUTYRYLCHOLINESTERASE' in n: found.append('BuChE')
+    if 'MAO-A' in n: found.append('MAO-A')
+    if 'MAO-B' in n: found.append('MAO-B')
+    if 'ALDH' in n or 'ALDEHYDE' in n: found.append('ALDH')
+    
+    return list(dict.fromkeys(found))
 
 def parse_protocol(doc, p1, p2, index):
     t1 = doc[p1-1].get_text()
@@ -207,12 +247,12 @@ def parse_protocol(doc, p1, p2, index):
     }
 
 def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, existing_drugs_dict=None):
-    t1 = doc[p1-1].get_text()
-    t2 = doc[p2-1].get_text()
+    t1 = normalize_text(doc[p1-1].get_text())
+    t2 = normalize_text(doc[p2-1].get_text())
     lines1 = [l.strip() for l in t1.splitlines() if l.strip()]
     lines2 = [l.strip() for l in t2.splitlines() if l.strip()]
 
-    m_name = re.search(r'CLINICAL MONOGRAPH · (.*?) \(PART 1', t1)
+    m_name = re.search(r'CLINICAL MONOGRAPH\s*[·\s]\s*(.*?)\s*\(PART 1', t1, re.I)
     raw_name = m_name.group(1).strip() if m_name else (lines1[3] if len(lines1) > 3 else 'Unknown')
     
     name_words = []
@@ -287,16 +327,19 @@ def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, 
             benchmarks.append({'label': 'TARGET CLINICAL DOSE', 'value': target_dose, 'detail': max_dose or 'Titrate to clinical efficacy'})
 
     receptors = []
-    rec_sec = re.search(r'(?:RECEPTOR BINDING PROFILE|TRANSPORTER & RECEPTOR|HIGH-POTENCY TRIAZOLO|RECEPTOR PROFILE|MOLECULAR PHARMACODYNAMICS|INTRACELLULAR TARGETS|HYDROLYSIS & PHARMACODYNAMICS)(.*?)(?:ADVERSE EFFECT RISK|VISUAL SAFETY MATRIX)', t1, re.DOTALL)
-    if rec_sec:
-        r_text = rec_sec.group(1)
-        blocks = re.split(r'\n(?=[A-Z0-9][A-Za-z0-9\-\s/αβγ]+(?:Receptor|Transporter|Channel|Enzyme|Subunit|Cleavage|Activation|Affinity))', r_text)
+    seen_recs = set()
+    m_sec = re.search(r'\n([A-Z0-9\s&/\-\(\),]+(?:PHARMACODYNAMICS|PROFILE|TARGETS|MECHANISM|RECEPTORS?))\s*\n(.*?)(?=\n(?:ADVERSE EFFECT RISK|VISUAL SAFETY MATRIX|\Z))', t1, re.DOTALL)
+    if m_sec:
+        r_text = m_sec.group(2)
+        blocks = re.split(r'\n(?=[A-Z0-9][A-Za-z0-9\-\s/&(),·]+\b(?:Receptor|Receptors|Transporter|Transporters|Channel|Channels|Enzyme|Enzymes|Subunit|Subunits|Adrenergic|Pump|System|Complex|Site)\b)', r_text)
         for blk in blocks:
             b_lines = [clean(l) for l in blk.splitlines() if clean(l)]
             if not b_lines: continue
             raw_target = b_lines[0]
-            rec_id = map_receptor_id(raw_target)
-            if not rec_id: continue
+            if any(w in raw_target for w in ['Profile', 'Fingerprint', 'Matrix', 'Overview', 'Dynamics']):
+                continue
+            rec_ids = extract_receptor_ids(raw_target)
+            if not rec_ids: continue
             
             ki = ''
             action = ''
@@ -304,29 +347,41 @@ def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, 
             for bl in b_lines[1:]:
                 if 'Clinical Action:' in bl:
                     clinical_action = clean(bl.replace('Clinical Action:', ''))
-                elif any(u in bl.lower() for u in ['nm', 'µm', 'um', 'sub-nanomolar', 'nanomolar', 'micromolar', 'ki ~', 'ki=']):
-                    ki = bl
-                elif not action and any(a in bl.lower() for a in ['agonist', 'antagonist', 'block', 'inhibit', 'modulat', 'partial', 'inverse', 'ligand', 'channel', 'high', 'potent', 'weak']):
+                elif any(u in bl.lower() for u in ['nm', 'µm', 'um', 'sub-nanomolar', 'nanomolar', 'micromolar', 'ki ~', 'ki=', 'ki =']):
+                    if not ki: ki = bl
+                elif not action and any(a in bl.lower() for a in ['agonist', 'antagonist', 'block', 'inhibit', 'modulat', 'partial', 'inverse', 'ligand', 'channel', 'high', 'potent', 'weak', 'ultra']):
                     action = bl
                     
-            occupancy = 50
-            if 'very high' in action.lower() or 'sub-nanomolar' in ki.lower() or 'potent' in action.lower():
+            occupancy = 60
+            act_lower = action.lower()
+            ki_lower = ki.lower()
+            m_occ = re.search(r'(\d+)\s*[-–]\s*(\d+)%\s*occupancy', blk, re.I)
+            if m_occ:
+                occupancy = (int(m_occ.group(1)) + int(m_occ.group(2))) // 2
+            elif 'sub-nanomolar' in act_lower or 'sub-nanomolar' in ki_lower or 'ultra-potent' in act_lower:
+                occupancy = 95
+            elif 'very high' in act_lower or 'potent block' in act_lower or 'high affinity' in act_lower:
                 occupancy = 85
-            elif 'weak' in action.lower() or 'low' in action.lower():
-                occupancy = 25
-            elif 'partial' in action.lower():
-                occupancy = 65
-            elif 'moderate' in action.lower():
+            elif 'partial' in act_lower:
+                occupancy = 70
+            elif 'weak' in act_lower or 'low' in act_lower:
+                occupancy = 35
+            elif 'moderate' in act_lower:
                 occupancy = 50
-            
-            receptors.append({
-                'receptor': rec_id,
-                'rawTarget': raw_target,
-                'occupancy': occupancy,
-                'ki': ki or 'High Affinity',
-                'action': action or 'Receptor Ligand',
-                'clinicalAction': clinical_action or f"Active modulation of {raw_target} contributes to clinical efficacy and tolerability."
-            })
+            else:
+                occupancy = 75
+
+            for rid in rec_ids:
+                if rid in seen_recs: continue
+                seen_recs.add(rid)
+                receptors.append({
+                    'receptor': rid,
+                    'rawTarget': raw_target,
+                    'occupancy': occupancy,
+                    'ki': ki or 'High Affinity',
+                    'action': action or 'Receptor Ligand',
+                    'clinicalAction': clinical_action or f"Active modulation of {raw_target} contributes to clinical efficacy and tolerability."
+                })
 
     if not receptors and prev_drug.get('receptors'):
         receptors = prev_drug.get('receptors')

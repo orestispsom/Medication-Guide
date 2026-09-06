@@ -114,9 +114,11 @@ export default function DrugDetailScreen() {
           { id: 'benchmarks', label: 'Benchmarks' },
           { id: 'receptors', label: 'Receptors' },
           { id: 'adverse', label: 'Adverse Footprint' },
+          { id: 'indications', label: 'Indications' },
+          { id: 'warnings', label: 'FDA / Safety' },
           { id: 'titration', label: 'Titration' },
           { id: 'special', label: 'Special Pop' },
-          { id: 'pearls', label: 'Pearls' },
+          { id: 'pearls', label: 'High-Yield' },
         ].map(tab => (
           <button
             key={tab.id}
@@ -327,43 +329,6 @@ export default function DrugDetailScreen() {
         </div>
       )}
 
-      {/* FDA Boxed Warning / Critical Alerts (Dignified, Medical-Grade) */}
-      {drug.blackBox && (
-        <div className="bg-red-50/50 dark:bg-red-950/20 border-2 border-red-500/80 dark:border-red-500/60 rounded-2xl p-5 mb-8 shadow-xs">
-          <div className="flex items-start gap-3">
-            <span className="text-xl flex-shrink-0 mt-0.5">⚠️</span>
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="px-2.5 py-0.5 rounded bg-red-600 text-white text-xs font-black uppercase tracking-wider">
-                  FDA Boxed Warning
-                </span>
-                <h3 className="font-bold text-red-900 dark:text-red-200 text-xs sm:text-sm uppercase tracking-wide">
-                  {drug.blackBox.title || 'CRITICAL CLINICAL ALERT'}
-                </h3>
-              </div>
-              <p className="text-sm sm:text-base text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-                {drug.blackBox.warning}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Food & Administration Mandate */}
-      {drug.foodRequirement && (
-        <div className="bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/60 rounded-2xl p-4 sm:p-5 mb-8 flex items-start gap-3 shadow-xs">
-          <span className="text-xl flex-shrink-0 mt-0.5">🍽️</span>
-          <div>
-            <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider mb-1">
-              Food & Administration Requirements
-            </h3>
-            <p className="text-sm sm:text-base text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-              {drug.foodRequirement}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Molecular Receptor Binding Profile */}
       {drug.receptors && drug.receptors.length > 0 && (
         <div id="receptors" className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
@@ -380,7 +345,7 @@ export default function DrugDetailScreen() {
               onClick={() => navigate('/receptors')}
               className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer"
             >
-              Guide →
+              Receptor Guide →
             </button>
           </div>
 
@@ -477,6 +442,82 @@ export default function DrugDetailScreen() {
         </div>
       )}
 
+      {/* Indications & Clinical Utility */}
+      <div id="indications" className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
+        <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
+          Indications & Clinical Utility
+        </h2>
+
+        {drug.indications && drug.indications.length > 0 && (
+          <div className="mb-5">
+            <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2.5">
+              FDA Approved / Core Indications
+            </p>
+            <div className="space-y-2">
+              {drug.indications.map((ind, i) => (
+                <div key={i} className="flex items-start gap-2.5 text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">✓</span>
+                  <span>{ind}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {drug.offLabel && drug.offLabel.length > 0 && (
+          <div>
+            <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2.5">
+              Evidence-Based Off-Label Uses
+            </p>
+            <div className="space-y-2">
+              {drug.offLabel.map((ind, i) => (
+                <div key={i} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <span className="text-slate-400 mt-0.5">○</span>
+                  <span>{ind}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* FDA Boxed Warning / Critical Alerts (Dignified, Medical-Grade) */}
+      {drug.blackBox && (
+        <div id="warnings" className="bg-red-50/50 dark:bg-red-950/20 border-2 border-red-500/80 dark:border-red-500/60 rounded-2xl p-5 mb-8 shadow-xs scroll-mt-20">
+          <div className="flex items-start gap-3">
+            <span className="text-xl flex-shrink-0 mt-0.5">⚠️</span>
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="px-2.5 py-0.5 rounded bg-red-600 text-white text-xs font-black uppercase tracking-wider">
+                  FDA Boxed Warning
+                </span>
+                <h3 className="font-bold text-red-900 dark:text-red-200 text-xs sm:text-sm uppercase tracking-wide">
+                  {drug.blackBox.title || 'CRITICAL CLINICAL ALERT'}
+                </h3>
+              </div>
+              <p className="text-sm sm:text-base text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+                {drug.blackBox.warning}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Food & Administration Mandate */}
+      {drug.foodRequirement && (
+        <div id="administration" className="bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/60 rounded-2xl p-4 sm:p-5 mb-8 flex items-start gap-3 shadow-xs scroll-mt-20">
+          <span className="text-xl flex-shrink-0 mt-0.5">🍽️</span>
+          <div>
+            <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider mb-1">
+              Food & Administration Requirements
+            </h3>
+            <p className="text-sm sm:text-base text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+              {drug.foodRequirement}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Structured 4-Step Titration Schedule */}
       {drug.titrationSchedule && drug.titrationSchedule.length > 0 && (
         <div id="titration" className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
@@ -529,53 +570,68 @@ export default function DrugDetailScreen() {
         </div>
       )}
 
-      {/* Special Populations & Organ Impairment */}
+      {/* Special Populations & Organ Adjustments (Simplified 2x2 Box) */}
       {drug.specialPopulations && (
         <div id="special" className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
-          <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
+          <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-1">
             Special Populations & Organ Adjustments
           </h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+            Prescribing considerations across vulnerable demographics and clearance pathways
+          </p>
 
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {drug.specialPopulations.perinatal && (
-              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-l-4 border-l-pink-500">
-                <span className="text-xs font-bold text-pink-700 dark:text-pink-400 uppercase tracking-wider block mb-1">
-                  Perinatal & Pregnancy
-                </span>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-t-2 border-t-pink-500 flex flex-col justify-start">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-base">🤰</span>
+                  <span className="text-xs font-bold text-pink-700 dark:text-pink-400 uppercase tracking-wider">
+                    Perinatal & Pregnancy
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
                   {drug.specialPopulations.perinatal}
                 </p>
               </div>
             )}
 
             {drug.specialPopulations.pediatric && (
-              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-l-4 border-l-blue-500">
-                <span className="text-xs font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider block mb-1">
-                  Pediatric Considerations
-                </span>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-t-2 border-t-blue-500 flex flex-col justify-start">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-base">🧒</span>
+                  <span className="text-xs font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">
+                    Pediatric Considerations
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
                   {drug.specialPopulations.pediatric}
                 </p>
               </div>
             )}
 
             {drug.specialPopulations.geriatric && (
-              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-l-4 border-l-amber-500">
-                <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block mb-1">
-                  Geriatric & Beers Criteria
-                </span>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-t-2 border-t-amber-500 flex flex-col justify-start">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-base">👴</span>
+                  <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                    Geriatric & Beers Criteria
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
                   {drug.specialPopulations.geriatric}
                 </p>
               </div>
             )}
 
             {drug.specialPopulations.organImpairment && (
-              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-l-4 border-l-purple-500">
-                <span className="text-xs font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider block mb-1">
-                  Renal & Hepatic Impairment
-                </span>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+              <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80 border-t-2 border-t-purple-500 flex flex-col justify-start">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-base">🩺</span>
+                  <span className="text-xs font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider">
+                    Renal & Hepatic Clearance
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
                   {drug.specialPopulations.organImpairment}
                 </p>
               </div>
@@ -584,46 +640,7 @@ export default function DrugDetailScreen() {
         </div>
       )}
 
-      {/* Indications & Off-Label */}
-      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8">
-        <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">
-          Indications & Clinical Utility
-        </h2>
-
-        {drug.indications && drug.indications.length > 0 && (
-          <div className="mb-5">
-            <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2.5">
-              FDA Approved / Core Indications
-            </p>
-            <div className="space-y-2">
-              {drug.indications.map((ind, i) => (
-                <div key={i} className="flex items-start gap-2.5 text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">✓</span>
-                  <span>{ind}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {drug.offLabel && drug.offLabel.length > 0 && (
-          <div>
-            <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2.5">
-              Evidence-Based Off-Label Uses
-            </p>
-            <div className="space-y-2">
-              {drug.offLabel.map((ind, i) => (
-                <div key={i} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  <span className="text-slate-400 mt-0.5">○</span>
-                  <span>{ind}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Clinical Pearls */}
+      {/* High-Yield Clinical Practice Pearls */}
       {drug.clinicalPearls && drug.clinicalPearls.length > 0 && (
         <div id="pearls" className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
           <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-4">

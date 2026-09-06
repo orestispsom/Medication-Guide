@@ -1,4 +1,4 @@
-﻿# scripts/run_build.py
+# scripts/run_build.py
 import fitz
 import json
 import os
@@ -12,7 +12,7 @@ from catalog import MONOGRAPH_ENTRIES
 from parsers import parse_monograph, parse_protocol
 
 PDF_PATH = r'C:\Users\orest\OneDrive\Υπολογιστής\Master Psychopharm.pdf'
-OUTPUT_PATH = r'src/data.json'
+OUTPUT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'data.json'))
 
 doc = fitz.open(PDF_PATH)
 print(f"Compendium PDF loaded: {len(doc)} pages.")
@@ -20,7 +20,7 @@ print(f"Compendium PDF loaded: {len(doc)} pages.")
 # Load existing data.json to preserve rich indications/CYP mappings
 existing_drugs_dict = {}
 try:
-    with open('src/data.json', 'r', encoding='utf-8') as f_in:
+    with open(OUTPUT_PATH, 'r', encoding='utf-8') as f_in:
         old_data = json.load(f_in)
         for d in old_data.get('drugs', []):
             existing_drugs_dict[d['id']] = d
