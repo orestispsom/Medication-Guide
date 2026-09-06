@@ -11,8 +11,9 @@ export default function ReceptorDetailScreen() {
   if (!receptor) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">Receptor Target Not Found</h2>
-        <p className="text-sm text-gray-500 mb-4">The specified molecular receptor does not exist in the database.</p>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Receptor Target Not Found</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">The specified molecular receptor does not exist in the database.</p>
+
         <button
           onClick={() => navigate('/receptors')}
           className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-indigo-700"
@@ -81,7 +82,7 @@ export default function ReceptorDetailScreen() {
 
         <div className="space-y-3 pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5" style={{ color: receptor.color }}>
+            <span className="text-xs font-black uppercase tracking-wider block mb-0.5" style={{ color: receptor.color }}>
               Molecular Mechanism & Neurobiology
             </span>
             <p className="text-xs text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
@@ -91,7 +92,7 @@ export default function ReceptorDetailScreen() {
 
           {receptor.therapeuticEffect && (
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5 text-emerald-700 dark:text-emerald-400">
+              <span className="text-xs font-black uppercase tracking-wider block mb-0.5 text-emerald-700 dark:text-emerald-400">
                 Therapeutic Efficacy Profile
               </span>
               <p className="text-xs text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
@@ -102,7 +103,7 @@ export default function ReceptorDetailScreen() {
 
           {receptor.sideEffects && (
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider block mb-0.5 text-rose-700 dark:text-rose-400">
+              <span className="text-xs font-black uppercase tracking-wider block mb-0.5 text-rose-700 dark:text-rose-400">
                 Adverse Liabilities & Risks
               </span>
               <p className="text-xs text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
@@ -194,7 +195,7 @@ export default function ReceptorDetailScreen() {
 
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {b?.ki && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
                               Ki: {b.ki}
                             </span>
                           )}

@@ -107,7 +107,7 @@ export default function HomeScreen() {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             onKeyDown={handleSearchKeyDown}
-            placeholder="Search 170+ drugs, brands (e.g. Cobenfy, Vyvanse), press / to focus..."
+            placeholder="Search drugs, brands, or indications (press / to focus)..."
             className="w-full bg-transparent text-slate-900 dark:text-white rounded-2xl pl-12 pr-12 py-3.5 text-base shadow-none focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium"
           />
           {searchQuery ? (
@@ -208,29 +208,25 @@ export default function HomeScreen() {
       </div>
 
       {/* 1. CLINICAL DOMAINS & DRUG FAMILIES FIRST */}
-      <div className="mb-9">
+      <div className="mb-10">
         <div className="flex items-end justify-between mb-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-bold mb-1 border border-blue-100 dark:border-blue-900/50">
-              <span>📚</span>
-              <span>Core Reference Taxonomy</span>
-            </div>
-            <h2 className="font-display text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h2 className="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Clinical Domains & Drug Families
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Browse 170+ monographs across 12 psychopharmacologic classes
+              170+ monographs across 12 psychopharmacologic classes
             </p>
           </div>
           <button
             onClick={() => navigate('/all-drugs')}
             className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap pb-0.5"
           >
-            Browse All 170+ →
+            View All 170+ →
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {data.families.map(family => (
             <FamilyCard key={family.id} family={family} />
           ))}
@@ -238,14 +234,10 @@ export default function HomeScreen() {
       </div>
 
       {/* 2. POINT-OF-CARE CLINICAL TOOLS */}
-      <div className="mb-9">
+      <div className="mb-10">
         <div className="flex items-end justify-between mb-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold mb-1 border border-emerald-100 dark:border-emerald-900/50">
-              <span>⚡</span>
-              <span>Interactive Clinical Engines</span>
-            </div>
-            <h2 className="font-display text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h2 className="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Point-of-Care Bedside Tools
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
@@ -262,40 +254,33 @@ export default function HomeScreen() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {[
-            { id: 'cpz', name: 'CPZ Antipsychotic Equivalence', badge: 'Dosing Engine', desc: 'Calculate chlorpromazine equivalents, cumulative D2 exposure, and switch targets.', icon: '🎭' },
-            { id: 'lithium', name: 'Lithium 12h TDM & Cockcroft-Gault', badge: 'Kinetics Engine', desc: 'Predict steady-state trough levels, dose adjustments, and eGFR safety clearance.', icon: '🧪' },
-            { id: 'clozapine', name: 'Clozapine REMS ANC & Rechallenge', badge: 'Safety Algorithm', desc: 'Neutropenia triage, ANC monitoring schedules, and BEN benign ethnic neutropenia rules.', icon: '🩸' },
-            { id: 'cyp', name: 'CYP450 Interaction Matrix', badge: 'Collision Checker', desc: 'Screen 1A2, 2D6, 3A4, 2C19 inhibitors and inducers with dose-adjustment guidance.', icon: '⚡' },
-            { id: 'bzd', name: 'Ashton Benzodiazepine Taper', badge: 'Taper Generator', desc: 'Diazepam substitution and gradual 10%–25% stepped reduction timelines.', icon: '⚖️' },
-            { id: 'emergency', name: 'Emergency Toxicity Playbook', badge: 'Emergency Protocol', desc: 'Stepwise resuscitation orders for NMS, Serotonin Syndrome, and Catatonia.', icon: '🚨' },
+            { id: 'cpz', name: 'CPZ Antipsychotic Equivalence', desc: 'Calculate chlorpromazine equivalents, cumulative D2 exposure, and switch targets.', icon: '🎭' },
+            { id: 'lithium', name: 'Lithium 12h TDM & Cockcroft-Gault', desc: 'Predict steady-state trough levels, dose adjustments, and eGFR safety clearance.', icon: '🧪' },
+            { id: 'clozapine', name: 'Clozapine REMS ANC & Rechallenge', desc: 'Neutropenia triage, ANC monitoring schedules, and benign ethnic neutropenia rules.', icon: '🩸' },
+            { id: 'cyp', name: 'CYP450 Interaction Matrix', desc: 'Screen 1A2, 2D6, 3A4, 2C19 inhibitors and inducers with dose-adjustment guidance.', icon: '⚡' },
+            { id: 'bzd', name: 'Ashton Benzodiazepine Taper', desc: 'Diazepam substitution and gradual 10%–25% stepped reduction timelines.', icon: '⚖️' },
+            { id: 'emergency', name: 'Emergency Toxicity Playbook', desc: 'Stepwise resuscitation orders for NMS, Serotonin Syndrome, and Catatonia.', icon: '🚨' },
           ].map(tool => (
             <button
               key={tool.id}
               onClick={() => navigate(`/tools?tab=${tool.id}`)}
-              className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.35)] hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all duration-200 text-left group cursor-pointer flex flex-col justify-between"
+              className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all duration-200 text-left group cursor-pointer"
             >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center text-xl shadow-2xs border border-slate-200/60 dark:border-slate-700/60">
-                    {tool.icon}
-                  </span>
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60">
-                    {tool.badge}
-                  </span>
-                </div>
-
-                <h3 className="font-display font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5">
-                  {tool.name}
-                </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
-                  {tool.desc}
-                </p>
+              <div className="flex items-center justify-between gap-2 mb-2.5">
+                <span className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center text-xl border border-slate-200/60 dark:border-slate-700/60">
+                  {tool.icon}
+                </span>
+                <span className="text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all text-sm font-bold">
+                  →
+                </span>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                <span>Launch Engine</span>
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </div>
+              <h3 className="font-display font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5">
+                {tool.name}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                {tool.desc}
+              </p>
             </button>
           ))}
         </div>
@@ -303,13 +288,12 @@ export default function HomeScreen() {
 
       {/* 3. KEY CLINICAL REFERENCE DIRECTORIES */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 text-xs font-bold mb-1 border border-purple-100 dark:border-purple-900/50">
-          <span>📑</span>
-          <span>Cross-Cutting Indexes</span>
-        </div>
-        <h2 className="font-display text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+        <h2 className="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
           Reference Compendium Directories
         </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+          Direct access to cross-cutting compendium directories and matrices
+        </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
           <button

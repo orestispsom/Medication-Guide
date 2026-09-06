@@ -86,14 +86,15 @@ export default function ComparisonTableScreen() {
 
   const getSeverityStyle = (severity) => {
     const s = (severity || '').toLowerCase()
-    if (s.includes('severe')) return 'bg-red-500 text-white font-black'
-    if (s.includes('very high')) return 'bg-orange-500 text-white font-bold'
-    if (s.includes('high')) return 'bg-amber-500 text-white font-bold'
-    if (s.includes('mod')) return 'bg-yellow-400 text-gray-900 font-semibold'
-    if (s.includes('low')) return 'bg-emerald-500 text-white font-medium'
-    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) return 'bg-blue-400 text-white font-medium'
-    return 'bg-gray-100 text-gray-400'
+    if (s.includes('severe')) return 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 font-bold'
+    if (s.includes('very high')) return 'bg-orange-50 dark:bg-orange-950/50 text-orange-800 dark:text-orange-300 border border-orange-200/80 dark:border-orange-900/60 font-bold'
+    if (s.includes('high')) return 'bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/60 font-bold'
+    if (s.includes('mod')) return 'bg-yellow-50 dark:bg-yellow-950/40 text-yellow-800 dark:text-yellow-300 border border-yellow-200/80 dark:border-yellow-900/60 font-semibold'
+    if (s.includes('low')) return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 font-medium'
+    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) return 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 font-medium'
+    return 'bg-slate-50 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500'
   }
+
 
   const togglePinDrug = (drugId) => {
     if (pinnedDrugIds.includes(drugId)) {
@@ -192,7 +193,7 @@ export default function ComparisonTableScreen() {
               <select
                 value={selectedSubgroupId}
                 onChange={e => setSelectedSubgroupId(e.target.value)}
-                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="all">All Subgroups ({subgroupsInFamily.length})</option>
                 {subgroupsInFamily.map(sg => (
@@ -208,7 +209,7 @@ export default function ComparisonTableScreen() {
               value={drugFilter}
               onChange={e => setDrugFilter(e.target.value)}
               placeholder="Filter drug columns..."
-              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 w-48 ml-auto placeholder:text-gray-400 dark:placeholder:text-gray-500"
+              className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 w-48 ml-auto placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
         )}
@@ -217,22 +218,22 @@ export default function ComparisonTableScreen() {
       {/* Mode 1 & 2: Full Matrix Table */}
       {comparisonMode !== 'head-to-head' ? (
         drugs.length > 0 ? (
-          <div className="overflow-x-auto rounded-3xl border border-gray-200 dark:border-gray-800 shadow-xs bg-white dark:bg-gray-900 mb-4">
+          <div className="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs bg-white dark:bg-[#0b0f19] mb-4">
             <table className="min-w-full border-collapse text-xs">
               <thead>
-                <tr className="bg-gray-50/90 dark:bg-gray-800/90 border-b border-gray-200 dark:border-gray-700">
-                  <th className="sticky left-0 bg-gray-50 dark:bg-gray-800 z-20 px-4 py-3 text-left font-bold text-gray-500 dark:text-gray-400 min-w-[150px] uppercase tracking-wider text-xs">
+                <tr className="bg-slate-50/90 dark:bg-[#111827]/90 border-b border-slate-200 dark:border-slate-700">
+                  <th className="sticky left-0 bg-slate-50 dark:bg-[#111827] z-20 px-4 py-3 text-left font-bold text-slate-500 dark:text-slate-400 min-w-[150px] uppercase tracking-wider text-xs">
                     {comparisonMode === 'receptors' ? 'Receptor Target' : 'Adverse Domain'}
                   </th>
                   {drugs.map(drug => (
                     <th
                       key={drug.id}
                       onClick={() => navigate(`/drug/${drug.id}`)}
-                      className="px-3 py-3 text-center font-bold text-gray-900 dark:text-white border-l border-gray-200/80 dark:border-gray-800 min-w-[110px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      className="px-3 py-3 text-center font-bold text-slate-900 dark:text-white border-l border-slate-200/80 dark:border-slate-800 min-w-[110px] cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     >
-                      <div className="text-sm font-bold text-gray-900 dark:text-white">{drug.name}</div>
+                      <div className="text-sm font-bold text-slate-900 dark:text-white">{drug.name}</div>
                       {drug.targetDose && (
-                        <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+                        <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                           {drug.targetDose.split('·')[0]}
                         </div>
                       )}
@@ -246,24 +247,24 @@ export default function ComparisonTableScreen() {
                   receptorIds.map(receptorId => {
                     const recObj = data.receptors.find(r => r.id === receptorId)
                     return (
-                      <tr key={receptorId} className="hover:bg-gray-50/60 dark:hover:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                      <tr key={receptorId} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                         <td
                           onClick={() => navigate(`/receptors/${receptorId}`)}
-                          className="sticky left-0 bg-white dark:bg-gray-900 z-10 px-4 py-2.5 font-bold border-r border-gray-200/80 dark:border-gray-800 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          className="sticky left-0 bg-white dark:bg-[#0b0f19] z-10 px-4 py-2.5 font-bold border-r border-slate-200/80 dark:border-slate-800 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         >
                           <div className="flex items-center gap-2">
                             <span
                               className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                               style={{ backgroundColor: recObj?.color || '#6366f1' }}
                             />
-                            <span className="font-bold text-sm text-gray-900 dark:text-white">{receptorId}</span>
+                            <span className="font-bold text-sm text-slate-900 dark:text-white">{receptorId}</span>
                           </div>
                         </td>
 
                         {drugs.map(drug => {
                           const b = getBinding(drug, receptorId)
                           return (
-                            <td key={drug.id} className="px-3 py-2.5 text-center border-l border-gray-100 dark:border-gray-800">
+                            <td key={drug.id} className="px-3 py-2.5 text-center border-l border-slate-100 dark:border-slate-800">
                               {b ? (
                                 <div className="flex flex-col items-center">
                                   <span
@@ -276,13 +277,13 @@ export default function ComparisonTableScreen() {
                                     {b.occupancy}%
                                   </span>
                                   {b.ki && (
-                                    <span className="text-[10px] text-gray-500 font-medium mt-0.5">
+                                    <span className="text-xs text-slate-500 font-medium mt-0.5">
                                       {b.ki}
                                     </span>
                                   )}
                                 </div>
                               ) : (
-                                <span className="text-gray-300 font-medium">—</span>
+                                <span className="text-slate-300 font-medium">—</span>
                               )}
                             </td>
                           )
@@ -292,8 +293,8 @@ export default function ComparisonTableScreen() {
                   })
                 ) : (
                   standardAdverseDomains.map(domain => (
-                    <tr key={domain} className="hover:bg-gray-50/60 dark:hover:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                      <td className="sticky left-0 bg-white dark:bg-gray-900 z-10 px-4 py-2.5 font-bold text-gray-800 dark:text-gray-200 border-r border-gray-200/80 dark:border-gray-800 text-xs">
+                    <tr key={domain} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                      <td className="sticky left-0 bg-white dark:bg-[#0b0f19] z-10 px-4 py-2.5 font-bold text-slate-800 dark:text-slate-200 border-r border-slate-200/80 dark:border-slate-800 text-xs">
                         {domain}
                       </td>
 
@@ -301,7 +302,7 @@ export default function ComparisonTableScreen() {
                         const sev = getAdverseSeverity(drug, domain)
                         const badgeClass = getSeverityStyle(sev)
                         return (
-                          <td key={drug.id} className="px-3 py-2.5 text-center border-l border-gray-100 dark:border-gray-800">
+                          <td key={drug.id} className="px-3 py-2.5 text-center border-l border-slate-100 dark:border-slate-800">
                             <span className={`text-xs px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap ${badgeClass}`}>
                               {sev}
                             </span>
@@ -315,20 +316,20 @@ export default function ComparisonTableScreen() {
             </table>
           </div>
         ) : (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400">No drugs matching filter criteria in this family.</p>
+          <div className="bg-white dark:bg-[#111827] rounded-2xl p-8 text-center border border-slate-100 dark:border-slate-700">
+            <p className="text-sm text-slate-500 dark:text-slate-400">No drugs matching filter criteria in this family.</p>
           </div>
         )
       ) : (
         /* Mode 3: Head-to-Head Side-by-Side View */
         <div className="max-w-4xl mx-auto">
           {/* Drug Selector Bar */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-200 dark:border-gray-700 mb-6 shadow-xs">
+          <div className="bg-white dark:bg-[#111827] rounded-2xl p-4 border border-slate-200 dark:border-slate-700 mb-6 shadow-xs">
             <div className="flex items-center justify-between gap-2 mb-3">
-              <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Select Up to 4 Drugs to Compare:
               </span>
-              <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                 {pinnedDrugs.length} of 4 selected
               </span>
             </div>
@@ -342,8 +343,8 @@ export default function ComparisonTableScreen() {
                     onClick={() => togglePinDrug(d.id)}
                     className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all border ${
                       isPinned
-                        ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-2xs'
-                        : 'bg-gray-50 dark:bg-gray-700/60 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:border-gray-400'
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-2xs'
+                        : 'bg-slate-50 dark:bg-slate-700/60 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-600 hover:border-slate-400'
                     }`}
                   >
                     {isPinned ? '✓ ' : '+ '}
@@ -407,7 +408,7 @@ export default function ComparisonTableScreen() {
                           return (
                             <div key={domain} className="flex items-center justify-between text-xs">
                               <span className="text-slate-700 dark:text-slate-300 font-medium truncate max-w-[130px]">{domain.split('&')[0]}</span>
-                              <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${getSeverityStyle(sev)}`}>
+                              <span className={`text-xs px-2 py-0.5 rounded font-bold ${getSeverityStyle(sev)}`}>
                                 {sev}
                               </span>
                             </div>
@@ -431,7 +432,7 @@ export default function ComparisonTableScreen() {
       )}
 
       {/* Legend & Guide */}
-      <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500 pt-2 pb-6">
+      <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3 text-xs text-slate-500 dark:text-slate-400 pt-2 pb-6">
         {comparisonMode === 'receptors' ? (
           <>
             <span className="flex items-center gap-1.5">
@@ -439,22 +440,23 @@ export default function ComparisonTableScreen() {
               <span>Occupancy (%)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="text-[11px] font-bold text-gray-700">Ki</span>
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Ki</span>
               <span>Binding affinity (nM)</span>
             </span>
-            <span className="text-gray-400">Click any column header to view full drug monograph</span>
+            <span className="text-slate-400">Click any column header to view full drug monograph</span>
           </>
         ) : (
           <>
-            <span className="px-2 py-0.5 rounded bg-red-500 text-white font-bold text-[10px]">Severe</span>
-            <span className="px-2 py-0.5 rounded bg-orange-500 text-white font-bold text-[10px]">Very High</span>
-            <span className="px-2 py-0.5 rounded bg-amber-500 text-white font-bold text-[10px]">High</span>
-            <span className="px-2 py-0.5 rounded bg-yellow-400 text-gray-900 font-semibold text-[10px]">Moderate</span>
-            <span className="px-2 py-0.5 rounded bg-emerald-500 text-white font-medium text-[10px]">Low</span>
-            <span className="px-2 py-0.5 rounded bg-blue-400 text-white font-medium text-[10px]">Near Zero / Sparing</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 font-bold text-xs">Severe</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-orange-50 dark:bg-orange-950/50 text-orange-800 dark:text-orange-300 border border-orange-200/80 dark:border-orange-900/60 font-bold text-xs">Very High</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/60 font-bold text-xs">High</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-yellow-50 dark:bg-yellow-950/40 text-yellow-800 dark:text-yellow-300 border border-yellow-200/80 dark:border-yellow-900/60 font-semibold text-xs">Moderate</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 font-medium text-xs">Low</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 font-medium text-xs">Near Zero / Sparing</span>
           </>
         )}
       </div>
+
     </div>
   )
 }

@@ -79,10 +79,6 @@ export default function CrossTitrationScreen() {
 
       {/* Header */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold mb-2">
-          <span>🔄</span>
-          <span>Module 12: Cross-Titration & Deprescribing Master Tool</span>
-        </div>
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Transition & Deprescribing Protocols
         </h1>
@@ -90,6 +86,7 @@ export default function CrossTitrationScreen() {
           20 evidence-based switch algorithms with 4-phase timelines, receptor shift dynamics, risk stratification meters, and emergency rescue guides.
         </p>
       </div>
+
 
       {/* Quick Direct Switch Finder Box */}
       <div className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-5 mb-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
@@ -219,13 +216,13 @@ export default function CrossTitrationScreen() {
                 </span>
               </div>
 
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
                 {proto.classTransition}
               </p>
 
-              <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700/60">
+              <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-700/60">
                 {proto.switchType && (
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">
                     {proto.switchType}
                   </span>
                 )}
@@ -235,7 +232,7 @@ export default function CrossTitrationScreen() {
                   </span>
                 )}
                 {proto.coreMandate && (
-                  <span className="text-xs text-gray-600 dark:text-gray-400 italic ml-auto truncate max-w-xs">
+                  <span className="text-xs text-slate-600 dark:text-slate-400 italic ml-auto truncate max-w-xs">
                     Mandate: {proto.coreMandate}
                   </span>
                 )}
@@ -244,9 +241,9 @@ export default function CrossTitrationScreen() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700 shadow-xs">
-          <p className="text-base font-bold text-gray-800 dark:text-white mb-1">No transition protocols found</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Try clearing your switch matcher inputs or adjusting search keywords.</p>
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-8 text-center border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+          <p className="text-base font-bold text-slate-900 dark:text-white mb-1">No transition protocols found</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">Try clearing your switch matcher inputs or adjusting search keywords.</p>
           <button
             onClick={() => {
               setSearchQuery('')
@@ -254,11 +251,12 @@ export default function CrossTitrationScreen() {
               setToDrugFilter('')
               setSelectedSwitchType('ALL')
             }}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-xs"
+            className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold shadow-xs hover:opacity-90 cursor-pointer"
           >
             Reset Filters
           </button>
         </div>
+
       )}
     </div>
   )
@@ -383,7 +381,7 @@ function ProtocolDetailView({ protocol, onBack }) {
     if (s.includes('HIGH')) return { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', bar: 'bg-orange-500', width: '75%' }
     if (s.includes('MODERATE')) return { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', bar: 'bg-amber-500', width: '50%' }
     if (s.includes('LOW')) return { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', bar: 'bg-emerald-500', width: '25%' }
-    return { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', bar: 'bg-gray-400', width: '15%' }
+    return { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200', bar: 'bg-slate-400', width: '15%' }
   }
 
   return (
@@ -515,35 +513,35 @@ function ProtocolDetailView({ protocol, onBack }) {
       )}
 
       {/* Patient Transition Schedule Date Picker */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-5 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+          <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
             <span>🗓️</span>
             <span>Patient Transition Schedule Calculator</span>
           </span>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Select patient start date to generate exact calendar dates for each phase
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-xs font-bold text-gray-600 dark:text-gray-300 whitespace-nowrap">Start Date:</label>
+          <label className="text-xs font-bold text-slate-600 dark:text-slate-300 whitespace-nowrap">Start Date:</label>
           <input
             type="date"
             value={startDate}
             onChange={e => setStartDate(e.target.value)}
-            className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
+            className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-500"
           />
         </div>
       </div>
 
       {/* Clinical Rationale */}
       {protocol.rationale && (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
             <span>🔬</span>
             <span>Clinical Neurobiological Rationale</span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
             {protocol.rationale}
           </p>
         </div>
@@ -551,15 +549,15 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Pharmacokinetic Profile */}
       {protocol.kinetics && protocol.kinetics.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>⏱️</span>
             <span>Pharmacokinetic Considerations & Elimination Kinetics</span>
           </h2>
           <div className="space-y-2">
             {protocol.kinetics.map((k, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-sm text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/60 rounded-xl p-3 border border-gray-100 dark:border-gray-800">
-                <span className="text-gray-400 dark:text-gray-500 font-bold">•</span>
+              <div key={i} className="flex items-start gap-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#0b0f19]/60 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+                <span className="text-slate-400 dark:text-slate-500 font-bold">•</span>
                 <span className="font-medium leading-relaxed">{k}</span>
               </div>
             ))}
@@ -569,18 +567,18 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* 4-Phase Execution Timeline with Interactive Tabs & Calculated Dates */}
       {protocol.phases && protocol.phases.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
               <span>📅</span>
               <span>Structured 4-Phase Execution Schedule</span>
             </h2>
 
-            <div className="flex bg-gray-100 dark:bg-gray-700/60 p-1 rounded-xl gap-1">
+            <div className="flex bg-slate-100 dark:bg-slate-700/60 p-1 rounded-xl gap-1">
               <button
                 onClick={() => setActivePhaseIndex(null)}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                  activePhaseIndex === null ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-2xs' : 'text-gray-500 dark:text-gray-400'
+                  activePhaseIndex === null ? 'bg-white dark:bg-[#111827] text-slate-900 dark:text-white shadow-2xs' : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
                 All
@@ -590,7 +588,7 @@ function ProtocolDetailView({ protocol, onBack }) {
                   key={idx}
                   onClick={() => setActivePhaseIndex(idx)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                    activePhaseIndex === idx ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-2xs' : 'text-gray-500 dark:text-gray-400'
+                    activePhaseIndex === idx ? 'bg-white dark:bg-[#111827] text-slate-900 dark:text-white shadow-2xs' : 'text-slate-500 dark:text-slate-400'
                   }`}
                 >
                   Phase {idx + 1}
@@ -599,7 +597,7 @@ function ProtocolDetailView({ protocol, onBack }) {
             </div>
           </div>
 
-          <div className="relative border-l-2 border-gray-200 dark:border-gray-700 ml-4 pl-6 space-y-6">
+          <div className="relative border-l-2 border-slate-200 dark:border-slate-700 ml-4 pl-6 space-y-6">
             {protocol.phases
               .filter((_, idx) => activePhaseIndex === null || activePhaseIndex === idx)
               .map((ph, idx) => {
@@ -608,35 +606,35 @@ function ProtocolDetailView({ protocol, onBack }) {
                 return (
                   <div key={actualIndex} className="relative group">
                     {/* Stepper Bullet */}
-                    <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-extrabold text-xs flex items-center justify-center shadow-md border-2 border-white dark:border-gray-800">
+                    <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center shadow-md border-2 border-white dark:border-slate-800">
                       {actualIndex + 1}
                     </div>
 
-                    <div className="bg-gray-50/80 dark:bg-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-2xl p-4 sm:p-5 border border-gray-200/80 dark:border-gray-700/80 transition-colors">
+                    <div className="bg-slate-50/80 dark:bg-[#111827]/80 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-700/80 transition-colors">
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                           {ph.phase || `PHASE ${actualIndex + 1}`}
                         </span>
                         <div className="flex items-center gap-1.5">
                           {calculatedDateRange && (
-                            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
+                            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                               🗓️ {calculatedDateRange}
                             </span>
                           )}
                           {ph.timing && (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-xs">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-xs">
                               {ph.timing}
                             </span>
                           )}
                         </div>
                       </div>
 
-                      <h3 className="font-bold text-base text-gray-900 dark:text-white mb-2 leading-snug">
+                      <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 leading-snug">
                         {ph.title}
                       </h3>
 
                       {ph.notes && (
-                        <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed bg-white dark:bg-gray-900/80 rounded-xl p-3.5 border border-gray-200 dark:border-gray-700 font-normal">
+                        <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed bg-white dark:bg-[#0b0f19]/80 rounded-xl p-3.5 border border-slate-200 dark:border-slate-700 font-normal">
                           {ph.notes}
                         </p>
                       )}
@@ -650,12 +648,12 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Receptor Shift Dynamics Table */}
       {protocol.receptorShiftDynamics && protocol.receptorShiftDynamics.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
             <span>🧬</span>
             <span>Receptor Shift Dynamics & Vulnerability Windows</span>
           </h2>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
             Pharmacodynamic differential as drug concentrations cross during the transition timeline:
           </p>
 
@@ -663,9 +661,9 @@ function ProtocolDetailView({ protocol, onBack }) {
             {protocol.receptorShiftDynamics.map((item, i) => {
               const riskInfo = getRiskColor(item.riskLevel)
               return (
-                <div key={i} className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-4 border border-gray-200/80 dark:border-gray-700/80">
+                <div key={i} className="bg-slate-50 dark:bg-[#0b0f19]/60 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80">
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="font-extrabold text-base text-gray-900 dark:text-white">
+                    <span className="font-extrabold text-base text-slate-900 dark:text-white">
                       {item.receptor}
                     </span>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
@@ -673,12 +671,12 @@ function ProtocolDetailView({ protocol, onBack }) {
                     </span>
                   </div>
 
-                  <div className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
                     Transition Shift: {item.shift}
                   </div>
 
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    <span className="font-semibold text-gray-700 dark:text-gray-200">Clinical Impact:</span> {item.hazard}
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    <span className="font-semibold text-slate-700 dark:text-slate-200">Clinical Impact:</span> {item.hazard}
                   </p>
                 </div>
               )
@@ -689,8 +687,8 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Adverse Risk Stratification Meters */}
       {protocol.riskMeters && protocol.riskMeters.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
             <span>📊</span>
             <span>Adverse Risk Stratification Meters</span>
           </h2>
@@ -699,9 +697,9 @@ function ProtocolDetailView({ protocol, onBack }) {
             {protocol.riskMeters.map((rm, i) => {
               const riskInfo = getRiskColor(rm.severity)
               return (
-                <div key={i} className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-700">
+                <div key={i} className="bg-slate-50 dark:bg-[#0b0f19]/60 rounded-2xl p-3.5 border border-slate-100 dark:border-slate-700">
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
                       {rm.domain}
                     </span>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
@@ -710,12 +708,12 @@ function ProtocolDetailView({ protocol, onBack }) {
                   </div>
 
                   {/* Progress Bar Meter */}
-                  <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
+                  <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mb-2">
                     <div className={`h-full rounded-full ${riskInfo.bar}`} style={{ width: riskInfo.width }} />
                   </div>
 
                   {rm.notes && (
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                       {rm.notes}
                     </p>
                   )}
@@ -745,7 +743,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <div className="space-y-2">
             {protocol.emergencyRescue.map((rescue, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900/80 rounded-xl p-3.5 border border-rose-100 dark:border-rose-900/40 text-sm text-gray-800 dark:text-gray-200 shadow-2xs leading-relaxed font-medium">
+              <div key={i} className="bg-white dark:bg-[#0b0f19]/80 rounded-xl p-3.5 border border-rose-100 dark:border-rose-900/40 text-sm text-slate-800 dark:text-slate-200 shadow-2xs leading-relaxed font-medium">
                 <span className="font-bold text-rose-700 dark:text-rose-400 mr-1.5">⚡</span>
                 {rescue}
               </div>
@@ -756,15 +754,15 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Clinical Practice Pearls */}
       {protocol.clinicalPearls && protocol.clinicalPearls.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
             <span>💡</span>
             <span>High-Yield Clinical Practice Pearls</span>
           </h2>
           <div className="space-y-2.5">
             {protocol.clinicalPearls.map((pearl, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-sm text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/60 rounded-xl p-3.5 border border-gray-200/80 dark:border-gray-700/80">
-                <span className="text-gray-500 dark:text-gray-400 font-extrabold text-sm">✓</span>
+              <div key={i} className="flex items-start gap-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#0b0f19]/60 rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-700/80">
+                <span className="text-slate-500 dark:text-slate-400 font-extrabold text-sm">✓</span>
                 <span className="leading-relaxed font-normal">{pearl}</span>
               </div>
             ))}
@@ -776,7 +774,7 @@ function ProtocolDetailView({ protocol, onBack }) {
       <div className="text-center pt-4 pb-8">
         <button
           onClick={onBack}
-          className="px-6 py-2.5 rounded-2xl bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs shadow-md transition-all inline-flex items-center gap-2"
+          className="px-6 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all inline-flex items-center gap-2"
         >
           ← Return to All 20 Protocols
         </button>

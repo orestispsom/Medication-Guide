@@ -134,7 +134,7 @@ export default function ClinicalToolsScreen() {
                 <span className="text-xl flex-shrink-0">{tab.icon}</span>
                 <div className="min-w-0">
                   <span className="text-xs font-bold block leading-snug truncate">{tab.label}</span>
-                  <span className={`text-[11px] block truncate mt-0.5 ${activeTab === tab.id ? 'text-slate-300 dark:text-slate-600' : 'text-slate-400 dark:text-slate-500'}`}>
+                  <span className={`text-xs block truncate mt-0.5 ${activeTab === tab.id ? 'text-slate-300 dark:text-slate-600' : 'text-slate-400 dark:text-slate-500'}`}>
                     {tab.desc}
                   </span>
                 </div>
@@ -370,38 +370,38 @@ function CpzEquivalencyConverter({ navigate, initialDrug, showToast }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
             <span>🎭</span>
             <span>Antipsychotic Chlorpromazine (CPZ) Converter</span>
           </h2>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
             Gardner / Leucht Consensus
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Current Antipsychotic:
             </label>
             <select
               value={sourceDrugKey}
               onChange={e => setSourceDrugKey(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {Object.entries(cpzCatalog).map(([k, v]) => (
                 <option key={k} value={k}>{v.name} ({v.brand})</option>
               ))}
             </select>
-            <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block">
+            <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">
               Typical: {sourceDrug.typical}
             </span>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Current Dose (mg/day):
             </label>
             <input
@@ -410,27 +410,27 @@ function CpzEquivalencyConverter({ navigate, initialDrug, showToast }) {
               min="0"
               value={sourceDose}
               onChange={e => setSourceDose(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block">
+            <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">
               100 mg CPZ = {sourceDrug.ratio} mg {sourceDrug.name}
             </span>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Convert To (Target Drug):
             </label>
             <select
               value={targetDrugKey}
               onChange={e => setTargetDrugKey(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {Object.entries(cpzCatalog).map(([k, v]) => (
                 <option key={k} value={k}>{v.name} ({v.brand})</option>
               ))}
             </select>
-            <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block">
+            <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">
               Typical: {targetDrug.typical}
             </span>
           </div>
@@ -438,50 +438,50 @@ function CpzEquivalencyConverter({ navigate, initialDrug, showToast }) {
 
         {/* Dual Conversion Result Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-          <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
               CPZ Equivalent Exposure
             </span>
-            <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
+            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
               {cpzEquivalent} mg
             </div>
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium mt-1">
               Chlorpromazine Equivalent / day
             </p>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
               Target Dose Equivalent
             </span>
-            <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
+            <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
               ~{targetEquivalentDose} mg
             </div>
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium mt-1">
               {targetDrug.name} daily dose
             </p>
           </div>
         </div>
 
         {/* Cumulative D2 Burden Meter */}
-        <div className="bg-gray-50 dark:bg-gray-900/60 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 mb-5">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] p-4 rounded-2xl border border-slate-100 dark:border-slate-700 mb-5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
               Cumulative D2 Occupancy & Exposure Meter
             </span>
-            <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${burdenStatus.badge}`}>
+            <span className={`text-xs font-black px-2 py-0.5 rounded-full border ${burdenStatus.badge}`}>
               {burdenStatus.label}
             </span>
           </div>
 
-          <div className="w-full bg-gray-200 dark:bg-gray-700 h-2.5 rounded-full overflow-hidden mb-2">
+          <div className="w-full bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden mb-2">
             <div
               className={`h-full transition-all duration-300 ${burdenStatus.meterColor}`}
               style={{ width: `${burdenStatus.meterPercent}%` }}
             />
           </div>
 
-          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
+          <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
             {burdenStatus.note}
           </p>
         </div>
@@ -507,7 +507,7 @@ function CpzEquivalencyConverter({ navigate, initialDrug, showToast }) {
           ) : (
             <button
               onClick={() => navigate(`/cross-titration`)}
-              className="py-2.5 px-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
+              className="py-2.5 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
             >
               <span>🔄</span>
               <span>View All 20 Cross-Titrations</span>
@@ -655,37 +655,37 @@ function LithiumTdmTool({ navigate, showToast }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <span>⏱️</span>
           <span>12-Hour Serum Trough Timing Validator</span>
         </h2>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
           Lithium trough must be drawn exactly 12 hours (± 2h) post-dose at steady state (≥ 5 days on stable dose).
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Time of Evening Dose:
             </label>
             <input
               type="time"
               value={doseTime}
               onChange={e => setDoseTime(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Time of Morning Blood Draw:
             </label>
             <input
               type="time"
               value={drawTime}
               onChange={e => setDrawTime(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
         </div>
@@ -693,7 +693,7 @@ function LithiumTdmTool({ navigate, showToast }) {
         <div className={`rounded-2xl p-4 border text-xs leading-relaxed ${timingStatus.badge}`}>
           <div className="flex items-center justify-between font-black mb-1">
             <span>{timingStatus.title}</span>
-            <span className="uppercase text-[10px]">{timingStatus.severity}</span>
+            <span className="uppercase text-xs">{timingStatus.severity}</span>
           </div>
           <p className="font-medium">
             {timingStatus.directive}
@@ -701,20 +701,20 @@ function LithiumTdmTool({ navigate, showToast }) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
             <span>🧪</span>
             <span>Steady-State Linear Dose Titration Math</span>
           </h2>
-          <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${toxicityAlert.badge}`}>
+          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${toxicityAlert.badge}`}>
             {toxicityAlert.status}
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Current Daily Dose (mg):
             </label>
             <input
@@ -722,12 +722,12 @@ function LithiumTdmTool({ navigate, showToast }) {
               step="150"
               value={currentDose}
               onChange={e => setCurrentDose(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Measured Level (mEq/L):
             </label>
             <input
@@ -735,12 +735,12 @@ function LithiumTdmTool({ navigate, showToast }) {
               step="0.05"
               value={currentLevel}
               onChange={e => setCurrentLevel(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
               Desired Target (mEq/L):
             </label>
             <input
@@ -748,14 +748,14 @@ function LithiumTdmTool({ navigate, showToast }) {
               step="0.05"
               value={customTarget}
               onChange={e => setCustomTarget(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
         </div>
 
         {/* Quick Clinical Target Presets */}
         <div className="flex flex-wrap items-center gap-1.5 mb-5">
-          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 mr-1">Targets:</span>
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 mr-1">Targets:</span>
           {[
             { label: 'Geriatric (0.4–0.6)', val: 0.5 },
             { label: 'Depression Aug (0.6)', val: 0.6 },
@@ -765,10 +765,10 @@ function LithiumTdmTool({ navigate, showToast }) {
             <button
               key={p.val}
               onClick={() => setCustomTarget(p.val)}
-              className={`text-[10px] font-bold px-2.5 py-1 rounded-xl border transition-all ${
+              className={`text-xs font-bold px-2.5 py-1 rounded-xl border transition-all ${
                 Math.abs(parseFloat(customTarget) - p.val) < 0.05
                   ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
+                  : 'bg-slate-50 dark:bg-[#0b0f19] text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-indigo-300'
               }`}
             >
               {p.label}
@@ -777,14 +777,14 @@ function LithiumTdmTool({ navigate, showToast }) {
         </div>
 
         {/* Result Banner */}
-        <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center mb-5">
-          <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center mb-5">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
             Calculated New Maintenance Dose
           </span>
-          <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
             {roundedDose} mg / day
           </div>
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium mt-1">
             Exact linear math: {predictedDose} mg/day (Adjust to nearest available 150 mg / 300 mg capsule)
           </p>
         </div>
@@ -808,7 +808,7 @@ function LithiumTdmTool({ navigate, showToast }) {
                 className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
                   item.checked
                     ? 'bg-rose-100 dark:bg-rose-900/60 border-rose-300 dark:border-rose-700 text-rose-950 dark:text-rose-200 font-bold'
-                    : 'bg-white dark:bg-gray-900 border-rose-200 dark:border-rose-900 text-gray-700 dark:text-gray-300'
+                    : 'bg-white dark:bg-[#0b0f19] border-rose-200 dark:border-rose-900 text-slate-700 dark:text-slate-300'
                 }`}
               >
                 <span>{item.label}</span>
@@ -908,13 +908,13 @@ function ClozapineRemsTool({ navigate, showToast }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
             <span>🩸</span>
             <span>Clozapine REMS Absolute Neutrophil Count (ANC) Triage</span>
           </h2>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
             FDA REMS Standard
           </span>
         </div>
@@ -926,11 +926,11 @@ function ClozapineRemsTool({ navigate, showToast }) {
             className={`p-3 rounded-2xl border text-center transition-all ${
               population === 'general'
                 ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-xs'
-                : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300'
+                : 'bg-slate-50 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
             }`}
           >
             <div className="text-xs">General Population</div>
-            <div className="text-[10px] opacity-75">Baseline ANC ≥ 1500 /µL</div>
+            <div className="text-xs opacity-75">Baseline ANC ≥ 1500 /µL</div>
           </button>
 
           <button
@@ -938,17 +938,17 @@ function ClozapineRemsTool({ navigate, showToast }) {
             className={`p-3 rounded-2xl border text-center transition-all ${
               population === 'ben'
                 ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-xs'
-                : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300'
+                : 'bg-slate-50 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
             }`}
           >
             <div className="text-xs">Benign Ethnic Neutropenia (BEN)</div>
-            <div className="text-[10px] opacity-75">Baseline ANC ≥ 1000 /µL</div>
+            <div className="text-xs opacity-75">Baseline ANC ≥ 1000 /µL</div>
           </button>
         </div>
 
         {/* ANC Input */}
         <div className="mb-4">
-          <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">
+          <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
             Current Absolute Neutrophil Count (ANC in /µL):
           </label>
           <input
@@ -956,14 +956,14 @@ function ClozapineRemsTool({ navigate, showToast }) {
             step="50"
             value={ancValue}
             onChange={e => setAncValue(e.target.value)}
-            className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <div className="flex gap-2 mt-1.5">
             {[2000, 1600, 1200, 900, 450].map(v => (
               <button
                 key={v}
                 onClick={() => setAncValue(v)}
-                className="text-[10px] px-2 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
+                className="text-xs px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
               >
                 {v} /µL
               </button>
@@ -975,7 +975,7 @@ function ClozapineRemsTool({ navigate, showToast }) {
         <div className={`rounded-2xl p-5 border mb-5 text-xs leading-relaxed ${triage.badge}`}>
           <div className="flex items-center justify-between font-black mb-1">
             <span className="text-sm">{triage.title}</span>
-            <span className="uppercase text-[10px] px-2 py-0.5 rounded-full bg-white/70 dark:bg-black/40">
+            <span className="uppercase text-xs px-2 py-0.5 rounded-full bg-white/70 dark:bg-black/40">
               Zone: {triage.zone}
             </span>
           </div>
@@ -993,7 +993,7 @@ function ClozapineRemsTool({ navigate, showToast }) {
             </span>
           </div>
           <div className="flex items-center gap-2 mb-2">
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+            <label className="text-xs font-medium text-slate-700 dark:text-slate-300 whitespace-nowrap">
               Hours Since Last Dose:
             </label>
             <input
@@ -1001,9 +1001,9 @@ function ClozapineRemsTool({ navigate, showToast }) {
               min="0"
               value={missedHours}
               onChange={e => setMissedHours(e.target.value)}
-              className="w-24 bg-white dark:bg-gray-900 border border-amber-300 dark:border-amber-800 rounded-xl px-2.5 py-1 text-xs font-bold"
+              className="w-24 bg-white dark:bg-[#0b0f19] border border-amber-300 dark:border-amber-800 rounded-xl px-2.5 py-1 text-xs font-bold"
             />
-            <span className="text-xs text-gray-500">hours</span>
+            <span className="text-xs text-slate-500">hours</span>
           </div>
 
           {missedDoseAlert && (
@@ -1148,8 +1148,8 @@ function CypInteractionChecker({ initialDrug }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <span>⚡</span>
           <span>Select Medications to Screen ({selectedDrugIds.length}/5)</span>
         </h2>
@@ -1179,7 +1179,7 @@ function CypInteractionChecker({ initialDrug }) {
             <span className="text-xl">🚬</span>
             <div>
               <span className="text-xs font-bold text-amber-950 dark:text-amber-300 block">Tobacco / Cigarette Smoking Status</span>
-              <span className="text-[10px] text-amber-800 dark:text-amber-400">Hydrocarbon inducer of CYP1A2 clearance</span>
+              <span className="text-xs text-amber-800 dark:text-amber-400">Hydrocarbon inducer of CYP1A2 clearance</span>
             </div>
           </div>
           <button
@@ -1187,7 +1187,7 @@ function CypInteractionChecker({ initialDrug }) {
             className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
               hasSmoking
                 ? 'bg-amber-600 text-white border-amber-600 shadow-2xs'
-                : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-amber-400'
+                : 'bg-white dark:bg-[#0b0f19] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-amber-400'
             }`}
           >
             {hasSmoking ? 'Active Smoker' : 'Non-Smoker'}
@@ -1200,7 +1200,7 @@ function CypInteractionChecker({ initialDrug }) {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search medication to add..."
-            className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
 
@@ -1214,7 +1214,7 @@ function CypInteractionChecker({ initialDrug }) {
                 className={`text-xs px-2.5 py-1 rounded-xl transition-all border ${
                   isSelected
                     ? 'bg-indigo-600 text-white border-indigo-600 font-bold'
-                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300 font-medium'
+                    : 'bg-white dark:bg-[#0b0f19] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-300 font-medium'
                 }`}
               >
                 {isSelected ? '✓ ' : '+ '}
@@ -1226,7 +1226,7 @@ function CypInteractionChecker({ initialDrug }) {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
+        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
           Pharmacokinetic Screening Results ({detectedInteractions.length} Flagged)
         </h3>
 
@@ -1236,26 +1236,26 @@ function CypInteractionChecker({ initialDrug }) {
             return (
               <div
                 key={i}
-                className={`rounded-3xl p-5 border-2 shadow-xs ${
+                className={`rounded-2xl p-5 border-2 shadow-xs ${
                   isCrit ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800' : 'bg-amber-50/80 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800'
                 }`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span
-                    className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
+                    className={`text-xs font-black uppercase px-2 py-0.5 rounded-full ${
                       isCrit ? 'bg-rose-600 text-white' : 'bg-amber-600 text-white'
                     }`}
                   >
                     {alert.severity} COLLISION
                   </span>
-                  <h4 className="font-extrabold text-sm text-gray-900 dark:text-white">
+                  <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
                     {alert.title}
                   </h4>
                 </div>
-                <p className="text-xs text-gray-700 dark:text-gray-300 font-medium mb-2">
-                  <span className="font-bold text-gray-900 dark:text-white">Mechanism:</span> {alert.mechanism}
+                <p className="text-xs text-slate-700 dark:text-slate-300 font-medium mb-2">
+                  <span className="font-bold text-slate-900 dark:text-white">Mechanism:</span> {alert.mechanism}
                 </p>
-                <div className="bg-white/80 dark:bg-gray-900/80 rounded-2xl p-3 border border-gray-200/60 dark:border-gray-700 text-xs text-gray-900 dark:text-gray-100 font-semibold leading-relaxed">
+                <div className="bg-white/80 dark:bg-[#0b0f19]/80 rounded-2xl p-3 border border-slate-200/60 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 font-semibold leading-relaxed">
                   <span className="font-black text-indigo-900 dark:text-indigo-400">Clinical Directive: </span>
                   {alert.directive}
                 </div>
@@ -1263,7 +1263,7 @@ function CypInteractionChecker({ initialDrug }) {
             )
           })
         ) : (
-          <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-3xl p-6 text-center">
+          <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-6 text-center">
             <span className="text-2xl block mb-1">✅</span>
             <h4 className="font-extrabold text-emerald-900 dark:text-emerald-300 text-sm mb-1">
               No Major CYP450 Collisions Detected
@@ -1345,13 +1345,13 @@ function QtcRiskStacker({ initialDrug }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-xs">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <span className="text-[10px] font-black uppercase text-gray-400 dark:text-gray-500 tracking-wider block">
+            <span className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider block">
               Cumulative Tisdale QTc Stratification
             </span>
-            <h2 className="text-xl font-black text-gray-900 dark:text-white">
+            <h2 className="text-xl font-black text-slate-900 dark:text-white">
               Total Score: {qtcAssessment.score} Points
             </h2>
           </div>
@@ -1360,25 +1360,25 @@ function QtcRiskStacker({ initialDrug }) {
           </span>
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-700 text-xs text-gray-800 dark:text-gray-200 font-medium leading-relaxed mb-4">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-2xl p-3.5 border border-slate-100 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium leading-relaxed mb-4">
           <span className="font-bold text-indigo-900 dark:text-indigo-400">Clinical Protocol: </span>
           {qtcAssessment.recommendation}
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="bg-blue-50/50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-800 rounded-xl p-2.5">
-            <span className="text-[10px] font-bold text-blue-900 dark:text-blue-300 uppercase block">Target Potassium (K+):</span>
+            <span className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase block">Target Potassium (K+):</span>
             <span className="font-black text-blue-950 dark:text-blue-100">≥ 4.0 mEq/L</span>
           </div>
           <div className="bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-800 rounded-xl p-2.5">
-            <span className="text-[10px] font-bold text-purple-900 dark:text-purple-300 uppercase block">Target Magnesium (Mg2+):</span>
+            <span className="text-xs font-bold text-purple-900 dark:text-purple-300 uppercase block">Target Magnesium (Mg2+):</span>
             <span className="font-black text-purple-950 dark:text-purple-100">≥ 2.0 mg/dL</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h3 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <span>❤️</span>
           <span>Patient Risk Factor Multipliers</span>
         </h3>
@@ -1398,7 +1398,7 @@ function QtcRiskStacker({ initialDrug }) {
               className={`p-3 rounded-2xl border text-left transition-all flex items-center justify-between ${
                 riskFactors[item.key]
                   ? 'bg-indigo-50 dark:bg-indigo-950 border-indigo-300 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200 font-bold'
-                  : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-medium'
+                  : 'bg-slate-50 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-medium'
               }`}
             >
               <span>{item.label}</span>
@@ -1492,19 +1492,19 @@ function BzdEquivalencyCalculator({ navigate, initialDrug, showToast }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
           <span>⚖️</span>
           <span>Diazepam Milligram Equivalency & Ashton Taper</span>
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">Current Benzodiazepine:</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Current Benzodiazepine:</label>
             <select
               value={selectedBzd}
               onChange={e => setSelectedBzd(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               {Object.entries(bzdData).map(([k, v]) => (
                 <option key={k} value={k}>{v.name}</option>
@@ -1513,35 +1513,35 @@ function BzdEquivalencyCalculator({ navigate, initialDrug, showToast }) {
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block mb-1">Total Daily Dose (mg/day):</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Total Daily Dose (mg/day):</label>
             <input
               type="number"
               step="0.25"
               min="0"
               value={dose}
               onChange={e => setDose(e.target.value)}
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
         </div>
 
         {/* Result Banner */}
-        <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center mb-5">
-          <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center mb-5">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
             Calculated Diazepam Equivalent
           </span>
-          <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
             {diazepamEquiv} mg Diazepam / day
           </div>
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium mt-1">
             {dose} mg of {currentBzd.name} = {diazepamEquiv} mg Diazepam
           </p>
         </div>
 
         {/* Ashton Taper Generator Controls */}
-        <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 mb-5">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-2xl p-4 border border-slate-100 dark:border-slate-700 mb-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold text-gray-900 dark:text-white">
+            <span className="text-xs font-bold text-slate-900 dark:text-white">
               Target Taper Duration:
             </span>
             <div className="flex gap-1">
@@ -1552,7 +1552,7 @@ function BzdEquivalencyCalculator({ navigate, initialDrug, showToast }) {
                   className={`px-2.5 py-1 text-xs font-bold rounded-xl transition-all ${
                     taperWeeks === w
                       ? 'bg-purple-600 text-white'
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border'
+                      : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border'
                   }`}
                 >
                   {w} Wks
@@ -1563,10 +1563,10 @@ function BzdEquivalencyCalculator({ navigate, initialDrug, showToast }) {
 
           <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
             {taperSchedule.map(s => (
-              <div key={s.week} className="flex items-center justify-between bg-white dark:bg-gray-800 p-2 rounded-xl text-xs border border-gray-100 dark:border-gray-700">
+              <div key={s.week} className="flex items-center justify-between bg-white dark:bg-[#111827] p-2 rounded-xl text-xs border border-slate-100 dark:border-slate-700">
                 <span className="font-bold text-purple-900 dark:text-purple-300 w-16">Week {s.week}:</span>
-                <span className="font-extrabold text-gray-900 dark:text-white w-20">{s.diazepamDose} mg/d</span>
-                <span className="text-[11px] text-gray-500 dark:text-gray-400 flex-1 truncate">{s.directive}</span>
+                <span className="font-extrabold text-slate-900 dark:text-white w-20">{s.diazepamDose} mg/d</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 flex-1 truncate">{s.directive}</span>
               </div>
             ))}
           </div>
@@ -1583,7 +1583,7 @@ function BzdEquivalencyCalculator({ navigate, initialDrug, showToast }) {
           </button>
           <button
             onClick={() => navigate('/cross-titration/protocol-10-long-term-benzodiazepine-deprescribing-the-ashton-manual-paradigm')}
-            className="py-2.5 px-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold text-xs rounded-xl transition-all"
+            className="py-2.5 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition-all"
           >
             Launch Full Protocol 10 →
           </button>
@@ -1646,15 +1646,15 @@ function MetabolicTrackerTool({ navigate, showToast }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-xs">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
             <span>📊</span>
             <span>ADA / APA Consensus Metabolic Monitoring Protocol</span>
           </h2>
           <button
             onClick={copyMetabolicGuideline}
-            className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800"
+            className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800"
           >
             📋 Copy Protocol
           </button>
@@ -1664,8 +1664,8 @@ function MetabolicTrackerTool({ navigate, showToast }) {
         <div className="overflow-x-auto mb-6">
           <table className="min-w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                <th className="p-2 font-bold text-gray-700 dark:text-gray-300">Metric</th>
+              <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#0b0f19]">
+                <th className="p-2 font-bold text-slate-700 dark:text-slate-300">Metric</th>
                 <th className="p-2 font-bold text-center">Baseline</th>
                 <th className="p-2 font-bold text-center">4 Wks</th>
                 <th className="p-2 font-bold text-center">8 Wks</th>
@@ -1674,15 +1674,15 @@ function MetabolicTrackerTool({ navigate, showToast }) {
                 <th className="p-2 font-bold text-center">Annually</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {monitoringCadence.map((row, i) => (
-                <tr key={i} className="hover:bg-gray-50/50 dark:hover:bg-gray-900/50">
-                  <td className="p-2 font-semibold text-gray-800 dark:text-gray-200">{row.parameter}</td>
+                <tr key={i} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50">
+                  <td className="p-2 font-semibold text-slate-800 dark:text-slate-200">{row.parameter}</td>
                   <td className="p-2 text-center font-black text-indigo-600">{row.baseline}</td>
-                  <td className="p-2 text-center text-gray-600 dark:text-gray-400">{row.w4}</td>
-                  <td className="p-2 text-center text-gray-600 dark:text-gray-400">{row.w8}</td>
+                  <td className="p-2 text-center text-slate-600 dark:text-slate-400">{row.w4}</td>
+                  <td className="p-2 text-center text-slate-600 dark:text-slate-400">{row.w8}</td>
                   <td className="p-2 text-center font-bold text-purple-600">{row.w12}</td>
-                  <td className="p-2 text-center text-gray-600 dark:text-gray-400">{row.quarterly}</td>
+                  <td className="p-2 text-center text-slate-600 dark:text-slate-400">{row.quarterly}</td>
                   <td className="p-2 text-center font-black text-emerald-600">{row.annually}</td>
                 </tr>
               ))}
@@ -1691,23 +1691,23 @@ function MetabolicTrackerTool({ navigate, showToast }) {
         </div>
 
         {/* Metformin Augmentation Guideline Card */}
-        <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 sm:p-5 mb-6">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-2xl p-4 sm:p-5 mb-6">
           <div className="flex items-center gap-2 mb-2.5">
             <span className="text-lg">💊</span>
-            <h3 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               Metformin Augmentation Directive
             </h3>
           </div>
-          <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
+          <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed mb-3">
             Initiate Metformin when a patient experiences <strong>≥ 5% weight gain</strong> within the first 3 months of SGA therapy or develops prediabetes (HbA1c 5.7%–6.4% / Fasting glucose 100–125 mg/dL).
           </p>
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-3.5 text-sm text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 font-medium">
+          <div className="bg-white dark:bg-[#111827] rounded-xl p-3.5 text-sm text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-medium">
             Dosing: Start 500 mg daily with evening meal × 1 week, then increase to 500 mg BID, titrating to target 1000 mg BID with meals as tolerated to attenuate SGA-induced insulin resistance and hepatic lipogenesis. Verify eGFR ≥ 30 mL/min.
           </div>
         </div>
 
         {/* SGA Metabolic Liability Hierarchy */}
-        <h3 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3">
+        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3">
           Second-Generation Antipsychotic Metabolic Risk Spectrum
         </h3>
         <div className="space-y-2">
@@ -1717,15 +1717,15 @@ function MetabolicTrackerTool({ navigate, showToast }) {
             return (
               <div
                 key={idx}
-                className="flex items-center justify-between bg-gray-50 dark:bg-gray-900/60 p-2.5 rounded-xl border border-gray-100 dark:border-gray-700 text-xs"
+                className="flex items-center justify-between bg-slate-50 dark:bg-[#0b0f19] p-2.5 rounded-xl border border-slate-100 dark:border-slate-700 text-xs"
               >
                 <div>
-                  <span className="font-extrabold text-gray-900 dark:text-white mr-1.5">{s.name}</span>
-                  <span className="text-gray-400 dark:text-gray-500">({s.brand})</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white mr-1.5">{s.name}</span>
+                  <span className="text-slate-400 dark:text-slate-500">({s.brand})</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-gray-500">Weight: {s.weight}</span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  <span className="text-xs text-slate-500">Weight: {s.weight}</span>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                     isHigh
                       ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
                       : isMod
@@ -1750,26 +1750,26 @@ function MetabolicTrackerTool({ navigate, showToast }) {
 function EmergencyPlaybook({ navigate }) {
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
           <span>🚨</span>
           <span>Emergency Psych Toxidrome Differential</span>
         </h2>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
           Key features distinguishing acute life-threatening psychiatric emergencies:
         </p>
 
         <div className="overflow-x-auto">
           <table className="min-w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                <th className="p-2 font-bold text-gray-700 dark:text-gray-300">Toxidrome</th>
-                <th className="p-2 font-bold text-gray-700 dark:text-gray-300">Neuromuscular</th>
-                <th className="p-2 font-bold text-gray-700 dark:text-gray-300">Pupils / Skin</th>
-                <th className="p-2 font-bold text-gray-700 dark:text-gray-300">First-Line Antidote</th>
+              <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#0b0f19]">
+                <th className="p-2 font-bold text-slate-700 dark:text-slate-300">Toxidrome</th>
+                <th className="p-2 font-bold text-slate-700 dark:text-slate-300">Neuromuscular</th>
+                <th className="p-2 font-bold text-slate-700 dark:text-slate-300">Pupils / Skin</th>
+                <th className="p-2 font-bold text-slate-700 dark:text-slate-300">First-Line Antidote</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               <tr>
                 <td className="p-2 font-black text-rose-700 dark:text-rose-400">Serotonin Syndrome</td>
                 <td className="p-2">Hyperreflexia, Spontaneous Clonus, Tremor</td>
@@ -1806,34 +1806,34 @@ function EmergencyPlaybook({ navigate }) {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">
+        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
           Standardized Antidote Dosing Directives
         </h3>
 
-        <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-3xl p-5 shadow-2xs">
+        <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-2xl p-5 shadow-2xs">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-extrabold text-sm text-rose-950 dark:text-rose-200">Cyproheptadine (Serotonin Antagonist)</h4>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-600 text-white">Hunter Positive</span>
+            <span className="text-xs font-bold px-2 py-0.5 rounded bg-rose-600 text-white">Hunter Positive</span>
           </div>
           <p className="text-xs text-rose-900 dark:text-rose-300 font-medium leading-relaxed mb-2">
             Initial loading dose: 12 mg orally (crushed via NG tube if intubated), followed by 2 mg every 2 hours until clinical improvement. Maintenance: 8 mg every 6 hours.
           </p>
         </div>
 
-        <div className="bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 rounded-3xl p-5 shadow-2xs">
+        <div className="bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 rounded-2xl p-5 shadow-2xs">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-extrabold text-sm text-purple-950 dark:text-purple-200">Dantrolene + Bromocriptine (NMS Rescue)</h4>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-600 text-white">Hyperthermic NMS</span>
+            <span className="text-xs font-bold px-2 py-0.5 rounded bg-purple-600 text-white">Hyperthermic NMS</span>
           </div>
           <p className="text-xs text-purple-900 dark:text-purple-300 font-medium leading-relaxed mb-2">
             Dantrolene: 1 to 2.5 mg/kg IV bolus (repeat up to 10 mg/kg max). Bromocriptine: 2.5 mg PO/NG TID, titrate up to 10 mg TID. Discontinue all dopamine antagonists immediately.
           </p>
         </div>
 
-        <div className="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-3xl p-5 shadow-2xs">
+        <div className="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-2xl p-5 shadow-2xs">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-extrabold text-sm text-indigo-950 dark:text-indigo-200">Lithium Toxicity Hemodialysis Criteria</h4>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-600 text-white">Renal Clearance</span>
+            <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-600 text-white">Renal Clearance</span>
           </div>
           <p className="text-xs text-indigo-900 dark:text-indigo-300 font-medium leading-relaxed mb-2">
             Mandatory emergent hemodialysis if serum Lithium &gt; 4.0 mEq/L (regardless of symptoms), or &gt; 2.5 mEq/L in the presence of severe neurotoxicity (stupor, seizures, ataxia) or renal failure.
@@ -1853,8 +1853,8 @@ function OrganAdjustmentTool() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <span>🩺</span>
           <span>Renal eGFR Impairment Tier</span>
         </h2>
@@ -1872,46 +1872,46 @@ function OrganAdjustmentTool() {
               className={`p-2.5 rounded-2xl border text-center transition-all ${
                 renalTier === tier.id
                   ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-xs'
-                  : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-indigo-300'
+                  : 'bg-slate-50 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-300'
               }`}
             >
               <div className="text-xs">{tier.label}</div>
-              <div className="text-[10px] opacity-75">{tier.sub}</div>
+              <div className="text-xs opacity-75">{tier.sub}</div>
             </button>
           ))}
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 space-y-2 text-xs">
-          <div className="font-bold text-gray-900 dark:text-white">Key Renal Adjustments:</div>
+        <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-2xl p-4 border border-slate-100 dark:border-slate-700 space-y-2 text-xs">
+          <div className="font-bold text-slate-900 dark:text-white">Key Renal Adjustments:</div>
           {renalTier === 'moderate' && (
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
               <li><strong>Lithium:</strong> Reduce initial dose by 25%–50%; monitor serum trough levels frequently.</li>
               <li><strong>Gabapentin / Pregabalin:</strong> Cap maximum daily dose to 50% of standard ceiling.</li>
               <li><strong>Paliperidone:</strong> Reduce initial dose to 3 mg/day (max 6 mg/day).</li>
             </ul>
           )}
           {renalTier === 'severe' && (
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
               <li><strong>Lithium:</strong> Strictly avoid unless no viable alternative exists (reduce by 50%–75%).</li>
               <li><strong>Duloxetine:</strong> Avoid use (increased plasma levels and metabolite accumulation).</li>
               <li><strong>Paliperidone:</strong> Reduce initial dose to 1.5 mg/day (max 3 mg/day).</li>
             </ul>
           )}
           {renalTier === 'esrd' && (
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
               <li><strong>Lithium:</strong> Strictly contraindicated except post-dialysis dosing with intensive nephrology oversight.</li>
               <li><strong>Bupropion:</strong> Reduce dose and frequency (max 100–150 mg every other day) due to seizure surge.</li>
               <li><strong>Renally Cleared Non-Hepatic:</strong> Prefer hepatic-cleared SSRIs (Sertraline) or SGAs (Aripiprazole, Olanzapine).</li>
             </ul>
           )}
           {renalTier === 'normal' && (
-            <p className="text-gray-600 dark:text-gray-400">Standard prescribing guidelines apply. Maintain standard baseline renal surveillance.</p>
+            <p className="text-slate-600 dark:text-slate-400">Standard prescribing guidelines apply. Maintain standard baseline renal surveillance.</p>
           )}
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs">
-        <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-xs">
+        <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <span>🧬</span>
           <span>Child-Pugh Hepatic Classification</span>
         </h2>
@@ -1928,32 +1928,32 @@ function OrganAdjustmentTool() {
               className={`p-2.5 rounded-2xl border text-center transition-all ${
                 hepaticTier === tier.id
                   ? 'bg-purple-700 text-white border-purple-700 font-bold shadow-xs'
-                  : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-purple-300'
+                  : 'bg-slate-50 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-purple-300'
               }`}
             >
               <div className="text-xs">{tier.label}</div>
-              <div className="text-[10px] opacity-75">{tier.sub}</div>
+              <div className="text-xs opacity-75">{tier.sub}</div>
             </button>
           ))}
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 space-y-2 text-xs">
-          <div className="font-bold text-gray-900 dark:text-white">Key Hepatic Adjustments:</div>
+        <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-2xl p-4 border border-slate-100 dark:border-slate-700 space-y-2 text-xs">
+          <div className="font-bold text-slate-900 dark:text-white">Key Hepatic Adjustments:</div>
           {hepaticTier === 'severe' && (
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
               <li><strong>Duloxetine:</strong> STRICTLY CONTRAINDICATED (severe hepatotoxicity risk).</li>
               <li><strong>Valproate / Divalproex:</strong> STRICTLY CONTRAINDICATED (hepatic necrosis and failure).</li>
               <li><strong>Benzodiazepines:</strong> Avoid oxidatively cleared agents (Diazepam, Chlordiazepoxide, Clonazepam); if required, use LOT (Lorazepam, Oxazepam, Temazepam) due to direct glucuronidation.</li>
             </ul>
           )}
           {hepaticTier === 'moderate' && (
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+            <ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
               <li><strong>Clozapine:</strong> Start at 12.5 mg; monitor hepatic transaminases weekly.</li>
               <li><strong>Antipsychotics:</strong> Initiate at 50% of standard starting dose.</li>
             </ul>
           )}
           {hepaticTier === 'mild' && (
-            <p className="text-gray-600 dark:text-gray-400">Standard starting doses with conservative escalation. Monitor transaminases with Valproate or Duloxetine.</p>
+            <p className="text-slate-600 dark:text-slate-400">Standard starting doses with conservative escalation. Monitor transaminases with Valproate or Duloxetine.</p>
           )}
         </div>
       </div>

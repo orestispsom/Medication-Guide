@@ -176,101 +176,18 @@ export default function AllDrugsScreen() {
         )}
       </div>
 
-      {/* Quick Clinical Smart Filter Chips */}
-      <div className="flex items-center gap-1.5 mb-3.5 overflow-x-auto hide-scrollbar pb-1">
-        {[
-          { id: 'all', label: 'All', icon: '💊' },
-          { id: 'weight-neutral', label: 'Weight Neutral', icon: '⚡' },
-          { id: 'low-qtc', label: 'Low QTc', icon: '❤️' },
-          { id: 'sedating', label: 'Bedtime / Sedating', icon: '🌙' },
-          { id: 'activating', label: 'Morning / Activating', icon: '☀️' },
-          { id: 'renal-safe', label: 'Hepatic Cleared', icon: '🩺' },
-          { id: 'meal-req', label: 'Meal Required', icon: '🍽️' },
-          { id: 'boxed-warning', label: 'Boxed Warnings', icon: '⚠️' },
-        ].map(chip => (
-          <button
-            key={chip.id}
-            onClick={() => setClinicalFilter(chip.id === clinicalFilter ? 'all' : chip.id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border flex-shrink-0 flex items-center gap-1.5 cursor-pointer ${
-              clinicalFilter === chip.id
-                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-sm'
-                : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
-            }`}
-          >
-            <span>{chip.icon}</span>
-            <span>{chip.label}</span>
-          </button>
-        ))}
-
-        <div className="ml-auto flex items-center gap-1.5 text-xs font-medium text-slate-400 dark:text-slate-500 flex-shrink-0">
-          <span>Sort:</span>
-          <select
-            value={sortBy}
-            onChange={e => setSortBy(e.target.value)}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-2xs focus:outline-none cursor-pointer"
-          >
-            <option value="name-asc">A–Z</option>
-            <option value="halfLife">Half-Life (t½)</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Alphabet Quick Jump Bar */}
-      <div className="flex flex-wrap items-center gap-1 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/80">
-        <button
-          onClick={() => setSelectedLetter('all')}
-          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-            selectedLetter === 'all'
-              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-          }`}
-        >
-          All
-        </button>
-        {ALPHABET.map(letter => {
-          const count = data.drugs.filter(d => d.name.toUpperCase().startsWith(letter)).length
-          if (count === 0) {
-            return (
-              <span
-                key={letter}
-                className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-slate-300 dark:text-slate-700 cursor-not-allowed"
-              >
-                {letter}
-              </span>
-            )
-          }
-          return (
-            <button
-              key={letter}
-              onClick={() => {
-                setSelectedLetter(letter)
-                setSearchQuery('')
-              }}
-              className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                selectedLetter === letter
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                  : 'bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 hover:border-slate-300'
-              }`}
-              title={`${count} drugs starting with ${letter}`}
-            >
-              {letter}
-            </button>
-          )
-        })}
-      </div>
-
       {/* Clinical Family Filter Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-2 mb-3.5">
+      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-3">
         <button
           onClick={() => handleFamilyChange('all')}
           className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer ${
             selectedFamilyId === 'all'
-              ? 'bg-slate-900 text-white border-transparent shadow-sm'
-              : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-xs'
+              : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300'
           }`}
         >
           <span>All Families</span>
-          <span className="text-[10px] opacity-75 font-semibold">({data.drugs.length})</span>
+          <span className="text-xs opacity-75 font-semibold">({data.drugs.length})</span>
         </button>
         {data.families.map(fam => {
           const isSelected = selectedFamilyId === fam.id
@@ -287,39 +204,102 @@ export default function AllDrugsScreen() {
               }}
             >
               <span>{fam.shortName || fam.name.split(' ')[0]}</span>
-              <span className="text-[10px] opacity-75 font-semibold">({count})</span>
+              <span className="text-xs opacity-75 font-semibold">({count})</span>
             </button>
           )
         })}
       </div>
 
-      {/* Subgroup Filter Dropdown (if family or all selected) */}
-      {availableSubgroups.length > 1 && (
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 whitespace-nowrap">Subgroup:</span>
+      {/* Streamlined Secondary Control Bar: Subgroup + Clinical Filter + Sort + Reset */}
+      <div className="flex flex-wrap items-center gap-2 mb-4 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-2 sm:p-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+        {/* Subgroup Dropdown */}
+        {availableSubgroups.length > 1 && (
           <select
             value={selectedSubgroupId}
             onChange={e => setSelectedSubgroupId(e.target.value)}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-full truncate cursor-pointer"
+            className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 max-w-[180px] sm:max-w-[200px] truncate cursor-pointer"
           >
-            <option value="all">All Subgroups ({availableSubgroups.length})</option>
+            <option value="all">All Classes ({availableSubgroups.length})</option>
             {availableSubgroups.map(sg => (
               <option key={sg.id} value={sg.id}>
                 {sg.name}
               </option>
             ))}
           </select>
+        )}
 
-          {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedLetter !== 'all' || searchQuery || clinicalFilter !== 'all') && (
+        {/* Clinical Smart Filter Dropdown */}
+        <select
+          value={clinicalFilter}
+          onChange={e => setClinicalFilter(e.target.value)}
+          className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+        >
+          <option value="all">Filter: All Clinical Profiles</option>
+          <option value="weight-neutral">⚡ Weight Neutral</option>
+          <option value="low-qtc">❤️ Low QTc Risk</option>
+          <option value="sedating">🌙 Bedtime / Sedating</option>
+          <option value="activating">☀️ Morning / Activating</option>
+          <option value="renal-safe">🩺 Hepatic Cleared</option>
+          <option value="meal-req">🍽️ Food Required</option>
+          <option value="boxed-warning">⚠️ Boxed Warning</option>
+        </select>
+
+        {/* Sort */}
+        <select
+          value={sortBy}
+          onChange={e => setSortBy(e.target.value)}
+          className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+        >
+          <option value="name-asc">Sort: A–Z</option>
+          <option value="halfLife">Sort: Half-Life (t½)</option>
+        </select>
+
+        {/* Reset */}
+        {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedLetter !== 'all' || searchQuery || clinicalFilter !== 'all') && (
+          <button
+            onClick={handleClearAll}
+            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 ml-auto px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+          >
+            ✕ Reset
+          </button>
+        )}
+      </div>
+
+      {/* Clean Compact Alphabet Jump Strip */}
+      <div className="flex items-center gap-1 overflow-x-auto hide-scrollbar pb-1 mb-4">
+        <button
+          onClick={() => setSelectedLetter('all')}
+          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all flex-shrink-0 cursor-pointer ${
+            selectedLetter === 'all'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
+        >
+          All
+        </button>
+        {ALPHABET.map(letter => {
+          const count = data.drugs.filter(d => d.name.toUpperCase().startsWith(letter)).length
+          if (count === 0) return null
+          return (
             <button
-              onClick={handleClearAll}
-              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 ml-auto whitespace-nowrap cursor-pointer"
+              key={letter}
+              onClick={() => {
+                setSelectedLetter(letter)
+                setSearchQuery('')
+              }}
+              className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg transition-all flex-shrink-0 cursor-pointer ${
+                selectedLetter === letter
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+              title={`${count} drugs starting with ${letter}`}
             >
-              Reset Filters
+              {letter}
             </button>
-          )}
-        </div>
-      )}
+          )
+        })}
+      </div>
+
 
       {/* Drug List */}
       {filteredDrugs.length > 0 ? (

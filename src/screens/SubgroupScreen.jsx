@@ -28,7 +28,7 @@ export default function SubgroupScreen() {
             }}
           >
             <span>{family.name}</span>
-            <span className="text-[10px] opacity-70">↗</span>
+            <span className="text-xs opacity-70">↗</span>
           </button>
         )}
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">

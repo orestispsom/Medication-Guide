@@ -131,7 +131,7 @@ export default function ReceptorListScreen() {
                       {receptor.id}
                     </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                     {drugCount} {drugCount === 1 ? 'drug' : 'drugs'}
                   </span>
                 </div>
@@ -146,7 +146,7 @@ export default function ReceptorListScreen() {
               </div>
 
               {receptor.therapeuticEffect && (
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold truncate">
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs text-indigo-600 dark:text-indigo-400 font-semibold truncate">
                   🎯 {receptor.therapeuticEffect}
                 </div>
               )}

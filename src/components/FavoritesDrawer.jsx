@@ -54,7 +54,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
             <span className="text-xl">⭐️</span>
             <div>
               <h2 className="font-display font-bold text-slate-900 dark:text-white text-sm">Clinical Favorites</h2>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500">
+              <p className="text-xs text-slate-400 dark:text-slate-500">
                 {starredDrugs.length + starredProtocols.length} saved item{starredDrugs.length + starredProtocols.length !== 1 ? 's' : ''}
               </p>
             </div>
@@ -82,7 +82,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
           {/* Starred Drugs */}
           {starredDrugs.length > 0 && (
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1">
                 <span>💊</span>
                 <span>Medications ({starredDrugs.length})</span>
               </p>
@@ -97,7 +97,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
                       <h4 className="font-display font-bold text-xs text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         {drug.name}
                       </h4>
-                      <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[200px]">
+                      <p className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[200px]">
                         {drug.subgroup}
                       </p>
                     </div>
@@ -117,7 +117,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
           {/* Starred Protocols */}
           {starredProtocols.length > 0 && (
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-1">
+              <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-1">
                 <span>🔄</span>
                 <span>Switch Protocols ({starredProtocols.length})</span>
               </p>
@@ -132,7 +132,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
                       <h4 className="font-display font-bold text-xs text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         #{proto.number} {proto.title}
                       </h4>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[200px]">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[200px]">
                         {proto.transitionTitle}
                       </p>
                     </div>
@@ -152,7 +152,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
 
         {/* Footer */}
         <div className="p-3 bg-slate-50 dark:bg-[#0b0f19] border-t border-slate-200/80 dark:border-slate-800/80 text-center">
-          <p className="text-[10px] text-slate-400 dark:text-slate-500">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             Stored locally on your device for fast offline rounds
           </p>
         </div>

@@ -19,8 +19,8 @@ export default function DrugDetailScreen() {
   if (!drug) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">Medication Not Found</h2>
-        <p className="text-sm text-gray-500 mb-4">The requested drug monograph does not exist in the compendium.</p>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Medication Not Found</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">The requested drug monograph does not exist in the compendium.</p>
         <button
           onClick={() => navigate('/all-drugs')}
           className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-indigo-700"
@@ -98,7 +98,8 @@ export default function DrugDetailScreen() {
     if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) {
       return { bg: 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/50', dot: 'bg-blue-400' }
     }
-    return { bg: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700', dot: 'bg-gray-400' }
+    return { bg: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' }
+
   }
 
   return (
@@ -197,92 +198,77 @@ export default function DrugDetailScreen() {
           </p>
         )}
 
-        {/* Context-Aware Point-of-Care Clinical Action Bar */}
+        {/* Streamlined Context-Aware Point-of-Care Clinical Action Bar */}
         <div className="flex flex-wrap items-center gap-2 mb-5">
           {(drug.familyId === 'antipsychotics' || (drug.subgroup && drug.subgroup.toLowerCase().includes('antipsychotic'))) && (
-            <button
-              onClick={() => navigate(`/tools?tab=cpz&drug=${encodeURIComponent(drug.name.toLowerCase())}`)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
-            >
-              <span>🎭</span>
-              <span>CPZ Calculator</span>
-            </button>
-          )}
-
-          {(drug.familyId === 'antipsychotics' || (drug.subgroup && drug.subgroup.toLowerCase().includes('antipsychotic'))) && (
-            <button
-              onClick={() => navigate('/tools?tab=metabolic')}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
-            >
-              <span>📊</span>
-              <span>Metabolic Tracker</span>
-            </button>
+            <>
+              <button
+                onClick={() => navigate(`/tools?tab=cpz&drug=${encodeURIComponent(drug.name.toLowerCase())}`)}
+                className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+              >
+                <span>🎭</span>
+                <span>CPZ Equivalence</span>
+              </button>
+              <button
+                onClick={() => navigate('/tools?tab=metabolic')}
+                className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+              >
+                <span>📊</span>
+                <span>Metabolic Monitoring</span>
+              </button>
+            </>
           )}
 
           {drug.name.toLowerCase().includes('clozapine') && (
             <button
               onClick={() => navigate('/tools?tab=clozapine')}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+              className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-rose-600 dark:hover:text-rose-400 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             >
               <span>🩸</span>
-              <span>REMS ANC Protocol</span>
+              <span>REMS ANC Triage</span>
             </button>
           )}
 
           {drug.name.toLowerCase().includes('lithium') && (
             <button
               onClick={() => navigate('/tools?tab=lithium')}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+              className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             >
               <span>🧪</span>
-              <span>Lithium TDM</span>
+              <span>Lithium 12h TDM</span>
             </button>
           )}
 
           {(drug.familyId === 'anxiolytics' || (drug.subgroup && drug.subgroup.toLowerCase().includes('benzodiazepine'))) && (
             <button
               onClick={() => navigate(`/tools?tab=bzd&drug=${encodeURIComponent(drug.name.toLowerCase())}`)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+              className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             >
               <span>⚖️</span>
               <span>Ashton Taper Calculator</span>
             </button>
           )}
 
+          {/* Quick Screen for CYP450 & QTc */}
           <button
             onClick={() => navigate(`/tools?tab=cyp&drug=${encodeURIComponent(drug.id)}`)}
-            className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+            className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
           >
             <span>⚡</span>
-            <span>CYP450 Collisions</span>
+            <span>Check CYP & QTc</span>
           </button>
 
-          <button
-            onClick={() => navigate(`/tools?tab=qtc&drug=${encodeURIComponent(drug.id)}`)}
-            className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 transition-all inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
-          >
-            <span>❤️</span>
-            <span>QTc Risk</span>
-          </button>
-
-          {relatedProtocols.length > 0 ? (
+          {relatedProtocols.length > 0 && (
             <button
               onClick={() => navigate(`/cross-titration/${relatedProtocols[0].id}`)}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 transition-colors inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
+              className="text-xs font-bold px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 transition-colors inline-flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             >
               <span>🔄</span>
               <span>Switch Protocol ({relatedProtocols.length})</span>
             </button>
-          ) : (
-            <button
-              onClick={() => navigate('/cross-titration')}
-              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 transition-colors inline-flex items-center gap-1.5 cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
-            >
-              <span>🔄</span>
-              <span>Switch Protocol</span>
-            </button>
           )}
         </div>
+
 
         {/* Target Maintenance & Max Ceiling Hero Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-4">
@@ -440,7 +426,7 @@ export default function DrugDetailScreen() {
                         minWidth: '2.5rem',
                       }}
                     >
-                      <span className="text-[10px] font-bold text-white drop-shadow-xs">
+                      <span className="text-xs font-bold text-white drop-shadow-xs">
                         {r.occupancy}%
                       </span>
                     </div>

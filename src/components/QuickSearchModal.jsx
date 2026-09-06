@@ -148,7 +148,7 @@ export default function QuickSearchModal({ isOpen, onClose }) {
           {/* Drugs Category */}
           {results.drugs.length > 0 && (
             <div className="pt-2">
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2 mb-1.5 flex items-center gap-1">
+              <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2 mb-1.5 flex items-center gap-1">
                 <span>💊</span>
                 <span>Medications</span>
               </p>
@@ -170,10 +170,10 @@ export default function QuickSearchModal({ isOpen, onClose }) {
                           </span>
                         )}
                       </div>
-                      <p className="text-[10px] text-slate-400 dark:text-slate-500">{drug.subgroup}</p>
+                      <p className="text-xs text-slate-400 dark:text-slate-500">{drug.subgroup}</p>
                     </div>
                     {drug.targetDose && (
-                      <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
                         {drug.targetDose.split('·')[0]}
                       </span>
                     )}
@@ -186,7 +186,7 @@ export default function QuickSearchModal({ isOpen, onClose }) {
           {/* Protocols Category */}
           {results.protocols.length > 0 && (
             <div className="pt-2">
-              <p className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider px-2 mb-1.5 flex items-center gap-1">
+              <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider px-2 mb-1.5 flex items-center gap-1">
                 <span>🔄</span>
                 <span>Cross-Titration Protocols</span>
               </p>
@@ -203,9 +203,9 @@ export default function QuickSearchModal({ isOpen, onClose }) {
                           #{proto.number} {proto.title}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400">{proto.transitionTitle}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{proto.transitionTitle}</p>
                     </div>
-                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
                       {proto.switchType}
                     </span>
                   </button>
@@ -217,7 +217,7 @@ export default function QuickSearchModal({ isOpen, onClose }) {
           {/* Receptors Category */}
           {results.receptors.length > 0 && (
             <div className="pt-2">
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2 mb-1.5 flex items-center gap-1">
+              <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2 mb-1.5 flex items-center gap-1">
                 <span>🧬</span>
                 <span>Molecular Targets</span>
               </p>
@@ -252,7 +252,7 @@ export default function QuickSearchModal({ isOpen, onClose }) {
         {/* Search Footer */}
         <div className="p-3 bg-slate-50 dark:bg-[#0b0f19] border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
           <span>Search across 80+ medications, 20 switch protocols & 44 receptors</span>
-          <span className="text-[10px] bg-slate-200/80 dark:bg-slate-800 px-1.5 py-0.5 rounded font-mono">ESC to close</span>
+          <span className="text-xs bg-slate-200/80 dark:bg-slate-800 px-1.5 py-0.5 rounded font-mono">ESC to close</span>
         </div>
       </div>
     </div>

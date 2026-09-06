@@ -88,7 +88,7 @@ export default function PatientHandoutModal({
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
             <div>
-              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Patient Name:</label>
+              <label className="text-xs font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Patient Name:</label>
               <input
                 type="text"
                 placeholder="e.g. John Doe"
@@ -98,7 +98,7 @@ export default function PatientHandoutModal({
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Clinic / Prescriber:</label>
+              <label className="text-xs font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Clinic / Prescriber:</label>
               <input
                 type="text"
                 placeholder="e.g. Dr. Smith / Outpatient Psych"
@@ -108,7 +108,7 @@ export default function PatientHandoutModal({
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Clinic Phone:</label>
+              <label className="text-xs font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Clinic Phone:</label>
               <input
                 type="text"
                 placeholder="e.g. (555) 234-5678"
@@ -121,12 +121,12 @@ export default function PatientHandoutModal({
         </div>
 
         {/* PRINTABLE CONTENT AREA */}
-        <div id="printable-handout-area" className="p-6 text-gray-900 bg-white max-h-[65vh] overflow-y-auto">
+        <div id="printable-handout-area" className="p-6 text-slate-900 bg-white max-h-[65vh] overflow-y-auto">
           {/* Header Banner */}
-          <div className="border-b-2 border-gray-900 pb-4 mb-5">
+          <div className="border-b-2 border-slate-900 pb-4 mb-5">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-xl font-black text-gray-900 tracking-tight">
+                <h1 className="text-xl font-black text-slate-900 tracking-tight">
                   Medication Transition Instructions
                 </h1>
                 <p className="text-sm font-bold text-indigo-900 mt-0.5">
@@ -134,8 +134,8 @@ export default function PatientHandoutModal({
                 </p>
               </div>
               <div className="text-right text-xs">
-                <span className="font-bold text-gray-500 block">Date Issued:</span>
-                <span className="font-bold text-gray-900">
+                <span className="font-bold text-slate-500 block">Date Issued:</span>
+                <span className="font-bold text-slate-900">
                   {startDate || new Date().toISOString().split('T')[0]}
                 </span>
               </div>
@@ -143,40 +143,40 @@ export default function PatientHandoutModal({
 
             {/* Patient & Clinic details */}
             {(patientName || clinicName || clinicPhone) && (
-              <div className="mt-3 pt-3 border-t border-gray-200 flex flex-wrap justify-between text-xs font-medium text-gray-700">
-                {patientName && <div><span className="font-bold text-gray-900">Patient:</span> {patientName}</div>}
-                {clinicName && <div><span className="font-bold text-gray-900">Prescriber:</span> {clinicName}</div>}
-                {clinicPhone && <div><span className="font-bold text-gray-900">Phone:</span> {clinicPhone}</div>}
+              <div className="mt-3 pt-3 border-t border-slate-200 flex flex-wrap justify-between text-xs font-medium text-slate-700">
+                {patientName && <div><span className="font-bold text-slate-900">Patient:</span> {patientName}</div>}
+                {clinicName && <div><span className="font-bold text-slate-900">Prescriber:</span> {clinicName}</div>}
+                {clinicPhone && <div><span className="font-bold text-slate-900">Phone:</span> {clinicPhone}</div>}
               </div>
             )}
           </div>
 
           {/* Introductory Explanation */}
-          <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200 text-xs mb-5 leading-relaxed">
-            <strong className="text-gray-900 block mb-1">How to follow this transition schedule:</strong>
+          <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs mb-5 leading-relaxed">
+            <strong className="text-slate-900 block mb-1">How to follow this transition schedule:</strong>
             Your doctor has prescribed a gradual transition plan over approximately <strong>{duration}</strong>.
             This schedule allows your body to safely adjust to your new medication while gradually stepping down your previous medication.
             Please take your doses exactly as outlined below. Do not stop either medication suddenly.
           </div>
 
           {/* Phase Table */}
-          <h2 className="text-xs font-black uppercase tracking-wider text-gray-800 mb-2">
+          <h2 className="text-xs font-black uppercase tracking-wider text-slate-800 mb-2">
             Your Step-by-Step Schedule:
           </h2>
           <div className="space-y-3 mb-6">
             {phases.map((ph, idx) => (
-              <div key={idx} className="border border-gray-300 rounded-xl p-3 text-xs">
-                <div className="flex items-center justify-between font-bold text-gray-900 mb-1 border-b border-gray-100 pb-1">
+              <div key={idx} className="border border-slate-300 rounded-xl p-3 text-xs">
+                <div className="flex items-center justify-between font-bold text-slate-900 mb-1 border-b border-slate-100 pb-1">
                   <span className="text-indigo-950 font-black">
                     Step {idx + 1}: {ph.title}
                   </span>
                   {ph.calculatedDates && (
-                    <span className="text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md text-[11px]">
+                    <span className="text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md text-xs">
                       {ph.calculatedDates}
                     </span>
                   )}
                 </div>
-                <div className="text-gray-800 font-medium leading-relaxed mt-1">
+                <div className="text-slate-800 font-medium leading-relaxed mt-1">
                   {ph.notes || ph.description || 'Follow instructions as directed by your clinician.'}
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function PatientHandoutModal({
               <span>Important Warnings & When to Call Us:</span>
             </div>
             {warnings && <p className="font-medium">{warnings}</p>}
-            <ul className="list-disc list-inside space-y-0.5 text-gray-800">
+            <ul className="list-disc list-inside space-y-0.5 text-slate-800">
               <li>Call immediately if you experience severe dizziness, fainting, high fever, or severe muscle stiffness.</li>
               <li>Mild temporary nausea, sleep changes, or restlessness can occur during medication shifts; contact us if troublesome.</li>
               <li>If you miss a dose, take it as soon as you remember, unless it is almost time for your next scheduled dose. Never take a double dose.</li>
@@ -198,7 +198,7 @@ export default function PatientHandoutModal({
           </div>
 
           {/* Footer note */}
-          <div className="pt-3 border-t border-gray-200 flex justify-between text-[10px] text-gray-500">
+          <div className="pt-3 border-t border-slate-200 flex justify-between text-xs text-slate-500">
             <span>Psychiatric Medication Guide — Point of Care Reference</span>
             <span>Always consult your healthcare provider with questions</span>
           </div>
