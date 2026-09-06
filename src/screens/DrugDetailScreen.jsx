@@ -1,11 +1,16 @@
+import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
 import ReceptorTag from '../components/ReceptorTag'
+import Toast from '../components/Toast'
 
 export default function DrugDetailScreen() {
   const { drugId } = useParams()
   const navigate = useNavigate()
+  const [toastMessage, setToastMessage] = useState('')
+  const [activeSection, setActiveSection] = useState('overview')
+
   const drug = data.drugs.find(d => d.id === drugId)
 
   if (!drug) {
@@ -26,12 +31,48 @@ export default function DrugDetailScreen() {
   const family = data.families.find(f => f.id === drug.familyId)
 
   // Find any related Module 12 switch protocols
-  const relatedProtocols = (data.protocols || []).filter(p => {
-    const nameMatch = p.transitionTitle && p.transitionTitle.toLowerCase().includes(drug.name.toLowerCase())
-    const titleMatch = p.title && p.title.toLowerCase().includes(drug.name.toLowerCase())
-    const rationaleMatch = p.rationale && p.rationale.toLowerCase().includes(drug.name.toLowerCase())
-    return nameMatch || titleMatch || rationaleMatch
-  })
+  const relatedProtocols = useMemo(() => {
+    return (data.protocols || []).filter(p => {
+      const nameMatch = p.transitionTitle && p.transitionTitle.toLowerCase().includes(drug.name.toLowerCase())
+      const titleMatch = p.title && p.title.toLowerCase().includes(drug.name.toLowerCase())
+      const rationaleMatch = p.rationale && p.rationale.toLowerCase().includes(drug.name.toLowerCase())
+      return nameMatch || titleMatch || rationaleMatch
+    })
+  }, [drug])
+
+  // Copy titration schedule to clipboard
+  const handleCopyTitration = () => {
+    if (!drug.titrationSchedule || drug.titrationSchedule.length === 0) return
+    const lines = [
+      `=== ${drug.name.toUpperCase()} (${drug.brand || ''}) TITRATION PROTOCOL ===`,
+      `Target Maintenance Dose: ${drug.targetDose || 'N/A'}`,
+      `Max Approved Ceiling: ${drug.maxDose || 'N/A'}`,
+      `Food Requirement: ${drug.foodRequirement || 'None specified'}`,
+      '',
+      'TITRATION SCHEDULE:',
+      ...drug.titrationSchedule.map((s, idx) =>
+        `${s.step || `Step ${idx + 1}`}: ${s.dose} ${s.timing ? `[${s.timing}]` : ''} - ${s.directive || ''}`
+      ),
+      '',
+      drug.blackBox ? `CRITICAL WARNING: ${drug.blackBox.title} - ${drug.blackBox.warning}` : '',
+      '====================================================='
+    ].filter(Boolean).join('\n')
+
+    navigator.clipboard.writeText(lines).then(() => {
+      setToastMessage('Titration schedule copied to clipboard!')
+    }).catch(() => {
+      setToastMessage('Failed to copy to clipboard')
+    })
+  }
+
+  // Scroll to section
+  const scrollTo = (id) => {
+    setActiveSection(id)
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   // Severity color mapper for Adverse Footprint
   const getSeverityBadge = (severity) => {
@@ -58,33 +99,70 @@ export default function DrugDetailScreen() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      <BackButton />
+    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+      <BackButton title={drug.name} />
+      <Toast message={toastMessage} onClose={() => setToastMessage('')} />
+
+      {/* Sticky Section Jump Bar */}
+      <div className="sticky top-2 z-30 bg-white/95 backdrop-blur-md rounded-2xl shadow-xs border border-gray-200/80 p-1.5 mb-5 flex items-center gap-1 overflow-x-auto hide-scrollbar">
+        {[
+          { id: 'overview', label: 'Overview' },
+          { id: 'benchmarks', label: 'Benchmarks' },
+          { id: 'receptors', label: 'Receptors' },
+          { id: 'adverse', label: 'Adverse Footprint' },
+          { id: 'titration', label: 'Titration' },
+          { id: 'special', label: 'Special Pop' },
+          { id: 'pearls', label: 'Pearls' },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => scrollTo(tab.id)}
+            className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              activeSection === tab.id
+                ? 'bg-indigo-600 text-white shadow-2xs'
+                : 'text-gray-600 hover:text-indigo-600 hover:bg-gray-100'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
       {/* Header & Taxonomy Badges */}
-      <div className="mb-5">
-        <div className="flex flex-wrap items-center gap-2 mb-2">
-          {family && (
-            <button
-              onClick={() => navigate(`/family/${family.id}`)}
-              className="text-xs font-bold px-2.5 py-1 rounded-full transition-opacity hover:opacity-80 border"
-              style={{
-                backgroundColor: family.color + '15',
-                color: family.color,
-                borderColor: family.color + '30',
-              }}
-            >
-              {family.name}
-            </button>
-          )}
-          {drug.subgroupId && (
-            <button
-              onClick={() => navigate(`/subgroup/${drug.subgroupId}`)}
-              className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-            >
-              {drug.subgroup}
-            </button>
-          )}
+      <div id="overview" className="mb-5 scroll-mt-20">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {family && (
+              <button
+                onClick={() => navigate(`/family/${family.id}`)}
+                className="text-xs font-bold px-2.5 py-1 rounded-full transition-opacity hover:opacity-80 border"
+                style={{
+                  backgroundColor: family.color + '15',
+                  color: family.color,
+                  borderColor: family.color + '30',
+                }}
+              >
+                {family.name}
+              </button>
+            )}
+            {drug.subgroupId && (
+              <button
+                onClick={() => navigate(`/subgroup/${drug.subgroupId}`)}
+                className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+              >
+                {drug.subgroup}
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={handleCopyTitration}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 text-gray-700 text-xs font-semibold transition-all border border-gray-200"
+            title="Copy titration schedule and warnings to clipboard"
+          >
+            <span>📋</span>
+            <span>Copy Titration</span>
+          </button>
         </div>
 
         <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-1">
@@ -135,7 +213,7 @@ export default function DrugDetailScreen() {
 
       {/* 4-Card Benchmark Metrics Grid */}
       {drug.benchmarkMetrics && drug.benchmarkMetrics.length > 0 && (
-        <div className="mb-6">
+        <div id="benchmarks" className="mb-6 scroll-mt-20">
           <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
             <span>📐</span>
             <span>Clinical Benchmark Metrics</span>
@@ -204,7 +282,7 @@ export default function DrugDetailScreen() {
 
       {/* Molecular Receptor Binding Profile */}
       {drug.receptors && drug.receptors.length > 0 && (
-        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+        <div id="receptors" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
               <span>🧬</span>
@@ -281,7 +359,7 @@ export default function DrugDetailScreen() {
 
       {/* Adverse Effect Risk Footprint (8 Domains) */}
       {drug.adverseFootprint && drug.adverseFootprint.length > 0 && (
-        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+        <div id="adverse" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
           <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>🛡️</span>
             <span>Adverse Effect Risk Footprint</span>
@@ -314,11 +392,19 @@ export default function DrugDetailScreen() {
 
       {/* Structured 4-Step Titration Schedule */}
       {drug.titrationSchedule && drug.titrationSchedule.length > 0 && (
-        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <span>📈</span>
-            <span>Structured 4-Step Titration Schedule</span>
-          </h2>
+        <div id="titration" className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+              <span>📈</span>
+              <span>Structured 4-Step Titration Schedule</span>
+            </h2>
+            <button
+              onClick={handleCopyTitration}
+              className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              Copy Protocol →
+            </button>
+          </div>
 
           <div className="space-y-3">
             {drug.titrationSchedule.map((step, idx) => (
@@ -354,7 +440,7 @@ export default function DrugDetailScreen() {
 
       {/* Special Populations & Organ Impairment */}
       {drug.specialPopulations && (
-        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+        <div id="special" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
           <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>👥</span>
             <span>Special Populations & Organ Adjustments</span>
@@ -450,7 +536,7 @@ export default function DrugDetailScreen() {
 
       {/* Clinical Pearls */}
       {drug.clinicalPearls && drug.clinicalPearls.length > 0 && (
-        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+        <div id="pearls" className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6 scroll-mt-20">
           <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>💡</span>
             <span>High-Yield Clinical Practice Pearls</span>

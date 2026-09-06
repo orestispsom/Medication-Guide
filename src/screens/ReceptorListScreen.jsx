@@ -43,8 +43,8 @@ export default function ReceptorListScreen() {
   }, [searchQuery, selectedCategory])
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      <BackButton />
+    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+      <BackButton title="Receptor Guide" />
 
       {/* Header */}
       <div className="mb-5">

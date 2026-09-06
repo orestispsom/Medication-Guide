@@ -13,24 +13,32 @@ export default function FamilyScreen() {
   const drugCount = data.drugs.filter(d => d.familyId === familyId).length
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
-      <BackButton />
+    <div className="max-w-2xl mx-auto px-4 py-6 pb-28">
+      <BackButton title={family.name} />
 
       <div className="mb-6">
-        <h1 className="text-xl font-extrabold text-gray-900">{family.name}</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900">{family.name}</h1>
         <p className="text-sm text-gray-500 mt-1">{drugCount} medications across {subgroups.length} subgroups</p>
       </div>
 
-      <button
-        onClick={() => navigate(`/family/${familyId}/comparison`)}
-        className="w-full mb-5 rounded-xl p-3.5 font-semibold text-sm border-2 transition-all hover:shadow-md flex items-center justify-center gap-2"
-        style={{ borderColor: family.color, color: family.color, backgroundColor: family.color + '08' }}
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 18h18M3 6h18" />
-        </svg>
-        Table Overview — Receptor Comparison
-      </button>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5">
+        <button
+          onClick={() => navigate(`/family/${familyId}/comparison`)}
+          className="rounded-2xl p-3.5 font-bold text-xs border transition-all hover:shadow-md flex items-center justify-center gap-2"
+          style={{ borderColor: family.color + '40', color: family.color, backgroundColor: family.color + '10' }}
+        >
+          <span>🧬</span>
+          <span>Receptor Comparison Table</span>
+        </button>
+
+        <button
+          onClick={() => navigate(`/family/${familyId}/comparison`)}
+          className="rounded-2xl p-3.5 font-bold text-xs border border-gray-200 bg-white text-gray-700 hover:border-gray-300 transition-all hover:shadow-md flex items-center justify-center gap-2"
+        >
+          <span>🛡️</span>
+          <span>Adverse Risk Matrix</span>
+        </button>
+      </div>
 
       <div className="space-y-3">
         {subgroups.map(sg => (

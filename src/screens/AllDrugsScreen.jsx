@@ -15,12 +15,25 @@ export default function AllDrugsScreen() {
   const [selectedFamilyId, setSelectedFamilyId] = useState('all')
   const [selectedSubgroupId, setSelectedSubgroupId] = useState('all')
   const [selectedLetter, setSelectedLetter] = useState('all')
+  const [filterBoxedWarning, setFilterBoxedWarning] = useState(false)
+  const [filterMealReq, setFilterMealReq] = useState(false)
+  const [sortBy, setSortBy] = useState('name-asc') // 'name-asc' | 'halfLife'
 
   // Subgroups available for the currently selected family
   const availableSubgroups = useMemo(() => {
     if (selectedFamilyId === 'all') return data.subgroups
     return data.subgroups.filter(s => s.familyId === selectedFamilyId)
   }, [selectedFamilyId])
+
+  // Helper to extract approximate hours from half-life string
+  const parseHalfLifeHours = (hlStr) => {
+    if (!hlStr) return 999
+    const match = hlStr.match(/(\d+(\.\d+)?)\s*(h|hour|day)/i)
+    if (!match) return 999
+    const val = parseFloat(match[1])
+    if (match[3].toLowerCase().startsWith('d')) return val * 24
+    return val
+  }
 
   // Filter drugs
   const filteredDrugs = useMemo(() => {
@@ -44,6 +57,16 @@ export default function AllDrugsScreen() {
         }
       }
 
+      // Boxed warning filter
+      if (filterBoxedWarning && !drug.blackBox) {
+        return false
+      }
+
+      // Meal requirement filter
+      if (filterMealReq && (!drug.foodRequirement || !drug.foodRequirement.toLowerCase().includes('meal'))) {
+        return false
+      }
+
       // Search query filter
       if (q) {
         const nameMatch = drug.name.toLowerCase().includes(q)
@@ -56,8 +79,13 @@ export default function AllDrugsScreen() {
       }
 
       return true
-    }).sort((a, b) => a.name.localeCompare(b.name))
-  }, [searchQuery, selectedFamilyId, selectedSubgroupId, selectedLetter])
+    }).sort((a, b) => {
+      if (sortBy === 'halfLife') {
+        return parseHalfLifeHours(a.halfLife) - parseHalfLifeHours(b.halfLife)
+      }
+      return a.name.localeCompare(b.name)
+    })
+  }, [searchQuery, selectedFamilyId, selectedSubgroupId, selectedLetter, filterBoxedWarning, filterMealReq, sortBy])
 
   const handleFamilyChange = (famId) => {
     setSelectedFamilyId(famId)
@@ -69,11 +97,14 @@ export default function AllDrugsScreen() {
     setSelectedFamilyId('all')
     setSelectedSubgroupId('all')
     setSelectedLetter('all')
+    setFilterBoxedWarning(false)
+    setFilterMealReq(false)
+    setSortBy('name-asc')
     setSearchParams({})
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
       <BackButton />
 
       {/* Header */}
@@ -94,7 +125,7 @@ export default function AllDrugsScreen() {
       </div>
 
       {/* Search Input */}
-      <div className="relative mb-4">
+      <div className="relative mb-3">
         <svg
           className="w-5 h-5 text-gray-400 absolute left-4 top-3.5 pointer-events-none"
           fill="none"
@@ -123,6 +154,43 @@ export default function AllDrugsScreen() {
             ✕
           </button>
         )}
+      </div>
+
+      {/* Quick Clinical Filter Toggles */}
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <button
+          onClick={() => setFilterBoxedWarning(!filterBoxedWarning)}
+          className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
+            filterBoxedWarning
+              ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
+              : 'bg-white text-gray-600 border-gray-200 hover:border-amber-300'
+          }`}
+        >
+          ⚠️ Boxed Warnings Only
+        </button>
+
+        <button
+          onClick={() => setFilterMealReq(!filterMealReq)}
+          className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
+            filterMealReq
+              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+              : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300'
+          }`}
+        >
+          🍽️ Meal Required Only
+        </button>
+
+        <div className="ml-auto flex items-center gap-1.5 text-xs font-medium text-gray-500">
+          <span>Sort:</span>
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+            className="bg-white border border-gray-200 rounded-xl px-2 py-1 text-xs font-semibold text-gray-700 shadow-2xs focus:outline-none"
+          >
+            <option value="name-asc">A–Z</option>
+            <option value="halfLife">Half-Life (t½)</option>
+          </select>
+        </div>
       </div>
 
       {/* Alphabet Quick Jump Bar */}
@@ -220,7 +288,7 @@ export default function AllDrugsScreen() {
             ))}
           </select>
 
-          {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedLetter !== 'all' || searchQuery) && (
+          {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedLetter !== 'all' || searchQuery || filterBoxedWarning || filterMealReq) && (
             <button
               onClick={handleClearAll}
               className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 ml-auto whitespace-nowrap"

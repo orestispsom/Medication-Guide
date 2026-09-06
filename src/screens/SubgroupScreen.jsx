@@ -12,15 +12,15 @@ export default function SubgroupScreen() {
   const drugs = data.drugs.filter(d => d.subgroupId === subgroupId)
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
-      <BackButton />
+    <div className="max-w-2xl mx-auto px-4 py-6 pb-28">
+      <BackButton title={subgroup.name} />
 
       <div className="mb-1">
         <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: family?.color }}>
           {family?.name}
         </p>
       </div>
-      <h1 className="text-xl font-extrabold text-gray-900 mb-1">{subgroup.name}</h1>
+      <h1 className="text-2xl font-extrabold text-gray-900 mb-1">{subgroup.name}</h1>
       <p className="text-sm text-gray-500 mb-5">{drugs.length} medication{drugs.length !== 1 ? 's' : ''}</p>
 
       <div className="space-y-3">

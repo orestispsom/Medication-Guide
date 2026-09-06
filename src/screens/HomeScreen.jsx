@@ -1,11 +1,35 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import FamilyCard from '../components/FamilyCard'
 
+const QUICK_CHIPS = [
+  { label: 'Clozapine Titration', query: 'Clozapine' },
+  { label: 'Lithium Level', query: 'Lithium' },
+  { label: 'Cobenfy (Dual Muscarinic)', query: 'Cobenfy' },
+  { label: 'Ashton BZD Taper', path: '/cross-titration/protocol-10-long-term-benzodiazepine-deprescribing-the-ashton-manual-paradigm' },
+  { label: 'MAOI Safe Washout', path: '/cross-titration/protocol-03-ssri-to-maoi-cross-titration' },
+  { label: 'Auvelity (NMDA)', query: 'Auvelity' },
+  { label: 'Cariprazine D3', query: 'Cariprazine' },
+  { label: 'Emergency Antidotes', path: '/family/antidotes-interventional' },
+]
+
 export default function HomeScreen() {
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
+  const searchInputRef = useRef(null)
+
+  // Listen for keyboard '/' shortcut to focus search
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === '/' && document.activeElement !== searchInputRef.current) {
+        e.preventDefault()
+        searchInputRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   // Live filter drugs across generic name, brand names, subgroup, family, and indications
   const searchResults = useMemo(() => {
@@ -24,8 +48,20 @@ export default function HomeScreen() {
       .slice(0, 8)
   }, [searchQuery])
 
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (searchResults.length === 1) {
+        navigate(`/drug/${searchResults[0].id}`)
+        setSearchQuery('')
+      } else if (searchResults.length > 1) {
+        navigate(`/all-drugs?search=${encodeURIComponent(searchQuery)}`)
+        setSearchQuery('')
+      }
+    }
+  }
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="max-w-2xl mx-auto px-4 py-6 pb-24">
       {/* Header */}
       <div className="text-center mb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold mb-3">
@@ -38,10 +74,21 @@ export default function HomeScreen() {
         <p className="text-sm text-gray-500 mt-1">
           Evidence-Based Pharmacodynamics, Titration & Deprescribing
         </p>
+
+        {/* Stats Pill */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-[11px] font-semibold text-gray-400">
+          <span>{data.drugs.length} Monographs</span>
+          <span>•</span>
+          <span>{data.protocols?.length || 20} Transition Protocols</span>
+          <span>•</span>
+          <span>{data.receptors.length} Molecular Targets</span>
+          <span>•</span>
+          <span>8 Adverse Safety Domains</span>
+        </div>
       </div>
 
       {/* Global Quick Search Bar */}
-      <div className="relative mb-6">
+      <div className="relative mb-3">
         <div className="relative flex items-center">
           <svg
             className="w-5 h-5 text-gray-400 absolute left-4 pointer-events-none"
@@ -52,19 +99,25 @@ export default function HomeScreen() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Search 170+ drugs, brands (e.g. Cobenfy, Vyvanse), indications..."
-            className="w-full bg-white border border-gray-200 rounded-2xl pl-11 pr-10 py-3.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400"
+            onKeyDown={handleSearchKeyDown}
+            placeholder="Search 170+ drugs, brands (e.g. Cobenfy, Vyvanse), press / to focus..."
+            className="w-full bg-white border border-gray-200 rounded-2xl pl-11 pr-10 py-3.5 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400"
           />
-          {searchQuery && (
+          {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
               className="absolute right-3 text-gray-400 hover:text-gray-600 p-1 text-xs rounded-full bg-gray-100 hover:bg-gray-200"
             >
               ✕
             </button>
+          ) : (
+            <span className="absolute right-4 text-xs font-mono font-semibold text-gray-300 pointer-events-none border border-gray-200 rounded px-1.5 py-0.5">
+              /
+            </span>
           )}
         </div>
 
@@ -128,50 +181,72 @@ export default function HomeScreen() {
         )}
       </div>
 
+      {/* High-Yield Clinical Quick Prescribing Chips */}
+      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-5">
+        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap mr-1">
+          Quick Picks:
+        </span>
+        {QUICK_CHIPS.map(chip => (
+          <button
+            key={chip.label}
+            onClick={() => {
+              if (chip.path) {
+                navigate(chip.path)
+              } else if (chip.query) {
+                setSearchQuery(chip.query)
+              }
+            }}
+            className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-white border border-gray-200 text-gray-700 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/50 shadow-2xs transition-all"
+          >
+            {chip.label}
+          </button>
+        ))}
+      </div>
+
       {/* High-Yield Quick Navigation Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
         <button
           onClick={() => navigate('/all-drugs')}
-          className="bg-white border border-gray-200 hover:border-indigo-400 rounded-xl p-3 text-left shadow-xs hover:shadow-md transition-all group"
+          className="bg-white border border-gray-200 hover:border-indigo-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">📋</span>
-            <span className="text-xs font-bold text-gray-900 group-hover:text-indigo-600">All Drugs</span>
+            <span className="text-xl">📋</span>
+            <span className="text-xs font-extrabold text-gray-900 group-hover:text-indigo-600">All Drugs</span>
           </div>
-          <p className="text-[10px] text-gray-400 mt-1">Complete A–Z index</p>
+          <p className="text-[11px] text-gray-400 mt-1">Complete A–Z index</p>
         </button>
 
         <button
           onClick={() => navigate('/cross-titration')}
-          className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 hover:border-indigo-400 rounded-xl p-3 text-left shadow-xs hover:shadow-md transition-all group"
+          className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 hover:border-indigo-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">🔄</span>
-            <span className="text-xs font-bold text-indigo-900 group-hover:text-indigo-700">Cross-Titration</span>
+            <span className="text-xl">🔄</span>
+            <span className="text-xs font-extrabold text-indigo-900 group-hover:text-indigo-700">Cross-Titration</span>
           </div>
-          <p className="text-[10px] text-indigo-500 mt-1">20 Switch Protocols</p>
+          <p className="text-[11px] text-indigo-500 mt-1">20 Switch Protocols</p>
         </button>
 
         <button
           onClick={() => navigate('/receptors')}
-          className="bg-white border border-gray-200 hover:border-indigo-400 rounded-xl p-3 text-left shadow-xs hover:shadow-md transition-all group"
+          className="bg-white border border-gray-200 hover:border-indigo-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">🧬</span>
-            <span className="text-xs font-bold text-gray-900 group-hover:text-indigo-600">Receptors</span>
+            <span className="text-xl">🧬</span>
+            <span className="text-xs font-extrabold text-gray-900 group-hover:text-indigo-600">Receptors</span>
           </div>
-          <p className="text-[10px] text-gray-400 mt-1">44 Molecular Targets</p>
+          <p className="text-[11px] text-gray-400 mt-1">44 Molecular Targets</p>
         </button>
 
         <button
           onClick={() => navigate('/family/antidotes-interventional')}
-          className="bg-rose-50 border border-rose-200 hover:border-rose-400 rounded-xl p-3 text-left shadow-xs hover:shadow-md transition-all group"
+          className="bg-rose-50 border border-rose-200 hover:border-rose-400 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">🚨</span>
-            <span className="text-xs font-bold text-rose-900 group-hover:text-rose-700">Antidotes</span>
+            <span className="text-xl">🚨</span>
+            <span className="text-xs font-extrabold text-rose-900 group-hover:text-rose-700">Antidotes</span>
           </div>
-          <p className="text-[10px] text-rose-500 mt-1">Emergency Rescues</p>
+          <p className="text-[11px] text-rose-500 mt-1">Emergency Rescues</p>
         </button>
       </div>
 
@@ -195,13 +270,13 @@ export default function HomeScreen() {
       </div>
 
       {/* Cross-Module Clinical Tools Callout */}
-      <div className="bg-gradient-to-r from-indigo-900 to-purple-900 rounded-2xl p-5 text-white shadow-lg mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 rounded-3xl p-5 text-white shadow-lg mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-700 text-indigo-200">
-            Module 12 Integration
+            Module 12 Master Tool
           </span>
           <h3 className="text-base font-bold mt-1.5">
-            Cross-Titration & Deprescribing Tool
+            Cross-Titration & Deprescribing Algorithm
           </h3>
           <p className="text-xs text-indigo-200 mt-0.5 max-w-md">
             Interactive step-by-step algorithms, receptor shift kinetics, Ashton BZD tapers, MAOI washouts, and emergency rescue guides.
@@ -214,11 +289,6 @@ export default function HomeScreen() {
           Launch Protocols →
         </button>
       </div>
-
-      {/* Footer */}
-      <p className="text-center text-[11px] text-gray-400 mt-6">
-        {data.drugs.length} clinical monographs · {data.protocols?.length || 20} transition algorithms · {data.receptors.length} molecular targets · 9 authoritative clinical domains
-      </p>
     </div>
   )
 }

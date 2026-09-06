@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
+import Toast from '../components/Toast'
 
 export default function CrossTitrationScreen() {
   const { protocolId } = useParams()
@@ -53,7 +54,7 @@ export default function CrossTitrationScreen() {
 
   // Otherwise render the Master Protocol Catalog
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
       <BackButton />
 
       {/* Header */}
@@ -156,7 +157,7 @@ export default function CrossTitrationScreen() {
                 </span>
               )}
               {proto.duration && (
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-100">
+                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-100">
                   ⏱️ {proto.duration}
                 </span>
               )}
@@ -175,6 +176,35 @@ export default function CrossTitrationScreen() {
 
 function ProtocolDetailView({ protocol, onBack }) {
   const navigate = useNavigate()
+  const [toastMessage, setToastMessage] = useState('')
+  const [activePhaseIndex, setActivePhaseIndex] = useState(null) // null = all
+
+  // Copy switch protocol to clipboard
+  const handleCopyProtocol = () => {
+    const lines = [
+      `=== MODULE 12: PROTOCOL #${protocol.number} - ${protocol.title.toUpperCase()} ===`,
+      `Transition: ${protocol.transitionTitle}`,
+      `Switch Type: ${protocol.switchType} · Duration: ${protocol.duration}`,
+      `Core Mandate: ${protocol.coreMandate}`,
+      '',
+      `CLINICAL RATIONALE:`,
+      protocol.rationale || '',
+      '',
+      'EXECUTION PHASES:',
+      ...(protocol.phases || []).map((ph, idx) =>
+        `Phase ${idx + 1} (${ph.timing || ''}): ${ph.title} - ${ph.notes || ''}`
+      ),
+      '',
+      protocol.alertBox ? `CRITICAL PRECAUTION: ${protocol.alertBox}` : '',
+      '========================================================================'
+    ].filter(Boolean).join('\n')
+
+    navigator.clipboard.writeText(lines).then(() => {
+      setToastMessage('Switch protocol copied to clipboard!')
+    }).catch(() => {
+      setToastMessage('Failed to copy to clipboard')
+    })
+  }
 
   // Risk meter severity color helper
   const getRiskColor = (severity) => {
@@ -187,17 +217,30 @@ function ProtocolDetailView({ protocol, onBack }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      {/* Back Button */}
-      <button
-        onClick={onBack}
-        className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-purple-700 mb-4 transition-colors"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back to All 20 Protocols
-      </button>
+    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+      <Toast message={toastMessage} onClose={() => setToastMessage('')} />
+
+      {/* Back Button & Copy Protocol Button */}
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={onBack}
+          className="inline-flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-purple-700 transition-colors py-1 px-2 rounded-lg hover:bg-gray-100"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>All 20 Protocols</span>
+        </button>
+
+        <button
+          onClick={handleCopyProtocol}
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition-all border border-purple-200"
+          title="Copy protocol to clipboard"
+        >
+          <span>📋</span>
+          <span>Copy Protocol</span>
+        </button>
+      </div>
 
       {/* Protocol Header Card */}
       <div className="bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 text-white rounded-3xl p-6 shadow-xl mb-6">
@@ -296,46 +339,75 @@ function ProtocolDetailView({ protocol, onBack }) {
         </div>
       )}
 
-      {/* 4-Phase Execution Timeline */}
+      {/* 4-Phase Execution Timeline with Interactive Tabs */}
       {protocol.phases && protocol.phases.length > 0 && (
         <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <span>📅</span>
-            <span>Structured 4-Phase Execution Schedule</span>
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+              <span>📅</span>
+              <span>Structured 4-Phase Execution Schedule</span>
+            </h2>
+
+            <div className="flex bg-gray-100 p-1 rounded-xl gap-1">
+              <button
+                onClick={() => setActivePhaseIndex(null)}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                  activePhaseIndex === null ? 'bg-white text-purple-700 shadow-2xs' : 'text-gray-500'
+                }`}
+              >
+                All
+              </button>
+              {protocol.phases.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActivePhaseIndex(idx)}
+                  className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                    activePhaseIndex === idx ? 'bg-white text-purple-700 shadow-2xs' : 'text-gray-500'
+                  }`}
+                >
+                  Phase {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="relative border-l-2 border-purple-200 ml-4 pl-6 space-y-6">
-            {protocol.phases.map((ph, idx) => (
-              <div key={idx} className="relative group">
-                {/* Stepper Bullet */}
-                <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-purple-700 text-white font-black text-xs flex items-center justify-center shadow-md border-2 border-white">
-                  {idx + 1}
-                </div>
+            {protocol.phases
+              .filter((_, idx) => activePhaseIndex === null || activePhaseIndex === idx)
+              .map((ph, idx) => {
+                const actualIndex = activePhaseIndex !== null ? activePhaseIndex : idx
+                return (
+                  <div key={actualIndex} className="relative group">
+                    {/* Stepper Bullet */}
+                    <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-purple-700 text-white font-black text-xs flex items-center justify-center shadow-md border-2 border-white">
+                      {actualIndex + 1}
+                    </div>
 
-                <div className="bg-purple-50/50 hover:bg-purple-50 rounded-2xl p-4 border border-purple-100 transition-colors">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-black text-purple-900 uppercase tracking-wide">
-                      {ph.phase || `PHASE ${idx + 1}`}
-                    </span>
-                    {ph.timing && (
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white text-purple-700 border border-purple-200 shadow-xs">
-                        {ph.timing}
-                      </span>
-                    )}
+                    <div className="bg-purple-50/50 hover:bg-purple-50 rounded-2xl p-4 border border-purple-100 transition-colors">
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <span className="text-xs font-black text-purple-900 uppercase tracking-wide">
+                          {ph.phase || `PHASE ${actualIndex + 1}`}
+                        </span>
+                        {ph.timing && (
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white text-purple-700 border border-purple-200 shadow-xs">
+                            {ph.timing}
+                          </span>
+                        )}
+                      </div>
+
+                      <h3 className="font-bold text-sm text-gray-900 mb-2 leading-snug">
+                        {ph.title}
+                      </h3>
+
+                      {ph.notes && (
+                        <p className="text-xs text-gray-600 leading-relaxed bg-white rounded-xl p-3 border border-purple-100/60 font-medium">
+                          {ph.notes}
+                        </p>
+                      )}
+                    </div>
                   </div>
-
-                  <h3 className="font-bold text-sm text-gray-900 mb-2 leading-snug">
-                    {ph.title}
-                  </h3>
-
-                  {ph.notes && (
-                    <p className="text-xs text-gray-600 leading-relaxed bg-white rounded-xl p-3 border border-purple-100/60">
-                      {ph.notes}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+                )
+              })}
           </div>
         </div>
       )}
@@ -437,7 +509,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <div className="space-y-2">
             {protocol.emergencyRescue.map((rescue, i) => (
-              <div key={i} className="bg-white rounded-xl p-3 border border-rose-100 text-xs text-gray-800 shadow-2xs leading-relaxed">
+              <div key={i} className="bg-white rounded-xl p-3 border border-rose-100 text-xs text-gray-800 shadow-2xs leading-relaxed font-medium">
                 <span className="font-bold text-rose-700 mr-1.5">⚡</span>
                 {rescue}
               </div>
