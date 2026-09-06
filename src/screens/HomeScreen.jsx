@@ -64,39 +64,20 @@ export default function HomeScreen() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 pb-28">
-      {/* Top Header with Theme Toggle */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
-          <span>📚</span>
-          <span>12-Module Master Psychopharmacology Compendium</span>
-        </div>
+      {/* Top Header: Single Line */}
+      <div className="flex items-center justify-between mb-4 pt-1">
+        <h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+          <span>💊</span>
+          <span>Psychiatric Medication App</span>
+        </h1>
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-300 hover:text-amber-500 dark:hover:text-yellow-400 hover:border-amber-300 transition-all shadow-2xs text-xs"
+          className="px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:text-amber-500 dark:hover:text-yellow-400 hover:border-amber-300 dark:hover:border-yellow-500 transition-all shadow-2xs text-xs font-bold flex items-center gap-1.5 cursor-pointer"
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
-          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+          <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
+          <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
         </button>
-      </div>
-
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-          Psychiatric Medication Guide
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Evidence-Based Pharmacodynamics, Titration & Deprescribing
-        </p>
-
-        {/* Stats Pill */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-[11px] font-semibold text-gray-400 dark:text-gray-500">
-          <span>{data.drugs.length} Monographs</span>
-          <span>•</span>
-          <span>{data.protocols?.length || 20} Transition Protocols</span>
-          <span>•</span>
-          <span>{data.receptors.length} Molecular Targets</span>
-          <span>•</span>
-          <span>8 Adverse Safety Domains</span>
-        </div>
       </div>
 
       {/* Global Quick Search Bar */}
@@ -122,7 +103,7 @@ export default function HomeScreen() {
           {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700"
+              className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 cursor-pointer"
             >
               ✕
             </button>
@@ -146,7 +127,7 @@ export default function HomeScreen() {
                       setSearchQuery('')
                       navigate(`/drug/${drug.id}`)
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group"
+                    className="w-full px-4 py-3 text-left hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between group cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -184,7 +165,7 @@ export default function HomeScreen() {
                   navigate(`/all-drugs?search=${encodeURIComponent(searchQuery)}`)
                   setSearchQuery('')
                 }}
-                className="w-full py-2.5 px-4 bg-gray-50 dark:bg-gray-800/90 hover:bg-gray-100 dark:hover:bg-gray-700 text-center text-xs font-semibold text-indigo-600 dark:text-indigo-400 transition-colors"
+                className="w-full py-2.5 px-4 bg-gray-50 dark:bg-gray-800/90 hover:bg-gray-100 dark:hover:bg-gray-700 text-center text-xs font-semibold text-indigo-600 dark:text-indigo-400 transition-colors cursor-pointer"
               >
                 View all results in A-Z Directory →
               </button>
@@ -193,8 +174,15 @@ export default function HomeScreen() {
         )}
       </div>
 
-      {/* High-Yield Clinical Quick Prescribing Chips */}
-      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-5">
+      {/* High-Yield Clinical Quick Prescribing Chips with mousewheel support */}
+      <div
+        onWheel={(e) => {
+          if (e.deltaY !== 0) {
+            e.currentTarget.scrollLeft += e.deltaY
+          }
+        }}
+        className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-6"
+      >
         <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap mr-1">
           Quick Picks:
         </span>
@@ -208,61 +196,34 @@ export default function HomeScreen() {
                 setSearchQuery(chip.query)
               }
             }}
-            className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 shadow-2xs transition-all"
+            className="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-indigo-50/50 dark:hover:bg-gray-700/50 shadow-2xs transition-all cursor-pointer"
           >
             {chip.label}
           </button>
         ))}
       </div>
 
-      {/* High-Yield Quick Navigation Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
+      {/* 1. CLINICAL DOMAINS & DRUG FAMILIES FIRST */}
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+          <span>💊</span>
+          <span>Clinical Domains & Drug Families</span>
+        </h2>
         <button
           onClick={() => navigate('/all-drugs')}
-          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
+          className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <span className="text-xl">📋</span>
-            <span className="text-xs font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">All Drugs</span>
-          </div>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">Complete A–Z index</p>
-        </button>
-
-        <button
-          onClick={() => navigate('/cross-titration')}
-          className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/40 border border-indigo-200 dark:border-indigo-800/60 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🔄</span>
-            <span className="text-xs font-extrabold text-indigo-900 dark:text-indigo-200 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">Cross-Titration</span>
-          </div>
-          <p className="text-[11px] text-indigo-500 dark:text-indigo-400 mt-1">20 Switch Protocols</p>
-        </button>
-
-        <button
-          onClick={() => navigate('/receptors')}
-          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🧬</span>
-            <span className="text-xs font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Receptors</span>
-          </div>
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">44 Molecular Targets</p>
-        </button>
-
-        <button
-          onClick={() => navigate('/family/antidotes-interventional')}
-          className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 hover:border-rose-400 dark:hover:border-rose-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🚨</span>
-            <span className="text-xs font-extrabold text-rose-900 dark:text-rose-200 group-hover:text-rose-700 dark:group-hover:text-rose-300">Antidotes</span>
-          </div>
-          <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1">Emergency Rescues</p>
+          Browse All ({data.drugs.length}) →
         </button>
       </div>
 
-      {/* Clinical Decision Tools Banner */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+        {data.families.map(family => (
+          <FamilyCard key={family.id} family={family} />
+        ))}
+      </div>
+
+      {/* 2. CLINICAL DECISION TOOLS SECOND */}
       <div
         onClick={() => navigate('/tools')}
         className="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-950 rounded-3xl p-5 text-white shadow-md mb-6 cursor-pointer hover:shadow-lg transition-all border border-teal-800/40 group"
@@ -288,66 +249,94 @@ export default function HomeScreen() {
         <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-teal-800/40">
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=cpz'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             🎭 CPZ Converter
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=lithium'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             🧪 Lithium TDM
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=clozapine'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             🩸 Clozapine REMS
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=cyp'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             ⚡ CYP450
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=qtc'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             ❤️ QTc Stacker
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=bzd'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             ⚖️ BZD / Ashton
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=metabolic'); }}
-            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors cursor-pointer"
           >
             📊 Metabolic
           </button>
         </div>
       </div>
 
-      {/* Clinical Families Section */}
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          Clinical Domains & Drug Families
-        </h2>
+      {/* 3. High-Yield Quick Navigation Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
         <button
           onClick={() => navigate('/all-drugs')}
-          className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
         >
-          Browse All ({data.drugs.length}) →
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📋</span>
+            <span className="text-xs font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">All Drugs</span>
+          </div>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">Complete A–Z index</p>
         </button>
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        {data.families.map(family => (
-          <FamilyCard key={family.id} family={family} />
-        ))}
+        <button
+          onClick={() => navigate('/cross-titration')}
+          className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/40 border border-indigo-200 dark:border-indigo-800/60 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🔄</span>
+            <span className="text-xs font-extrabold text-indigo-900 dark:text-indigo-200 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">Cross-Titration</span>
+          </div>
+          <p className="text-[11px] text-indigo-500 dark:text-indigo-400 mt-1">20 Switch Protocols</p>
+        </button>
+
+        <button
+          onClick={() => navigate('/receptors')}
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🧬</span>
+            <span className="text-xs font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Receptors</span>
+          </div>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">44 Molecular Targets</p>
+        </button>
+
+        <button
+          onClick={() => navigate('/family/antidotes-interventional')}
+          className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 hover:border-rose-400 dark:hover:border-rose-500 rounded-2xl p-3.5 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🚨</span>
+            <span className="text-xs font-extrabold text-rose-900 dark:text-rose-200 group-hover:text-rose-700 dark:group-hover:text-rose-300">Antidotes</span>
+          </div>
+          <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1">Emergency Rescues</p>
+        </button>
       </div>
 
       {/* Cross-Module Clinical Tools Callout */}
@@ -365,7 +354,7 @@ export default function HomeScreen() {
         </div>
         <button
           onClick={() => navigate('/cross-titration')}
-          className="px-4 py-2 bg-white text-indigo-950 hover:bg-indigo-50 font-bold text-xs rounded-xl shadow transition-all whitespace-nowrap"
+          className="px-4 py-2 bg-white text-indigo-950 hover:bg-indigo-50 font-bold text-xs rounded-xl shadow transition-all whitespace-nowrap cursor-pointer"
         >
           Launch Protocols →
         </button>

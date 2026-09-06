@@ -1,17 +1,32 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import data from '../data.json'
-import BackButton from '../components/BackButton'
 import Toast from '../components/Toast'
+import { useTheme } from '../context/ThemeContext'
+
+const CLINICAL_TOOLS = [
+  { id: 'cpz', label: 'CPZ Equivalency', icon: '🎭', desc: 'Chlorpromazine dose converter' },
+  { id: 'lithium', label: 'Lithium TDM', icon: '🧪', desc: '12h trough & Cockcroft-Gault' },
+  { id: 'clozapine', label: 'Clozapine REMS', icon: '🩸', desc: 'ANC monitoring & neutropenia triage' },
+  { id: 'cyp', label: 'CYP450 Checker', icon: '⚡', desc: 'Multi-drug metabolic collisions' },
+  { id: 'qtc', label: 'QTc Stacker', icon: '❤️', desc: 'Cardiac repolarization risk' },
+  { id: 'bzd', label: 'BZD / Ashton', icon: '⚖️', desc: 'Diazepam eq & taper schedules' },
+  { id: 'metabolic', label: 'Metabolic Tracker', icon: '📊', desc: 'SGA glucose & lipid protocols' },
+  { id: 'emergency', label: 'Emergency Playbook', icon: '🚨', desc: 'NMS, SS, Catatonia, Anticholinergic' },
+  { id: 'renal', label: 'Organ Adjuster', icon: '🩺', desc: 'Hepatic & renal CrCl clearance' },
+]
 
 export default function ClinicalToolsScreen() {
   const navigate = useNavigate()
+  const { theme, toggleTheme } = useTheme()
   const [searchParams, setSearchParams] = useSearchParams()
   const initialTab = searchParams.get('tab') || 'cpz'
   const initialDrug = searchParams.get('drug') || ''
 
   const [activeTab, setActiveTab] = useState(initialTab)
   const [toastMessage, setToastMessage] = useState('')
+  const [showAllTools, setShowAllTools] = useState(false)
+  const scrollContainerRef = useRef(null)
 
   // Sync tab with URL if user clicks
   const handleTabChange = (tabId) => {
@@ -19,16 +34,69 @@ export default function ClinicalToolsScreen() {
     setSearchParams({ tab: tabId })
   }
 
+  // Scroll active tab into view when activeTab changes
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const activeEl = scrollContainerRef.current.querySelector(`[data-tab-id="${activeTab}"]`)
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      }
+    }
+  }, [activeTab])
+
+  // Horizontal scroll buttons
+  const handleScroll = (direction) => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -180 : 180,
+        behavior: 'smooth',
+      })
+    }
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
-      <BackButton title="Clinical Decision Tools" />
+      {/* Top Bar with Home Button and Theme Switch */}
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-400 transition-colors text-xs font-bold py-1.5 px-3.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer shadow-2xs"
+          title="Return to Home Screen"
+        >
+          <span>🏠</span>
+          <span>Home</span>
+        </button>
+
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 hidden sm:inline">
+            Point of Care Decision Support
+          </span>
+          <button
+            onClick={toggleTheme}
+            className="p-1.5 px-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-amber-500 dark:hover:text-yellow-400 transition-colors text-xs font-bold flex items-center gap-1 cursor-pointer shadow-2xs"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
+            <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
+          </button>
+        </div>
+      </div>
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
       {/* Header */}
-      <div className="mb-5">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-semibold mb-2">
-          <span>🛠️</span>
-          <span>Point-of-Care Clinical Decision Support</span>
+      <div className="mb-4">
+        <div className="flex items-center justify-between gap-2 mb-1.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
+            <span>🛠️</span>
+            <span>Point-of-Care Clinical Tools</span>
+          </div>
+
+          <button
+            onClick={() => setShowAllTools(!showAllTools)}
+            className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer px-2 py-1 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <span>{showAllTools ? '▤ Single Row Bar' : '⊞ View All 9 Tools'}</span>
+          </button>
         </div>
         <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Clinical Tools & Calculators
@@ -38,33 +106,90 @@ export default function ClinicalToolsScreen() {
         </p>
       </div>
 
-      {/* Segmented Tool Tabs - Horizontal Scrollable */}
-      <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800/90 p-1.5 rounded-2xl mb-6 overflow-x-auto hide-scrollbar">
-        {[
-          { id: 'cpz', label: 'CPZ Equivalency', icon: '🎭' },
-          { id: 'lithium', label: 'Lithium TDM', icon: '🧪' },
-          { id: 'clozapine', label: 'Clozapine REMS', icon: '🩸' },
-          { id: 'cyp', label: 'CYP450 Checker', icon: '⚡' },
-          { id: 'qtc', label: 'QTc Stacker', icon: '❤️' },
-          { id: 'bzd', label: 'BZD / Ashton', icon: '⚖️' },
-          { id: 'metabolic', label: 'Metabolic Tracker', icon: '📊' },
-          { id: 'emergency', label: 'Emergency Playbook', icon: '🚨' },
-          { id: 'renal', label: 'Organ Adjuster', icon: '🩺' },
-        ].map(tab => (
+      {/* View All 9 Tools Grid (when toggled open) */}
+      {showAllTools ? (
+        <div className="bg-gray-100 dark:bg-gray-800/90 p-3 rounded-2xl mb-6 border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+              All 9 Clinical Engines (1-Click Access)
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+              Active: {CLINICAL_TOOLS.find(t => t.id === activeTab)?.label}
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {CLINICAL_TOOLS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  handleTabChange(tab.id)
+                  setShowAllTools(false)
+                }}
+                className={`flex items-start gap-2 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
+                  activeTab === tab.id
+                    ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-400/50'
+                    : 'bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700'
+                }`}
+              >
+                <span className="text-lg flex-shrink-0">{tab.icon}</span>
+                <div className="min-w-0">
+                  <span className="text-xs font-bold block leading-snug truncate">{tab.label}</span>
+                  <span className={`text-[10px] block truncate ${activeTab === tab.id ? 'text-indigo-100' : 'text-gray-400 dark:text-gray-500'}`}>
+                    {tab.desc}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* Segmented Tool Tabs with Scroll Controls & Mousewheel Support */
+        <div className="relative mb-6 flex items-center gap-1.5">
+          {/* Scroll Left Button */}
           <button
-            key={tab.id}
-            onClick={() => handleTabChange(tab.id)}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
-              activeTab === tab.id
-                ? 'bg-white dark:bg-gray-900 text-indigo-700 dark:text-indigo-300 shadow-xs'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-            }`}
+            onClick={() => handleScroll('left')}
+            className="hidden sm:flex items-center justify-center w-7 h-9 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-black text-sm flex-shrink-0 cursor-pointer transition-colors shadow-2xs"
+            title="Scroll left"
           >
-            <span>{tab.icon}</span>
-            <span>{tab.label}</span>
+            ‹
           </button>
-        ))}
-      </div>
+
+          <div
+            ref={scrollContainerRef}
+            onWheel={(e) => {
+              if (e.deltaY !== 0) {
+                e.currentTarget.scrollLeft += e.deltaY
+              }
+            }}
+            className="flex-1 flex items-center gap-1 bg-gray-100 dark:bg-gray-800/90 p-1.5 rounded-2xl overflow-x-auto hide-scrollbar scroll-smooth"
+          >
+            {CLINICAL_TOOLS.map(tab => (
+              <button
+                key={tab.id}
+                data-tab-id={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 cursor-pointer ${
+                  activeTab === tab.id
+                    ? 'bg-white dark:bg-gray-900 text-indigo-700 dark:text-indigo-300 shadow-xs ring-1 ring-indigo-500/20'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-gray-700/40'
+                }`}
+              >
+                <span>{tab.icon}</span>
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Scroll Right Button */}
+          <button
+            onClick={() => handleScroll('right')}
+            className="hidden sm:flex items-center justify-center w-7 h-9 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-black text-sm flex-shrink-0 cursor-pointer transition-colors shadow-2xs"
+            title="Scroll right to see all tools"
+          >
+            ›
+          </button>
+        </div>
+      )}
 
       {/* Active Tool View */}
       {activeTab === 'cpz' && (
