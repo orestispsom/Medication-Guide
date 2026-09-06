@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
 import Toast from '../components/Toast'
+import { isFavorite, toggleFavorite } from '../utils/favorites'
 
 export default function CrossTitrationScreen() {
   const { protocolId } = useParams()
@@ -266,6 +267,7 @@ function ProtocolDetailView({ protocol, onBack }) {
   const navigate = useNavigate()
   const [toastMessage, setToastMessage] = useState('')
   const [activePhaseIndex, setActivePhaseIndex] = useState(null) // null = all
+  const [starred, setStarred] = useState(isFavorite('protocol', protocol.id))
 
   // Start Date for Patient Schedule Calculator (defaults to today)
   const todayStr = new Date().toISOString().split('T')[0]
@@ -359,14 +361,33 @@ function ProtocolDetailView({ protocol, onBack }) {
           <span>All 20 Protocols</span>
         </button>
 
-        <button
-          onClick={handleCopyProtocol}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition-all border border-purple-200 shadow-2xs"
-          title="Copy protocol with exact patient dates to clipboard"
-        >
-          <span>📋</span>
-          <span>Copy Patient Schedule</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              const isNow = toggleFavorite('protocol', protocol.id)
+              setStarred(isNow)
+              setToastMessage(isNow ? `Protocol #${protocol.number} saved to Favorites!` : `Protocol #${protocol.number} removed from favorites`)
+            }}
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all border ${
+              starred
+                ? 'bg-amber-100 text-amber-800 border-amber-300 shadow-2xs'
+                : 'bg-white text-gray-600 border-gray-200 hover:text-amber-600'
+            }`}
+            title={starred ? 'Starred in Favorites' : 'Add to Favorites'}
+          >
+            <span>{starred ? '★' : '☆'}</span>
+            <span>{starred ? 'Starred' : 'Star'}</span>
+          </button>
+
+          <button
+            onClick={handleCopyProtocol}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition-all border border-purple-200 shadow-2xs"
+            title="Copy protocol with exact patient dates to clipboard"
+          >
+            <span>📋</span>
+            <span>Copy Patient Schedule</span>
+          </button>
+        </div>
       </div>
 
       {/* Protocol Header Card */}

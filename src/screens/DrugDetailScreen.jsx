@@ -5,6 +5,8 @@ import BackButton from '../components/BackButton'
 import ReceptorTag from '../components/ReceptorTag'
 import Toast from '../components/Toast'
 
+import { isFavorite, toggleFavorite } from '../utils/favorites'
+
 export default function DrugDetailScreen() {
   const { drugId } = useParams()
   const navigate = useNavigate()
@@ -12,6 +14,7 @@ export default function DrugDetailScreen() {
   const [activeSection, setActiveSection] = useState('overview')
 
   const drug = data.drugs.find(d => d.id === drugId)
+  const [starred, setStarred] = useState(drug ? isFavorite('drug', drug.id) : false)
 
   if (!drug) {
     return (
@@ -155,19 +158,56 @@ export default function DrugDetailScreen() {
             )}
           </div>
 
-          <button
-            onClick={handleCopyTitration}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 text-gray-700 text-xs font-semibold transition-all border border-gray-200"
-            title="Copy titration schedule and warnings to clipboard"
-          >
-            <span>📋</span>
-            <span>Copy Titration</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                const isNow = toggleFavorite('drug', drug.id)
+                setStarred(isNow)
+                setToastMessage(isNow ? `${drug.name} saved to Clinical Favorites!` : `${drug.name} removed from favorites`)
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all border ${
+                starred
+                  ? 'bg-amber-100 text-amber-800 border-amber-300 shadow-2xs'
+                  : 'bg-gray-100 text-gray-600 border-gray-200 hover:text-amber-600'
+              }`}
+              title={starred ? 'Starred in Favorites' : 'Add to Favorites'}
+            >
+              <span>{starred ? '★' : '☆'}</span>
+              <span>{starred ? 'Starred' : 'Star'}</span>
+            </button>
+
+            <button
+              onClick={handleCopyTitration}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 text-gray-700 text-xs font-semibold transition-all border border-gray-200"
+              title="Copy titration schedule and warnings to clipboard"
+            >
+              <span>📋</span>
+              <span>Copy Titration</span>
+            </button>
+          </div>
         </div>
 
         <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-1">
           {drug.name}
         </h1>
+
+        {/* Quick Clinical Tool Shortcuts */}
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <button
+            onClick={() => navigate('/tools')}
+            className="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-100 hover:bg-purple-100 transition-colors inline-flex items-center gap-1"
+          >
+            <span>⚡</span>
+            <span>Screen CYP450 Collisions</span>
+          </button>
+          <button
+            onClick={() => navigate('/tools')}
+            className="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-100 hover:bg-rose-100 transition-colors inline-flex items-center gap-1"
+          >
+            <span>❤️</span>
+            <span>Screen QTc Risk</span>
+          </button>
+        </div>
 
         {drug.brand && (
           <p className="text-sm font-medium text-gray-500 mb-3">

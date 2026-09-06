@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
 
 export default function BackButton({ title }) {
   const navigate = useNavigate()
+  const { theme, toggleTheme } = useTheme()
 
   const handleBack = () => {
     if (window.history.state && window.history.state.idx > 0) {
@@ -15,7 +17,7 @@ export default function BackButton({ title }) {
     <div className="flex items-center justify-between mb-4">
       <button
         onClick={handleBack}
-        className="inline-flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 transition-colors text-xs font-bold py-1 px-2 rounded-lg hover:bg-gray-100"
+        className="inline-flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors text-xs font-bold py-1 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -23,15 +25,22 @@ export default function BackButton({ title }) {
         <span>Back</span>
       </button>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         {title && (
-          <span className="text-xs font-semibold text-gray-400 mr-2 max-w-[200px] truncate hidden sm:inline">
+          <span className="text-xs font-semibold text-gray-400 mr-2 max-w-[180px] truncate hidden sm:inline">
             {title}
           </span>
         )}
         <button
+          onClick={toggleTheme}
+          className="text-gray-400 hover:text-amber-500 dark:hover:text-yellow-400 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        <button
           onClick={() => navigate('/')}
-          className="text-gray-400 hover:text-indigo-600 p-1 rounded-lg hover:bg-gray-100 transition-colors text-xs"
+          className="text-gray-400 hover:text-indigo-600 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs"
           title="Return to Home"
         >
           🏠

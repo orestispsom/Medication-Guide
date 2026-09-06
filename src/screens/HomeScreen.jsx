@@ -250,6 +250,29 @@ export default function HomeScreen() {
         </button>
       </div>
 
+      {/* Clinical Decision Tools Banner */}
+      <div
+        onClick={() => navigate('/tools')}
+        className="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-950 rounded-3xl p-5 text-white shadow-md mb-6 cursor-pointer hover:shadow-lg transition-all border border-teal-800/40 group"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-teal-600 text-teal-100">
+              Point-of-Care Clinical Tools
+            </span>
+            <h3 className="font-extrabold text-base mt-2 mb-1 group-hover:text-teal-300 transition-colors">
+              Pharmacokinetic Checkers & Decision Calculators
+            </h3>
+            <p className="text-xs text-teal-200/90 leading-relaxed max-w-md">
+              CYP450 Drug-Drug Collision Checker · Additive QTc Cardiac Risk Stacker · Ashton BZD Diazepam Equivalency · Emergency Toxidromes Playbook · Organ Adjuster.
+            </p>
+          </div>
+          <span className="text-2xl text-teal-300 group-hover:translate-x-1 transition-transform flex-shrink-0">
+            🛠️
+          </span>
+        </div>
+      </div>
+
       {/* Clinical Families Section */}
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider">

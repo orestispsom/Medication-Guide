@@ -83,9 +83,29 @@ The platform is systematically compiled from the 613-page **12-Module Master Cli
 - Categorized across 10 biological systems: Dopaminergic, Serotonergic, Adrenergic, Histaminergic, Muscarinic/Cholinergic, Transporters, GABAergic/Glutamatergic, Neuropeptides, and Enzymes/Channels.
 - Maps biological mechanisms, therapeutic effects, adverse liabilities, and all documented medications binding each target.
 
-### 5. Ergonomic Clinical UI/UX
+### 5. Point-of-Care Clinical Decision Tools & Calculators
+- **⚡ CYP450 Interaction & Tobacco Screening Checker**:
+  - Screens multi-drug combinations against CYP1A2, 2D6, 3A4, 2C19, and UGT1A4 pathways.
+  - Tobacco smoking status induction calculator (crucial for Clozapine and Olanzapine dosing).
+  - Flags severe metabolic collisions (e.g. Fluvoxamine + Clozapine, Valproate + Lamotrigine SJS risk, 2D6 inhibitor surges).
+- **❤️ Additive QTc Cardiac Risk Stacker**:
+  - Implements the Tisdale clinical risk framework combining drug liabilities with patient risk factors (Age $\ge 65$, Female, $\text{K}^+ < 4.0$, $\text{Mg}^{2+} < 2.0$, baseline QTc).
+  - Target electrolyte goals and protocolized repeat ECG monitoring directives.
+- **⚖️ Benzodiazepine Diazepam Milligram Equivalency (DME) Converter**:
+  - Converts between Alprazolam, Clonazepam, Lorazepam, Diazepam, Chlordiazepoxide, Oxazepam, and Temazepam.
+  - Direct 1-click launch into the Ashton Manual Deprescribing Protocol (#15).
+- **🚨 Psychiatric Emergency Toxidromes & Antidotes Playbook**:
+  - Rapid differential matrix for Serotonin Syndrome (Hunter Criteria), NMS, Anticholinergic Toxicity, Malignant Catatonia, Acute Dystonia, and Lithium Toxicity.
+  - Standardized antidote dosing directives (Cyproheptadine, Dantrolene, Bromocriptine, Benztropine IM, Flumazenil, Hemodialysis thresholds).
+- **🩺 Organ Impairment (Renal eGFR & Child-Pugh Hepatic) Adjuster**:
+  - Renal tiers ($\text{eGFR} \ge 60$, $30\text{--}59$, $15\text{--}29$, $<15$) and Child-Pugh Classes A, B, and C.
+  - Immediate flags for contraindicated agents (e.g. Duloxetine or Valproate in hepatic failure; Lithium in renal failure).
+
+### 6. Ergonomic Clinical UI/UX
 - **Universal Spotlight Command Palette**: Instant access from any screen via `Ctrl+K`, `Cmd+K`, or `/`.
-- **Persistent Bottom Navigation Shell**: 1-tap switching between Home, A–Z Directory, Titration, Compare, Receptors, and Search.
+- **Persistent Bottom Navigation Shell**: 1-tap switching between Home, A–Z Directory, Titration, Compare, Tools, Receptors, Starred, and Search.
+- **Bedside Clinical Favorites Drawer**: 1-tap ⭐️ star button on any drug monograph or switch protocol for fast retrieval on rounds.
+- **Medical Slate Dark Mode / Night Shift**: Toggleable theme (`🌙 / ☀️`) to eliminate eye fatigue during night calls and darkened inpatient rounds.
 - **Sticky Section Anchor Bar**: Instant jump to monograph sections (`Benchmarks`, `Receptors`, `Adverse`, `Titration`, `Pearls`).
 - **Subgroup Previews**: Direct visualization of member drugs on subgroup cards.
 

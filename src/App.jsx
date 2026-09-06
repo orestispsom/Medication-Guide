@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import HomeScreen from './screens/HomeScreen'
 import AllDrugsScreen from './screens/AllDrugsScreen'
 import CrossTitrationScreen from './screens/CrossTitrationScreen'
@@ -9,11 +10,14 @@ import ComparisonTableScreen from './screens/ComparisonTableScreen'
 import DrugDetailScreen from './screens/DrugDetailScreen'
 import ReceptorListScreen from './screens/ReceptorListScreen'
 import ReceptorDetailScreen from './screens/ReceptorDetailScreen'
+import ClinicalToolsScreen from './screens/ClinicalToolsScreen'
 import Navigation from './components/Navigation'
 import QuickSearchModal from './components/QuickSearchModal'
+import FavoritesDrawer from './components/FavoritesDrawer'
 
 function AppLayout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false)
   const location = useLocation()
 
   // Scroll to top on route change
@@ -22,7 +26,7 @@ function AppLayout() {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white transition-colors">
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HomeScreen />} />
@@ -36,23 +40,32 @@ function AppLayout() {
           <Route path="/drug/:drugId" element={<DrugDetailScreen />} />
           <Route path="/receptors" element={<ReceptorListScreen />} />
           <Route path="/receptors/:receptorId" element={<ReceptorDetailScreen />} />
+          <Route path="/tools" element={<ClinicalToolsScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
       {/* Global Persistent Bottom Navigation Bar */}
-      <Navigation onOpenSearch={() => setIsSearchOpen(true)} />
+      <Navigation
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenFavorites={() => setIsFavoritesOpen(true)}
+      />
 
       {/* Spotlight Command Palette Search Modal (Ctrl+K or /) */}
       <QuickSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      {/* Bedside Clinical Favorites Drawer */}
+      <FavoritesDrawer isOpen={isFavoritesOpen} onClose={() => setIsFavoritesOpen(false)} />
     </div>
   )
 }
 
 export default function App() {
   return (
-    <HashRouter>
-      <AppLayout />
-    </HashRouter>
+    <ThemeProvider>
+      <HashRouter>
+        <AppLayout />
+      </HashRouter>
+    </ThemeProvider>
   )
 }
