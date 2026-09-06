@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import FamilyCard from '../components/FamilyCard'
+import ReceptorNavModal from '../components/ReceptorNavModal'
 import { useTheme } from '../context/ThemeContext'
 
 const QUICK_CHIPS = [
@@ -19,6 +20,7 @@ export default function HomeScreen() {
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
   const [searchQuery, setSearchQuery] = useState('')
+  const [isReceptorNavOpen, setIsReceptorNavOpen] = useState(false)
   const searchInputRef = useRef(null)
 
   // Listen for keyboard '/' shortcut to focus search
@@ -230,6 +232,42 @@ export default function HomeScreen() {
           {data.families.map(family => (
             <FamilyCard key={family.id} family={family} />
           ))}
+
+          {/* Last Box in Clinical Domains: Molecular Receptor Navigation */}
+          <button
+            onClick={() => setIsReceptorNavOpen(true)}
+            className="bg-white dark:bg-[#111827] rounded-2xl p-5 border-2 border-indigo-500/40 dark:border-indigo-500/50 shadow-[0_2px_10px_rgba(99,102,241,0.06)] hover:shadow-md hover:border-indigo-500 dark:hover:border-indigo-400 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between text-left group w-full cursor-pointer relative"
+          >
+            <div>
+              {/* Top Row: Tinted Icon & Count Pill */}
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-xl border transition-transform group-hover:scale-105 duration-200 bg-indigo-500/10 dark:bg-indigo-500/20 border-indigo-500/30 text-indigo-600 dark:text-indigo-400"
+                >
+                  <span>🧬</span>
+                </div>
+
+                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80">
+                  44 Targets · 9 Families
+                </span>
+              </div>
+
+              {/* Title */}
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <h3 className="font-display font-bold text-slate-900 dark:text-white text-lg group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  Molecular Receptor Targets
+                </h3>
+                <span className="text-indigo-500 dark:text-indigo-400 group-hover:translate-x-0.5 transition-all text-sm font-bold flex-shrink-0">
+                  →
+                </span>
+              </div>
+
+              {/* Description */}
+              <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
+                Double-column navigator across 44 targets (5-HT, D, SERT, NET, M, H, GABA) with drug binding affinity rankings.
+              </p>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -315,7 +353,7 @@ export default function HomeScreen() {
           </button>
 
           <button
-            onClick={() => navigate('/receptors')}
+            onClick={() => setIsReceptorNavOpen(true)}
             className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
             <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">🧬</span>
@@ -333,6 +371,12 @@ export default function HomeScreen() {
           </button>
         </div>
       </div>
+
+      {/* Molecular Receptor & Target Navigation Modal */}
+      <ReceptorNavModal
+        isOpen={isReceptorNavOpen}
+        onClose={() => setIsReceptorNavOpen(false)}
+      />
     </div>
   )
 }

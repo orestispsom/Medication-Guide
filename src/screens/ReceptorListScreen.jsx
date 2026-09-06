@@ -2,31 +2,18 @@ import { useState, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
+import {
+  RECEPTOR_FAMILIES,
+  categorizeReceptor,
+  getReceptorFamily,
+  getReceptorFamilyColor
+} from '../utils/receptorFamily'
 
-export const categorizeReceptor = (recId) => {
-  const id = (recId || '').toUpperCase()
-  if (id.startsWith('D') && ['D1', 'D2', 'D3', 'D4', 'D5'].includes(id)) return 'Dopaminergic'
-  if (id.startsWith('5HT') || id.startsWith('5-HT')) return 'Serotonergic'
-  if (id.startsWith('ALPHA') || id.startsWith('BETA') || id.startsWith('Α') || id.startsWith('Β')) return 'Adrenergic'
-  if (id === 'H1' || id === 'H2' || id === 'H3' || id === 'H4') return 'Histaminergic'
-  if (['M1', 'M2', 'M3', 'M4', 'M5'].includes(id)) return 'Muscarinic'
-  if (['SERT', 'NET', 'DAT', 'VMAT2'].includes(id)) return 'Transporters'
-  if (id.includes('GABA') || ['NMDA', 'AMPA'].includes(id)) return 'GABA & Glutamate'
-  if (['MOR', 'KOR', 'DOR', 'SIGMA1', 'OX1R_OX2R'].includes(id)) return 'Opioid & Neuropeptides'
-  return 'Enzymes & Channels'
-}
+export { categorizeReceptor }
 
 const RECEPTOR_CATEGORIES = [
-  { id: 'ALL', label: 'All Targets' },
-  { id: 'Serotonergic', label: 'Serotonin (5-HT)' },
-  { id: 'Dopaminergic', label: 'Dopamine (D)' },
-  { id: 'Adrenergic', label: 'Adrenergic (α/β)' },
-  { id: 'Transporters', label: 'Transporters (SERT/NET/DAT)' },
-  { id: 'Histaminergic', label: 'Histamine (H)' },
-  { id: 'Muscarinic', label: 'Muscarinic (M)' },
-  { id: 'GABA & Glutamate', label: 'GABA & Glutamate' },
-  { id: 'Opioid & Neuropeptides', label: 'Opioid & Peptides' },
-  { id: 'Enzymes & Channels', label: 'Enzymes & Channels' },
+  { id: 'ALL', label: 'All Targets', color: '#64748B' },
+  ...RECEPTOR_FAMILIES.map(f => ({ id: f.id, label: f.shortName, color: f.color })),
 ]
 
 export default function ReceptorListScreen() {
@@ -35,12 +22,12 @@ export default function ReceptorListScreen() {
 
   const initialCat = searchParams.get('family') || 'ALL'
   const initialTarget = searchParams.get('target') || 'ALL'
-  const initialView = searchParams.get('view') || 'drugs' // 'drugs' | 'receptors'
+  const initialView = searchParams.get('view') || 'receptors' // default to receptors double-column view
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(initialCat)
   const [selectedTarget, setSelectedTarget] = useState(initialTarget)
-  const [viewMode, setViewMode] = useState(initialView) // 'drugs' | 'receptors'
+  const [viewMode, setViewMode] = useState(initialView) // 'receptors' | 'drugs'
   const [drugSortBy, setDrugSortBy] = useState('occupancy') // 'occupancy' | 'name' | 'family'
 
   // Pre-calculate count of drugs binding each category
@@ -73,7 +60,7 @@ export default function ReceptorListScreen() {
       }
       if (q) {
         const idMatch = r.id.toLowerCase().includes(q)
-        const nameMatch = r.fullName.toLowerCase().includes(q)
+        const nameMatch = r.fullName && r.fullName.toLowerCase().includes(q)
         const actionMatch = r.action && r.action.toLowerCase().includes(q)
         const effectMatch = r.therapeuticEffect && r.therapeuticEffect.toLowerCase().includes(q)
         return idMatch || nameMatch || actionMatch || effectMatch
@@ -88,7 +75,6 @@ export default function ReceptorListScreen() {
 
     return data.drugs
       .map(drug => {
-        // Collect all receptor bindings for this drug that match the selected category/target
         const matchingBindings = (drug.receptors || []).filter(r => {
           if (selectedTarget !== 'ALL') {
             return r.receptor === selectedTarget
@@ -101,11 +87,9 @@ export default function ReceptorListScreen() {
 
         if (matchingBindings.length === 0) return null
 
-        // Max occupancy among matching bindings
         const maxOccupancy = Math.max(...matchingBindings.map(b => b.occupancy || 0), 0)
         const primaryBinding = matchingBindings[0]
 
-        // Search query filter
         if (q) {
           const nameMatch = drug.name.toLowerCase().includes(q)
           const brandMatch = drug.brand && drug.brand.toLowerCase().includes(q)
@@ -145,15 +129,20 @@ export default function ReceptorListScreen() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
-      <BackButton title="Receptor Guide" />
+      <BackButton title="Receptors" />
 
       {/* Header */}
       <div className="mb-5">
-        <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Receptor & Pharmacodynamic Explorer
-        </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Explore 44 molecular targets across 9 receptor families and examine corresponding medications
+        <div className="flex items-center gap-2.5 mb-1">
+          <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-lg shadow-xs">
+            🧬
+          </span>
+          <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Molecular Receptor Targets
+          </h1>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Double-column receptor target navigator across 44 targets and 9 color-coded neurochemical families
         </p>
       </div>
 
@@ -171,7 +160,7 @@ export default function ReceptorListScreen() {
           type="text"
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          placeholder="Search by receptor symbol (e.g. 5HT2A, D2, SERT, H1) or drug name..."
+          placeholder="Search by receptor symbol (e.g. 5HT2A, D2, SERT, Alpha1) or drug name..."
           className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-900 dark:text-white rounded-2xl pl-11 pr-10 py-3 text-sm shadow-[0_1px_3px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium"
         />
         {searchQuery && (
@@ -188,39 +177,51 @@ export default function ReceptorListScreen() {
       <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-3">
         {RECEPTOR_CATEGORIES.map(cat => {
           const isSelected = selectedCategory === cat.id
-          const count = cat.id === 'ALL' ? data.drugs.length : (categoryDrugCounts[cat.id] || 0)
+          const count = cat.id === 'ALL' ? data.receptors.length : (data.receptors.filter(r => categorizeReceptor(r.id) === cat.id).length)
           return (
             <button
               key={cat.id}
               onClick={() => handleCategoryChange(cat.id)}
               className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer ${
                 isSelected
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-xs'
+                  ? 'border-transparent shadow-xs text-white'
                   : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300'
               }`}
+              style={{
+                backgroundColor: isSelected ? (cat.id === 'ALL' ? '#0f172a' : cat.color) : undefined,
+              }}
             >
+              {cat.id !== 'ALL' && (
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: isSelected ? '#ffffff' : cat.color }}
+                />
+              )}
               <span>{cat.label}</span>
-              <span className="text-xs opacity-75 font-semibold">({count})</span>
+              <span className={`text-[10px] ${isSelected ? 'text-white/80' : 'text-slate-400'}`}>
+                ({count})
+              </span>
             </button>
           )
         })}
       </div>
 
       {/* Sub-Target Chips (when family selected) */}
-      {categoryReceptors.length > 1 && (
+      {categoryReceptors.length > 1 && selectedCategory !== 'ALL' && (
         <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-4">
           <button
             onClick={() => handleTargetChange('ALL')}
             className={`px-2.5 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer border ${
               selectedTarget === 'ALL'
-                ? 'bg-indigo-600 text-white border-transparent shadow-2xs'
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-2xs'
                 : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300'
             }`}
           >
-            All {selectedCategory !== 'ALL' ? selectedCategory : 'Targets'}
+            All {selectedCategory}
           </button>
           {categoryReceptors.map(r => {
             const isSelected = selectedTarget === r.id
+            const famColor = getReceptorFamilyColor(r.id)
             const drugCount = data.drugs.filter(d => (d.receptors || []).some(rec => rec.receptor === r.id)).length
             return (
               <button
@@ -228,37 +229,26 @@ export default function ReceptorListScreen() {
                 onClick={() => handleTargetChange(r.id)}
                 className="px-2.5 py-1 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 border cursor-pointer"
                 style={{
-                  backgroundColor: isSelected ? r.color : `${r.color}15`,
-                  color: isSelected ? '#ffffff' : r.color,
-                  borderColor: isSelected ? r.color : `${r.color}40`,
+                  backgroundColor: isSelected ? famColor : `${famColor}12`,
+                  color: isSelected ? '#ffffff' : famColor,
+                  borderColor: isSelected ? famColor : `${famColor}35`,
                 }}
               >
                 <span
                   className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: isSelected ? '#ffffff' : r.color }}
+                  style={{ backgroundColor: isSelected ? '#ffffff' : famColor }}
                 />
                 <span>{r.id}</span>
-                <span className="text-xs opacity-80">({drugCount})</span>
+                <span className="text-[10px] opacity-80">({drugCount})</span>
               </button>
             )
           })}
         </div>
       )}
 
-      {/* Dual Mode Switcher Bar: Corresponding Drugs vs Receptors Grid */}
+      {/* Dual Mode Switcher Bar: Receptors Double Column vs Drugs List */}
       <div className="flex items-center justify-between gap-3 mb-4 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 p-1.5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
         <div className="flex items-center gap-1">
-          <button
-            onClick={() => setViewMode('drugs')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              viewMode === 'drugs'
-                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <span>💊</span>
-            <span>Corresponding Drugs ({correspondingDrugs.length})</span>
-          </button>
           <button
             onClick={() => setViewMode('receptors')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
@@ -268,7 +258,18 @@ export default function ReceptorListScreen() {
             }`}
           >
             <span>🧬</span>
-            <span>Target Profiles ({filteredReceptors.length})</span>
+            <span>Receptor Targets ({filteredReceptors.length})</span>
+          </button>
+          <button
+            onClick={() => setViewMode('drugs')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              viewMode === 'drugs'
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <span>💊</span>
+            <span>Binding Drugs ({correspondingDrugs.length})</span>
           </button>
         </div>
 
@@ -280,7 +281,7 @@ export default function ReceptorListScreen() {
               onChange={e => setDrugSortBy(e.target.value)}
               className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none cursor-pointer"
             >
-              <option value="occupancy">Highest Occupancy</option>
+              <option value="occupancy">Highest Affinity</option>
               <option value="name">Drug Name (A–Z)</option>
               <option value="family">Drug Family</option>
             </select>
@@ -288,7 +289,95 @@ export default function ReceptorListScreen() {
         )}
       </div>
 
-      {/* VIEW 1: CORRESPONDING DRUGS LIST */}
+      {/* VIEW 1: SCROLLABLE DOUBLE COLUMN OF RECEPTORS (DEFAULT) */}
+      {viewMode === 'receptors' && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+            <span className="font-semibold">
+              Showing {filteredReceptors.length} {filteredReceptors.length === 1 ? 'target' : 'targets'}
+            </span>
+            <span>Click card to inspect binding drugs ranked by affinity</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {filteredReceptors.map(receptor => {
+              const family = getReceptorFamily(receptor.id)
+              const famColor = family.color
+              const drugCount = data.drugs.filter(d =>
+                (d.receptors || []).some(r => r.receptor === receptor.id)
+              ).length
+
+              return (
+                <div
+                  key={receptor.id}
+                  onClick={() => navigate(`/receptors/${receptor.id}`)}
+                  className="rounded-2xl p-5 border shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between cursor-pointer group relative overflow-hidden"
+                  style={{
+                    backgroundColor: `${famColor}0C`,
+                    borderColor: `${famColor}35`,
+                  }}
+                >
+                  <div>
+                    {/* Top Row: Symbol in family color & Drug Count */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: famColor }}
+                        />
+                        <span
+                          className="font-display font-black text-lg tracking-tight group-hover:scale-105 transition-transform"
+                          style={{ color: famColor }}
+                        >
+                          {receptor.id}
+                        </span>
+                      </div>
+
+                      <span
+                        className="text-xs font-bold px-2.5 py-0.5 rounded-full border"
+                        style={{
+                          backgroundColor: `${famColor}18`,
+                          color: famColor,
+                          borderColor: `${famColor}40`,
+                        }}
+                      >
+                        {drugCount} {drugCount === 1 ? 'drug' : 'drugs'}
+                      </span>
+                    </div>
+
+                    {/* Full Name */}
+                    <h3 className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-snug mb-1">
+                      {receptor.fullName}
+                    </h3>
+
+                    {/* Action */}
+                    {receptor.action && (
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-3">
+                        {receptor.action}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between text-xs">
+                    <span className="font-semibold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
+                      {family.shortName}
+                    </span>
+                    <span
+                      className="font-bold text-xs flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                      style={{ color: famColor }}
+                    >
+                      Affinities →
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* VIEW 2: CORRESPONDING DRUGS LIST WITH FAMILY-COLORED BARS */}
       {viewMode === 'drugs' && (
         <div className="space-y-3">
           {correspondingDrugs.length > 0 ? (
@@ -301,7 +390,7 @@ export default function ReceptorListScreen() {
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-display font-bold text-slate-900 dark:text-white text-base sm:text-lg group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      <h3 className="font-display font-bold text-slate-900 dark:text-white text-base sm:text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {drug.name}
                       </h3>
                       {drug.brand && (
@@ -309,7 +398,7 @@ export default function ReceptorListScreen() {
                           ({drug.brand.replace('US:', '').split('·')[0].trim()})
                         </span>
                       )}
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70">
                         {drug.family}
                       </span>
                     </div>
@@ -317,22 +406,17 @@ export default function ReceptorListScreen() {
                   </div>
 
                   <div className="text-right flex-shrink-0">
-                    {drug.targetDose && (
-                      <span className="text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 px-2 py-0.5 rounded-lg whitespace-nowrap block mb-1">
-                        🎯 {drug.targetDose.split('·')[0].trim()}
-                      </span>
-                    )}
-                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-0.5 transition-transform inline-block">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform inline-block">
                       Monograph →
                     </span>
                   </div>
                 </div>
 
-                {/* Matching Receptor Bindings with Occupancy Bars */}
+                {/* Matching Receptor Bindings with Occupancy Bars in Family Color */}
                 <div className="space-y-2 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80">
                   {drug.matchingBindings.map(b => {
                     const receptorObj = (data.receptors || []).find(rec => rec.id === b.receptor)
-                    const color = receptorObj?.color || '#6366f1'
+                    const famColor = getReceptorFamilyColor(b.receptor)
                     const occ = b.occupancy || 0
 
                     return (
@@ -346,12 +430,12 @@ export default function ReceptorListScreen() {
                               }}
                               className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-md transition-transform hover:scale-105 border cursor-pointer"
                               style={{
-                                backgroundColor: `${color}18`,
-                                color: color,
-                                borderColor: `${color}40`,
+                                backgroundColor: `${famColor}18`,
+                                color: famColor,
+                                borderColor: `${famColor}40`,
                               }}
                             >
-                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
                               <span>{b.receptor}</span>
                             </span>
                             {receptorObj?.fullName && (
@@ -367,19 +451,19 @@ export default function ReceptorListScreen() {
                                 Ki: {b.ki}
                               </span>
                             )}
-                            <span className="text-xs font-black w-10 text-right" style={{ color }}>
+                            <span className="text-xs font-black w-10 text-right" style={{ color: famColor }}>
                               {occ}%
                             </span>
                           </div>
                         </div>
 
-                        {/* Occupancy Progress Bar */}
+                        {/* Occupancy Progress Bar in Family Color */}
                         <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-1">
                           <div
                             className="h-full rounded-full transition-all"
                             style={{
                               width: `${Math.min(Math.max(occ, 8), 100)}%`,
-                              backgroundColor: color,
+                              backgroundColor: famColor,
                             }}
                           />
                         </div>
@@ -417,90 +501,6 @@ export default function ReceptorListScreen() {
           )}
         </div>
       )}
-
-      {/* VIEW 2: RECEPTOR TARGETS PROFILES GRID */}
-      {viewMode === 'receptors' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          {filteredReceptors.map(receptor => {
-            const drugCount = data.drugs.filter(d =>
-              (d.receptors || []).some(r => r.receptor === receptor.id)
-            ).length
-
-            return (
-              <div
-                key={receptor.id}
-                className="bg-white dark:bg-[#111827] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all border border-slate-200/90 dark:border-slate-800/90 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2.5">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="w-4 h-4 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: receptor.color }}
-                      />
-                      <span className="font-display font-black text-base text-slate-900 dark:text-white">
-                        {receptor.id}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setSelectedTarget(receptor.id)
-                        setViewMode('drugs')
-                      }}
-                      className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/60 border border-slate-200/80 dark:border-slate-700/80 transition-colors cursor-pointer"
-                      title="View all drugs binding this target"
-                    >
-                      {drugCount} {drugCount === 1 ? 'drug' : 'drugs'} →
-                    </button>
-                  </div>
-
-                  <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug mb-1">
-                    {receptor.fullName}
-                  </p>
-
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
-                    {receptor.action}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 space-y-1.5">
-                  {receptor.therapeuticEffect && (
-                    <p className="text-xs text-slate-700 dark:text-slate-300">
-                      <strong className="font-bold text-emerald-700 dark:text-emerald-400">Therapeutic: </strong>
-                      {receptor.therapeuticEffect}
-                    </p>
-                  )}
-                  {receptor.sideEffects && (
-                    <p className="text-xs text-slate-700 dark:text-slate-300">
-                      <strong className="font-bold text-rose-700 dark:text-rose-400">Adverse: </strong>
-                      {receptor.sideEffects}
-                    </p>
-                  )}
-
-                  <div className="pt-2 flex items-center justify-between">
-                    <button
-                      onClick={() => navigate(`/receptors/${receptor.id}`)}
-                      className="text-xs font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
-                    >
-                      Full Target Dossier →
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedTarget(receptor.id)
-                        setViewMode('drugs')
-                      }}
-                      className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-                    >
-                      Explore Drugs
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
     </div>
   )
 }
-

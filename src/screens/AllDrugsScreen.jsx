@@ -4,7 +4,7 @@ import data from '../data.json'
 import BackButton from '../components/BackButton'
 import ReceptorTag from '../components/ReceptorTag'
 import DrugCard from '../components/DrugCard'
-import { categorizeReceptor } from './ReceptorListScreen'
+import { categorizeReceptor } from '../utils/receptorFamily'
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
