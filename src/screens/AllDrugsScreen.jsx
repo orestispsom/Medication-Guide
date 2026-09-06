@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
 import ReceptorTag from '../components/ReceptorTag'
+import DrugCard from '../components/DrugCard'
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
@@ -123,30 +124,30 @@ export default function AllDrugsScreen() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
       <BackButton />
 
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+            <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               A–Z Medication Compendium
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-              Browse {data.drugs.length} clinical drug monographs across 9 clinical domains
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Browse {data.drugs.length} clinical drug monographs across {data.families.length} clinical domains
             </p>
           </div>
-          <span className="text-xs font-bold px-3 py-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 rounded-full border border-indigo-100 dark:border-indigo-800">
+          <span className="text-xs font-bold px-3 py-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 rounded-full border border-indigo-100 dark:border-indigo-800 flex-shrink-0">
             {filteredDrugs.length} of {data.drugs.length}
           </span>
         </div>
       </div>
 
       {/* Search Input */}
-      <div className="relative mb-3">
+      <div className="relative mb-3.5">
         <svg
-          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-4 pointer-events-none"
+          className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-4 top-4 pointer-events-none"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -163,12 +164,12 @@ export default function AllDrugsScreen() {
             }
           }}
           placeholder="Filter by generic name, brand, indication, or mechanism..."
-          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-10 py-3.5 text-base font-medium shadow-xs focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-900 dark:text-white rounded-2xl pl-11 pr-10 py-3.5 text-sm font-medium shadow-[0_1px_3px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer"
           >
             ✕
           </button>
@@ -176,7 +177,7 @@ export default function AllDrugsScreen() {
       </div>
 
       {/* Quick Clinical Smart Filter Chips */}
-      <div className="flex items-center gap-1.5 mb-3 overflow-x-auto hide-scrollbar pb-1">
+      <div className="flex items-center gap-1.5 mb-3.5 overflow-x-auto hide-scrollbar pb-1">
         {[
           { id: 'all', label: 'All', icon: '💊' },
           { id: 'weight-neutral', label: 'Weight Neutral', icon: '⚡' },
@@ -190,10 +191,10 @@ export default function AllDrugsScreen() {
           <button
             key={chip.id}
             onClick={() => setClinicalFilter(chip.id === clinicalFilter ? 'all' : chip.id)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border flex-shrink-0 flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border flex-shrink-0 flex items-center gap-1.5 cursor-pointer ${
               clinicalFilter === chip.id
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-xs'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-sm'
+                : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
             }`}
           >
             <span>{chip.icon}</span>
@@ -201,12 +202,12 @@ export default function AllDrugsScreen() {
           </button>
         ))}
 
-        <div className="ml-auto flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 flex-shrink-0">
+        <div className="ml-auto flex items-center gap-1.5 text-xs font-medium text-slate-400 dark:text-slate-500 flex-shrink-0">
           <span>Sort:</span>
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-700 dark:text-gray-300 shadow-2xs focus:outline-none"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-2xs focus:outline-none cursor-pointer"
           >
             <option value="name-asc">A–Z</option>
             <option value="halfLife">Half-Life (t½)</option>
@@ -215,13 +216,13 @@ export default function AllDrugsScreen() {
       </div>
 
       {/* Alphabet Quick Jump Bar */}
-      <div className="flex flex-wrap items-center gap-1 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
+      <div className="flex flex-wrap items-center gap-1 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800/80">
         <button
           onClick={() => setSelectedLetter('all')}
-          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all ${
+          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
             selectedLetter === 'all'
-              ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
-              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
           }`}
         >
           All
@@ -232,7 +233,7 @@ export default function AllDrugsScreen() {
             return (
               <span
                 key={letter}
-                className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-gray-300 dark:text-gray-700 cursor-not-allowed"
+                className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-slate-300 dark:text-slate-700 cursor-not-allowed"
               >
                 {letter}
               </span>
@@ -245,10 +246,10 @@ export default function AllDrugsScreen() {
                 setSelectedLetter(letter)
                 setSearchQuery('')
               }}
-              className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg transition-all ${
+              className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 selectedLetter === letter
-                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
-                  : 'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
+                  : 'bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800/80 text-slate-700 dark:text-slate-300 hover:border-slate-300'
               }`}
               title={`${count} drugs starting with ${letter}`}
             >
@@ -259,13 +260,13 @@ export default function AllDrugsScreen() {
       </div>
 
       {/* Clinical Family Filter Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-2 mb-3">
+      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-2 mb-3.5">
         <button
           onClick={() => handleFamilyChange('all')}
-          className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border ${
+          className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer ${
             selectedFamilyId === 'all'
-              ? 'bg-gray-900 text-white border-gray-900 shadow-xs'
-              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+              ? 'bg-slate-900 text-white border-transparent shadow-sm'
+              : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
           }`}
         >
           <span>All Families</span>
@@ -278,7 +279,7 @@ export default function AllDrugsScreen() {
             <button
               key={fam.id}
               onClick={() => handleFamilyChange(fam.id)}
-              className="px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border"
+              className="px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer"
               style={{
                 backgroundColor: isSelected ? fam.color : fam.color + '10',
                 color: isSelected ? '#ffffff' : fam.color,
@@ -294,12 +295,12 @@ export default function AllDrugsScreen() {
 
       {/* Subgroup Filter Dropdown (if family or all selected) */}
       {availableSubgroups.length > 1 && (
-        <div className="flex items-center gap-2 mb-5">
-          <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 whitespace-nowrap">Subgroup:</span>
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 whitespace-nowrap">Subgroup:</span>
           <select
             value={selectedSubgroupId}
             onChange={e => setSelectedSubgroupId(e.target.value)}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-full truncate"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-full truncate cursor-pointer"
           >
             <option value="all">All Subgroups ({availableSubgroups.length})</option>
             {availableSubgroups.map(sg => (
@@ -312,7 +313,7 @@ export default function AllDrugsScreen() {
           {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedLetter !== 'all' || searchQuery || clinicalFilter !== 'all') && (
             <button
               onClick={handleClearAll}
-              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 ml-auto whitespace-nowrap"
+              className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 ml-auto whitespace-nowrap cursor-pointer"
             >
               Reset Filters
             </button>
@@ -323,106 +324,22 @@ export default function AllDrugsScreen() {
       {/* Drug List */}
       {filteredDrugs.length > 0 ? (
         <div className="space-y-3">
-          {filteredDrugs.map(drug => {
-            const family = data.families.find(f => f.id === drug.familyId)
-            const cleanBrand = drug.brand
-              ? drug.brand.replace('US:', '').split('·')[0].trim()
-              : ''
-
-            return (
-              <div
-                key={drug.id}
-                onClick={() => navigate(`/drug/${drug.id}`)}
-                className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-200/90 dark:border-gray-700/90 shadow-xs hover:shadow-md hover:border-gray-400 dark:hover:border-gray-500 transition-all cursor-pointer group"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {drug.name}
-                      </h3>
-                      {cleanBrand && (
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          ({cleanBrand})
-                        </span>
-                      )}
-                      {drug.blackBox && (
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800" title="Black Box / Boxed Warning">
-                          ⚠️ Boxed Warning
-                        </span>
-                      )}
-                      {drug.foodRequirement && drug.foodRequirement.toLowerCase().includes('meal') && (
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800" title={drug.foodRequirement}>
-                          🍽️ Meal Req
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-2.5">
-                      {drug.subgroup}
-                    </p>
-
-                    {/* Dosing & Half-Life Badges */}
-                    <div className="flex flex-wrap items-center gap-2 mb-2.5">
-                      {drug.targetDose && (
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
-                          🎯 Target: {drug.targetDose}
-                        </span>
-                      )}
-                      {drug.halfLife && (
-                        <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
-                          ⏱️ t½: {drug.halfLife}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Top Receptor Affinity Badges */}
-                    {drug.receptors && drug.receptors.length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
-                        {drug.receptors.slice(0, 4).map(r => (
-                          <ReceptorTag key={r.receptor} receptorId={r.receptor} occupancy={r.occupancy} />
-                        ))}
-                        {drug.receptors.length > 4 && (
-                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                            +{drug.receptors.length - 4} more
-                          </span>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Indications */}
-                    {drug.indications && drug.indications.length > 0 && (
-                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
-                        <span className="font-semibold text-gray-700 dark:text-gray-200">Indications:</span> {drug.indications.join(' · ')}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
-                      {family?.shortName || drug.family}
-                    </span>
-                    <span className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors text-base">
-                      →
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+          {filteredDrugs.map(drug => (
+            <DrugCard key={drug.id} drug={drug} />
+          ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700 shadow-xs">
-          <div className="w-12 h-12 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center mx-auto mb-3 text-xl">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-8 text-center border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+          <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-xl">
             🔍
           </div>
-          <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">No matching medications</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 max-w-sm mx-auto">
+          <h3 className="font-display font-bold text-slate-900 dark:text-white text-base mb-1">No matching medications</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-sm mx-auto">
             We couldn&apos;t find any drugs matching your search criteria. Try adjusting your query or resetting filters.
           </p>
           <button
             onClick={handleClearAll}
-            className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition-all"
+            className="px-4 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs shadow-xs transition-all cursor-pointer"
           >
             Clear All Filters
           </button>

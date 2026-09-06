@@ -50,16 +50,16 @@ export default function PatientHandoutModal({
         }
       `}</style>
 
-      <div className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden my-6">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 overflow-hidden my-6">
         {/* Modal Top Action Bar (hidden in print) */}
-        <div className="no-print flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/80">
+        <div className="no-print flex items-center justify-between px-6 py-4 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50 dark:bg-[#0b0f19]">
           <div className="flex items-center gap-2">
             <span className="text-xl">🖨️</span>
             <div>
-              <h2 className="text-sm font-bold text-gray-900 dark:text-white">
+              <h2 className="text-sm font-display font-bold text-slate-900 dark:text-white">
                 Patient Medication Transition Handout
               </h2>
-              <p className="text-[11px] text-gray-500 dark:text-gray-400">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Formatted for print or PDF export to give directly to the patient
               </p>
             </div>
@@ -67,14 +67,14 @@ export default function PatientHandoutModal({
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5"
+              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <span>🖨️</span>
               <span>Print Handout</span>
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-xl bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-bold"
+              className="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold cursor-pointer"
             >
               ✕
             </button>
@@ -82,39 +82,39 @@ export default function PatientHandoutModal({
         </div>
 
         {/* Clinician Fill-in Inputs (hidden in print) */}
-        <div className="no-print p-5 bg-indigo-50/50 dark:bg-indigo-950/20 border-b border-indigo-100 dark:border-indigo-900/50">
+        <div className="no-print p-5 bg-indigo-50/40 dark:bg-indigo-950/20 border-b border-indigo-100 dark:border-indigo-900/50">
           <span className="text-xs font-bold text-indigo-950 dark:text-indigo-300 block mb-2">
             Optional Header Customization:
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
             <div>
-              <label className="text-[10px] font-bold text-gray-600 dark:text-gray-400 block mb-0.5">Patient Name:</label>
+              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Patient Name:</label>
               <input
                 type="text"
                 placeholder="e.g. John Doe"
                 value={patientName}
                 onChange={e => setPatientName(e.target.value)}
-                className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2.5 py-1.5 text-xs font-medium"
+                className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-gray-600 dark:text-gray-400 block mb-0.5">Clinic / Prescriber:</label>
+              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Clinic / Prescriber:</label>
               <input
                 type="text"
                 placeholder="e.g. Dr. Smith / Outpatient Psych"
                 value={clinicName}
                 onChange={e => setClinicName(e.target.value)}
-                className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2.5 py-1.5 text-xs font-medium"
+                className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-gray-600 dark:text-gray-400 block mb-0.5">Clinic Phone:</label>
+              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400 block mb-0.5">Clinic Phone:</label>
               <input
                 type="text"
                 placeholder="e.g. (555) 234-5678"
                 value={clinicPhone}
                 onChange={e => setClinicPhone(e.target.value)}
-                className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2.5 py-1.5 text-xs font-medium"
+                className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-xl px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-white"
               />
             </div>
           </div>

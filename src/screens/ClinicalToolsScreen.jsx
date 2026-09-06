@@ -55,12 +55,12 @@ export default function ClinicalToolsScreen() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
       {/* Top Bar with Home Button and Theme Switch */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <button
           onClick={() => navigate('/')}
-          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-400 transition-colors text-xs font-bold py-1.5 px-3.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer shadow-2xs"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
           title="Return to Home Screen"
         >
           <span>🏠</span>
@@ -68,12 +68,12 @@ export default function ClinicalToolsScreen() {
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 hidden sm:inline">
+          <span className="text-xs font-medium text-slate-400 dark:text-slate-500 hidden sm:inline">
             Point of Care Decision Support
           </span>
           <button
             onClick={toggleTheme}
-            className="p-1.5 px-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-amber-500 dark:hover:text-yellow-400 transition-colors text-xs font-bold flex items-center gap-1 cursor-pointer shadow-2xs"
+            className="p-1.5 px-2.5 rounded-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-amber-500 dark:hover:text-amber-400 transition-all text-xs font-semibold flex items-center gap-1 cursor-pointer shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
@@ -84,36 +84,36 @@ export default function ClinicalToolsScreen() {
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between gap-2 mb-1.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
+      <div className="mb-5">
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
             <span>🛠️</span>
             <span>Point-of-Care Clinical Tools</span>
           </div>
 
           <button
             onClick={() => setShowAllTools(!showAllTools)}
-            className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer px-2 py-1 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-800 transition-colors"
+            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer px-2.5 py-1 rounded-lg hover:bg-indigo-50 dark:hover:bg-slate-800 transition-colors"
           >
             <span>{showAllTools ? '▤ Single Row Bar' : '⊞ View All 9 Tools'}</span>
           </button>
         </div>
-        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+        <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Clinical Tools & Calculators
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           CPZ & BZD equivalencies, Lithium TDM troughs, Clozapine REMS, CYP450 collisions, QTc stacker, and metabolic tracking
         </p>
       </div>
 
       {/* View All 9 Tools Grid (when toggled open) */}
       {showAllTools ? (
-        <div className="bg-gray-100 dark:bg-gray-800/90 p-3 rounded-2xl mb-6 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <div className="bg-slate-50 dark:bg-[#0b0f19] p-3.5 rounded-2xl mb-6 border border-slate-200/90 dark:border-slate-800/90">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               All 9 Clinical Engines (1-Click Access)
             </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800">
               Active: {CLINICAL_TOOLS.find(t => t.id === activeTab)?.label}
             </span>
           </div>
@@ -125,16 +125,16 @@ export default function ClinicalToolsScreen() {
                   handleTabChange(tab.id)
                   setShowAllTools(false)
                 }}
-                className={`flex items-start gap-2 p-2.5 rounded-xl text-left transition-all cursor-pointer ${
+                className={`flex items-start gap-2.5 p-3 rounded-xl text-left transition-all cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-400/50'
-                    : 'bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm'
+                    : 'bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
                 }`}
               >
-                <span className="text-lg flex-shrink-0">{tab.icon}</span>
+                <span className="text-xl flex-shrink-0">{tab.icon}</span>
                 <div className="min-w-0">
                   <span className="text-xs font-bold block leading-snug truncate">{tab.label}</span>
-                  <span className={`text-[10px] block truncate ${activeTab === tab.id ? 'text-indigo-100' : 'text-gray-400 dark:text-gray-500'}`}>
+                  <span className={`text-[11px] block truncate mt-0.5 ${activeTab === tab.id ? 'text-slate-300 dark:text-slate-600' : 'text-slate-400 dark:text-slate-500'}`}>
                     {tab.desc}
                   </span>
                 </div>
@@ -148,7 +148,7 @@ export default function ClinicalToolsScreen() {
           {/* Scroll Left Button */}
           <button
             onClick={() => handleScroll('left')}
-            className="hidden sm:flex items-center justify-center w-7 h-9 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-black text-sm flex-shrink-0 cursor-pointer transition-colors shadow-2xs"
+            className="hidden sm:flex items-center justify-center w-8 h-9 rounded-xl bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm flex-shrink-0 cursor-pointer transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
             title="Scroll left"
           >
             ‹
@@ -161,7 +161,7 @@ export default function ClinicalToolsScreen() {
                 e.currentTarget.scrollLeft += e.deltaY
               }
             }}
-            className="flex-1 flex items-center gap-1 bg-gray-100 dark:bg-gray-800/90 p-1.5 rounded-2xl overflow-x-auto hide-scrollbar scroll-smooth"
+            className="flex-1 flex items-center gap-1.5 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 p-1.5 rounded-2xl overflow-x-auto hide-scrollbar scroll-smooth shadow-[0_1px_3px_rgba(0,0,0,0.03)]"
           >
             {CLINICAL_TOOLS.map(tab => (
               <button
@@ -170,8 +170,8 @@ export default function ClinicalToolsScreen() {
                 onClick={() => handleTabChange(tab.id)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-white dark:bg-gray-900 text-indigo-700 dark:text-indigo-300 shadow-xs ring-1 ring-indigo-500/20'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-gray-700/40'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
                 }`}
               >
                 <span>{tab.icon}</span>
@@ -183,7 +183,7 @@ export default function ClinicalToolsScreen() {
           {/* Scroll Right Button */}
           <button
             onClick={() => handleScroll('right')}
-            className="hidden sm:flex items-center justify-center w-7 h-9 rounded-xl bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-black text-sm flex-shrink-0 cursor-pointer transition-colors shadow-2xs"
+            className="hidden sm:flex items-center justify-center w-8 h-9 rounded-xl bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm flex-shrink-0 cursor-pointer transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
             title="Scroll right to see all tools"
           >
             ›

@@ -74,34 +74,34 @@ export default function CrossTitrationScreen() {
 
   // Otherwise render the Master Protocol Catalog
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
       <BackButton />
 
       {/* Header */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold mb-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold mb-2">
           <span>🔄</span>
           <span>Module 12: Cross-Titration & Deprescribing Master Tool</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+        <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Transition & Deprescribing Protocols
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1">
           20 evidence-based switch algorithms with 4-phase timelines, receptor shift dynamics, risk stratification meters, and emergency rescue guides.
         </p>
       </div>
 
       {/* Quick Direct Switch Finder Box */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200/90 dark:border-gray-700/90 rounded-3xl p-5 mb-5 shadow-xs">
+      <div className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-5 mb-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-base">🎯</span>
-          <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
             Direct Switch Protocol Matcher
           </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
           <div>
-            <label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase block mb-1.5">
+            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1.5">
               Switching From (Current Drug):
             </label>
             <input
@@ -109,11 +109,11 @@ export default function CrossTitrationScreen() {
               value={fromDrugFilter}
               onChange={e => setFromDrugFilter(e.target.value)}
               placeholder="e.g. Sertraline, Paroxetine, Olanzapine, BZD..."
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
             />
           </div>
           <div>
-            <label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase block mb-1.5">
+            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1.5">
               Switching To (Target Drug):
             </label>
             <input
@@ -121,13 +121,13 @@ export default function CrossTitrationScreen() {
               value={toDrugFilter}
               onChange={e => setToDrugFilter(e.target.value)}
               placeholder="e.g. Venlafaxine, Aripiprazole, Clozapine..."
-              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
+              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
             />
           </div>
         </div>
         {(fromDrugFilter || toDrugFilter) && (
           <div className="flex items-center justify-between pt-2 text-xs">
-            <span className="text-gray-700 dark:text-gray-300 font-semibold">
+            <span className="text-slate-700 dark:text-slate-300 font-semibold">
               Matched {filteredProtocols.length} protocol{filteredProtocols.length !== 1 ? 's' : ''}
             </span>
             <button
@@ -135,7 +135,7 @@ export default function CrossTitrationScreen() {
                 setFromDrugFilter('')
                 setToDrugFilter('')
               }}
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold underline text-xs"
+              className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-xs cursor-pointer"
             >
               Clear Matcher
             </button>
@@ -146,7 +146,7 @@ export default function CrossTitrationScreen() {
       {/* Global Search Input */}
       <div className="relative mb-4">
         <svg
-          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-4 pointer-events-none"
+          className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-4 top-4 pointer-events-none"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -158,12 +158,12 @@ export default function CrossTitrationScreen() {
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Filter by keyword (e.g. Ashton, MAOI, UGT, Clozapine, Akathisia)..."
-          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-10 py-3.5 text-base font-medium shadow-xs focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-900 dark:text-white rounded-2xl pl-11 pr-10 py-3.5 text-sm font-medium shadow-[0_1px_3px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer"
           >
             ✕
           </button>
@@ -178,10 +178,10 @@ export default function CrossTitrationScreen() {
             <button
               key={st}
               onClick={() => setSelectedSwitchType(st)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border cursor-pointer ${
                 isSelected
-                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-xs'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-sm'
+                  : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
               }`}
             >
               {st === 'ALL' ? `All Protocols (${protocols.length})` : st}
@@ -197,24 +197,24 @@ export default function CrossTitrationScreen() {
             <div
               key={proto.id}
               onClick={() => navigate(`/cross-titration/${proto.id}`)}
-              className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-200/90 dark:border-gray-700/90 shadow-xs hover:shadow-md hover:border-gray-400 dark:hover:border-gray-500 transition-all cursor-pointer group"
+              className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md transition-all cursor-pointer group"
             >
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex items-center gap-3">
-                  <span className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-extrabold text-sm flex items-center justify-center flex-shrink-0">
+                  <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-extrabold text-xs flex items-center justify-center flex-shrink-0 border border-slate-200/60 dark:border-slate-700/60">
                     #{proto.number < 10 ? `0${proto.number}` : proto.number}
                   </span>
                   <div>
-                    <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="font-display font-bold text-base sm:text-lg text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                       {proto.title}
                     </h3>
-                    <p className="text-sm font-semibold text-gray-600 dark:text-gray-300 mt-0.5">
+                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-0.5">
                       {proto.transitionTitle}
                     </p>
                   </div>
                 </div>
 
-                <span className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors text-xl flex-shrink-0">
+                <span className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors text-xl flex-shrink-0">
                   →
                 </span>
               </div>
@@ -387,17 +387,17 @@ function ProtocolDetailView({ protocol, onBack }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
       {/* Back Button & Action Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors py-1.5 px-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
           </svg>
           <span>All 20 Protocols</span>
         </button>
@@ -409,10 +409,10 @@ function ProtocolDetailView({ protocol, onBack }) {
               setStarred(isNow)
               setToastMessage(isNow ? `Protocol #${protocol.number} saved to Favorites!` : `Protocol #${protocol.number} removed from favorites`)
             }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border cursor-pointer ${
               starred
-                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
+                ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800 shadow-2xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:text-amber-600 dark:hover:text-amber-400'
             }`}
             title={starred ? 'Starred in Favorites' : 'Add to Favorites'}
           >
@@ -422,7 +422,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <button
             onClick={() => setIsPrintModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold transition-all border border-gray-200 dark:border-gray-700 shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             title="Generate printable patient handout with calendar instructions"
           >
             <span>🖨️</span>
@@ -431,7 +431,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <button
             onClick={handleCopyEhrNote}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold transition-all border border-gray-200 dark:border-gray-700 shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             title="Copy structured clinical note for EHR documentation"
           >
             <span>📋</span>
@@ -440,7 +440,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <button
             onClick={handleCopyProtocol}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-semibold transition-all border border-gray-200 dark:border-gray-700"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
             title="Copy raw schedule to clipboard"
           >
             <span>Schedule</span>
@@ -449,50 +449,50 @@ function ProtocolDetailView({ protocol, onBack }) {
       </div>
 
       {/* Protocol Header Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-7 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold border border-gray-200 dark:border-gray-600">
+          <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-200/80 dark:border-slate-700">
             Protocol #{protocol.number < 10 ? `0${protocol.number}` : protocol.number}
           </span>
-          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
             Module 12 Compendium Reference
           </span>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-1.5">
+        <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1.5">
           {protocol.title}
         </h1>
 
-        <p className="text-base sm:text-lg font-bold text-gray-700 dark:text-gray-200 mb-2">
+        <p className="text-base sm:text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">
           {protocol.transitionTitle}
         </p>
 
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
           {protocol.classTransition}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-gray-100 dark:border-gray-700 text-xs">
-          <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-800">
-            <span className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider block mb-0.5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800/80">
+            <span className="text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-0.5">
               Switch Paradigm
             </span>
-            <span className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+            <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
               {protocol.switchType}
             </span>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-800">
-            <span className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider block mb-0.5">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800/80">
+            <span className="text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-0.5">
               Standard Duration
             </span>
-            <span className="font-bold text-amber-800 dark:text-amber-300 text-sm sm:text-base">
+            <span className="font-bold text-amber-700 dark:text-amber-400 text-sm sm:text-base">
               ⏱️ {protocol.duration}
             </span>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-800">
-            <span className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider block mb-0.5">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800/80">
+            <span className="text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-0.5">
               Core Clinical Mandate
             </span>
-            <span className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+            <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
               🎯 {protocol.coreMandate}
             </span>
           </div>

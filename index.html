@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psychiatric Medication Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -12,21 +15,32 @@
           extend: {
             fontFamily: {
               sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+              display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
             },
+            colors: {
+              slate: {
+                850: '#161f33',
+                925: '#0b0f19',
+              }
+            }
           },
         },
       }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-      body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      h1, h2, h3, h4, .font-display {
+        font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+      }
       .hide-scrollbar::-webkit-scrollbar { display: none; }
       .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
   </head>
-  <body class="bg-gray-50 min-h-screen">
+  <body class="bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 min-h-screen selection:bg-slate-900 selection:text-white dark:selection:bg-white dark:selection:text-slate-900 transition-colors">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

@@ -63,28 +63,38 @@ export default function HomeScreen() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 pb-28">
-      {/* Top Header: Single Line */}
-      <div className="flex items-center justify-between mb-4 pt-1">
-        <h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-          <span>💊</span>
-          <span>Psychiatric Medication App</span>
-        </h1>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
+      {/* Top Header: Single Line per user directive */}
+      <header className="flex items-center justify-between mb-5 pb-3 border-b border-slate-200/80 dark:border-slate-800">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center font-bold text-base shadow-xs">
+            💊
+          </div>
+          <div>
+            <h1 className="font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+              Psychiatric Medication App
+            </h1>
+            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+              12-Module Master Clinical Psychopharmacology Compendium
+            </p>
+          </div>
+        </div>
+
         <button
           onClick={toggleTheme}
-          className="px-3 py-1.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:text-amber-500 dark:hover:text-yellow-400 hover:border-amber-300 dark:hover:border-yellow-500 transition-all shadow-2xs text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+          className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
-          <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
-          <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
+          <span className="text-sm">{theme === 'dark' ? '☀️' : '🌙'}</span>
+          <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
         </button>
-      </div>
+      </header>
 
-      {/* Global Quick Search Bar */}
+      {/* Global Command Bar / Spotlight Search */}
       <div className="relative mb-3">
-        <div className="relative flex items-center">
+        <div className="relative flex items-center bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
           <svg
-            className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 pointer-events-none"
+            className="w-5 h-5 text-slate-400 dark:text-slate-500 absolute left-4 pointer-events-none"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -98,17 +108,17 @@ export default function HomeScreen() {
             onChange={e => setSearchQuery(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             placeholder="Search 170+ drugs, brands (e.g. Cobenfy, Vyvanse), press / to focus..."
-            className="w-full bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700/90 text-gray-900 dark:text-white rounded-2xl pl-12 pr-10 py-3.5 text-base shadow-2xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500 font-medium"
+            className="w-full bg-transparent text-slate-900 dark:text-white rounded-2xl pl-12 pr-12 py-3.5 text-base shadow-none focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium"
           />
           {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 cursor-pointer"
+              className="absolute right-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer"
             >
               ✕
             </button>
           ) : (
-            <span className="absolute right-4 text-xs font-mono font-semibold text-gray-400 dark:text-gray-500 pointer-events-none border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5">
+            <span className="absolute right-4 text-xs font-mono font-semibold text-slate-400 dark:text-slate-500 pointer-events-none border border-slate-200 dark:border-slate-700 rounded px-1.5 py-0.5">
               /
             </span>
           )}
@@ -116,7 +126,7 @@ export default function HomeScreen() {
 
         {/* Live Search Dropdown */}
         {searchQuery.trim() && (
-          <div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-30 divide-y divide-gray-100 dark:divide-gray-700">
+          <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-30 divide-y divide-slate-100 dark:divide-slate-800">
             {searchResults.length > 0 ? (
               searchResults.map(drug => {
                 const family = data.families.find(f => f.id === drug.familyId)
@@ -127,29 +137,29 @@ export default function HomeScreen() {
                       setSearchQuery('')
                       navigate(`/drug/${drug.id}`)
                     }}
-                    className="w-full px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-gray-700/60 transition-colors flex items-center justify-between group cursor-pointer"
+                    className="w-full px-4 py-3.5 text-left hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors flex items-center justify-between group cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-gray-900 dark:text-white text-base group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                        <span className="font-display font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400">
                           {drug.name}
                         </span>
                         {drug.brand && (
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                          <span className="text-sm text-slate-500 dark:text-slate-400">
                             ({drug.brand.split('·')[0].replace('US:', '').trim()})
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{drug.subgroup}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{drug.subgroup}</p>
                     </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 flex-shrink-0">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex-shrink-0">
                       {family?.shortName || drug.family}
                     </span>
                   </button>
                 )
               })
             ) : (
-              <div className="p-5 text-center text-sm text-gray-500 dark:text-gray-400">
+              <div className="p-5 text-center text-sm text-slate-500 dark:text-slate-400">
                 No medications matching &quot;{searchQuery}&quot;
               </div>
             )}
@@ -159,7 +169,7 @@ export default function HomeScreen() {
                   navigate(`/all-drugs?search=${encodeURIComponent(searchQuery)}`)
                   setSearchQuery('')
                 }}
-                className="w-full py-3 px-4 bg-gray-50 dark:bg-gray-800/90 hover:bg-gray-100 dark:hover:bg-gray-700 text-center text-sm font-semibold text-indigo-600 dark:text-indigo-400 transition-colors cursor-pointer"
+                className="w-full py-3 px-4 bg-slate-50 dark:bg-slate-800/90 hover:bg-slate-100 dark:hover:bg-slate-700 text-center text-sm font-semibold text-blue-600 dark:text-blue-400 transition-colors cursor-pointer"
               >
                 View all results in A-Z Directory →
               </button>
@@ -175,9 +185,9 @@ export default function HomeScreen() {
             e.currentTarget.scrollLeft += e.deltaY
           }
         }}
-        className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 mb-8"
+        className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-8"
       >
-        <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap mr-1">
+        <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap mr-1">
           Quick Picks:
         </span>
         {QUICK_CHIPS.map(chip => (
@@ -190,7 +200,7 @@ export default function HomeScreen() {
                 setSearchQuery(chip.query)
               }
             }}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700/90 text-gray-700 dark:text-gray-200 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-300 shadow-2xs transition-all cursor-pointer"
+            className="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:text-blue-600 dark:hover:text-blue-400 shadow-2xs transition-all cursor-pointer"
           >
             {chip.label}
           </button>
@@ -198,74 +208,93 @@ export default function HomeScreen() {
       </div>
 
       {/* 1. CLINICAL DOMAINS & DRUG FAMILIES FIRST */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-9">
+        <div className="flex items-end justify-between mb-4">
           <div>
-            <h2 className="text-base font-bold text-gray-900 dark:text-white">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-bold mb-1 border border-blue-100 dark:border-blue-900/50">
+              <span>📚</span>
+              <span>Core Reference Taxonomy</span>
+            </div>
+            <h2 className="font-display text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Clinical Domains & Drug Families
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
               Browse 170+ monographs across 12 psychopharmacologic classes
             </p>
           </div>
           <button
             onClick={() => navigate('/all-drugs')}
-            className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors cursor-pointer whitespace-nowrap"
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap pb-0.5"
           >
-            Browse All →
+            Browse All 170+ →
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {data.families.map(family => (
             <FamilyCard key={family.id} family={family} />
           ))}
         </div>
       </div>
 
-      {/* 2. POINT-OF-CARE CLINICAL TOOLS (CALM, CONTENT-FIRST DESIGN) */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+      {/* 2. POINT-OF-CARE CLINICAL TOOLS */}
+      <div className="mb-9">
+        <div className="flex items-end justify-between mb-4">
           <div>
-            <h2 className="text-base font-bold text-gray-900 dark:text-white">
-              Point-of-Care Clinical Tools
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold mb-1 border border-emerald-100 dark:border-emerald-900/50">
+              <span>⚡</span>
+              <span>Interactive Clinical Engines</span>
+            </div>
+            <h2 className="font-display text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Point-of-Care Bedside Tools
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Interactive clinical calculators and pharmacodynamic engines
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Calculators, therapeutic drug monitoring, and cross-titration engines
             </p>
           </div>
           <button
             onClick={() => navigate('/tools')}
-            className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors cursor-pointer whitespace-nowrap"
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap pb-0.5"
           >
             All 9 Tools →
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {[
-            { id: 'cpz', name: 'CPZ Dose Converter', desc: 'Convert between FGAs & SGAs to standard chlorpromazine equivalents', icon: '🎭' },
-            { id: 'lithium', name: 'Lithium 12h TDM', desc: 'Predict steady-state trough levels & Cockcroft-Gault clearance', icon: '🧪' },
-            { id: 'clozapine', name: 'Clozapine REMS ANC', desc: 'Neutropenia triage, rechallenge protocols, and blood monitoring', icon: '🩸' },
-            { id: 'cyp', name: 'CYP450 Collision Matrix', desc: 'Screen enzyme induction and inhibition interactions', icon: '⚡' },
-            { id: 'bzd', name: 'BZD / Ashton Taper', desc: 'Calculate diazepam equivalents and gradual withdrawal schedules', icon: '⚖️' },
-            { id: 'emergency', name: 'Emergency Playbook', desc: 'Rapid rescue protocols for NMS, SS, Catatonia, and toxicity', icon: '🚨' },
+            { id: 'cpz', name: 'CPZ Antipsychotic Equivalence', badge: 'Dosing Engine', desc: 'Calculate chlorpromazine equivalents, cumulative D2 exposure, and switch targets.', icon: '🎭' },
+            { id: 'lithium', name: 'Lithium 12h TDM & Cockcroft-Gault', badge: 'Kinetics Engine', desc: 'Predict steady-state trough levels, dose adjustments, and eGFR safety clearance.', icon: '🧪' },
+            { id: 'clozapine', name: 'Clozapine REMS ANC & Rechallenge', badge: 'Safety Algorithm', desc: 'Neutropenia triage, ANC monitoring schedules, and BEN benign ethnic neutropenia rules.', icon: '🩸' },
+            { id: 'cyp', name: 'CYP450 Interaction Matrix', badge: 'Collision Checker', desc: 'Screen 1A2, 2D6, 3A4, 2C19 inhibitors and inducers with dose-adjustment guidance.', icon: '⚡' },
+            { id: 'bzd', name: 'Ashton Benzodiazepine Taper', badge: 'Taper Generator', desc: 'Diazepam substitution and gradual 10%–25% stepped reduction timelines.', icon: '⚖️' },
+            { id: 'emergency', name: 'Emergency Toxicity Playbook', badge: 'Emergency Protocol', desc: 'Stepwise resuscitation orders for NMS, Serotonin Syndrome, and Catatonia.', icon: '🚨' },
           ].map(tool => (
             <button
               key={tool.id}
               onClick={() => navigate(`/tools?tab=${tool.id}`)}
-              className="bg-white dark:bg-gray-800/90 rounded-2xl p-4 sm:p-5 border border-gray-200/90 dark:border-gray-700/90 hover:border-indigo-400/60 dark:hover:border-indigo-500/60 shadow-2xs hover:shadow-md transition-all text-left group cursor-pointer"
+              className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.35)] hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all duration-200 text-left group cursor-pointer flex flex-col justify-between"
             >
-              <div className="flex items-start gap-3">
-                <span className="text-2xl flex-shrink-0">{tool.icon}</span>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 dark:text-white text-base group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                    {tool.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                    {tool.desc}
-                  </p>
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center text-xl shadow-2xs border border-slate-200/60 dark:border-slate-700/60">
+                    {tool.icon}
+                  </span>
+                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60">
+                    {tool.badge}
+                  </span>
                 </div>
+
+                <h3 className="font-display font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5">
+                  {tool.name}
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                  {tool.desc}
+                </p>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <span>Launch Engine</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </button>
           ))}
@@ -274,45 +303,49 @@ export default function HomeScreen() {
 
       {/* 3. KEY CLINICAL REFERENCE DIRECTORIES */}
       <div className="mb-6">
-        <h2 className="text-base font-bold text-gray-900 dark:text-white mb-3">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 text-xs font-bold mb-1 border border-purple-100 dark:border-purple-900/50">
+          <span>📑</span>
+          <span>Cross-Cutting Indexes</span>
+        </div>
+        <h2 className="font-display text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
           Reference Compendium Directories
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
           <button
             onClick={() => navigate('/all-drugs')}
-            className="bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700/90 hover:border-indigo-400/60 dark:hover:border-indigo-500/60 rounded-2xl p-4 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="text-2xl block mb-2">📋</span>
-            <span className="text-base font-bold text-gray-900 dark:text-white block group-hover:text-indigo-600 dark:group-hover:text-indigo-400">All Drugs</span>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Complete A–Z index</p>
+            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">📋</span>
+            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">A–Z Index</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">170+ Monographs</p>
           </button>
 
           <button
             onClick={() => navigate('/cross-titration')}
-            className="bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700/90 hover:border-indigo-400/60 dark:hover:border-indigo-500/60 rounded-2xl p-4 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="text-2xl block mb-2">🔄</span>
-            <span className="text-base font-bold text-gray-900 dark:text-white block group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Titration</span>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">20 Switch Protocols</p>
+            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">🔄</span>
+            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Titration</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">20 Protocols</p>
           </button>
 
           <button
             onClick={() => navigate('/receptors')}
-            className="bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700/90 hover:border-indigo-400/60 dark:hover:border-indigo-500/60 rounded-2xl p-4 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="text-2xl block mb-2">🧬</span>
-            <span className="text-base font-bold text-gray-900 dark:text-white block group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Receptors</span>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">44 Targets & Ki</p>
+            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">🧬</span>
+            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Receptors</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">44 Targets & Ki</p>
           </button>
 
           <button
             onClick={() => navigate('/family/antidotes-interventional')}
-            className="bg-white dark:bg-gray-800/90 border border-gray-200/90 dark:border-gray-700/90 hover:border-red-400/60 dark:hover:border-red-500/60 rounded-2xl p-4 text-left shadow-2xs hover:shadow-md transition-all group cursor-pointer"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-rose-300 dark:hover:border-rose-900/60 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="text-2xl block mb-2">🚨</span>
-            <span className="text-base font-bold text-gray-900 dark:text-white block group-hover:text-red-600 dark:group-hover:text-red-400">Antidotes</span>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Emergency Rescues</p>
+            <span className="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center text-lg mb-3 border border-rose-200/60 dark:border-rose-900/60">🚨</span>
+            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Antidotes</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Emergency Guides</p>
           </button>
         </div>
       </div>

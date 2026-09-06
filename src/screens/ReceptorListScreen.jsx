@@ -43,19 +43,19 @@ export default function ReceptorListScreen() {
   }, [searchQuery, selectedCategory])
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
       <BackButton title="Receptor Guide" />
 
       {/* Header */}
       <div className="mb-5">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-semibold mb-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold mb-2">
           <span>🧬</span>
           <span>44 Molecular Targets & Nanomolar Ki Benchmarks</span>
         </div>
-        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+        <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Receptor & Enzyme Reference
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Comprehensive binding profiles, therapeutic consequences, and adverse liability mappings
         </p>
       </div>
@@ -63,7 +63,7 @@ export default function ReceptorListScreen() {
       {/* Search Input */}
       <div className="relative mb-4">
         <svg
-          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-3.5 pointer-events-none"
+          className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-4 top-3.5 pointer-events-none"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -75,12 +75,12 @@ export default function ReceptorListScreen() {
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Search target by symbol (e.g. 5-HT2A, D2, SERT, α1, M1)..."
-          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-11 pr-10 py-3 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-900 dark:text-white rounded-2xl pl-11 pr-10 py-3 text-sm shadow-[0_1px_3px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700"
+            className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer"
           >
             ✕
           </button>
@@ -95,10 +95,10 @@ export default function ReceptorListScreen() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
+              className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border cursor-pointer ${
                 isSelected
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-sm'
+                  : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
               }`}
             >
               {cat}
@@ -118,7 +118,7 @@ export default function ReceptorListScreen() {
             <button
               key={receptor.id}
               onClick={() => navigate(`/receptors/${receptor.id}`)}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xs hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-500/50 transition-all text-left border border-gray-100 dark:border-gray-700 flex flex-col justify-between group"
+              className="bg-white dark:bg-[#111827] rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all text-left border border-slate-200/90 dark:border-slate-800/90 flex flex-col justify-between group cursor-pointer"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -127,26 +127,26 @@ export default function ReceptorListScreen() {
                       className="w-3.5 h-3.5 rounded-full flex-shrink-0"
                       style={{ backgroundColor: receptor.color }}
                     />
-                    <span className="font-extrabold text-sm text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    <span className="font-display font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                       {receptor.id}
                     </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                     {drugCount} {drugCount === 1 ? 'drug' : 'drugs'}
                   </span>
                 </div>
 
-                <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 leading-tight mb-1">
+                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-tight mb-1">
                   {receptor.fullName}
                 </p>
 
-                <p className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-2">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed mb-2">
                   {receptor.action}
                 </p>
               </div>
 
               {receptor.therapeuticEffect && (
-                <div className="pt-2 border-t border-gray-50 dark:border-gray-700 text-[10px] text-indigo-600 dark:text-indigo-400 font-medium truncate">
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold truncate">
                   🎯 {receptor.therapeuticEffect}
                 </div>
               )}

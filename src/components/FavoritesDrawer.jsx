@@ -44,24 +44,24 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-gray-900/50 backdrop-blur-xs animate-fade-in">
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/40 backdrop-blur-xs animate-fade-in">
       <div className="fixed inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-sm bg-white dark:bg-gray-900 h-full shadow-2xl z-10 flex flex-col justify-between border-l border-gray-100 dark:border-gray-800">
+      <div className="relative w-full max-w-sm bg-white dark:bg-[#111827] h-full shadow-2xl z-10 flex flex-col justify-between border-l border-slate-200/90 dark:border-slate-800/90">
         {/* Header */}
-        <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        <div className="p-4 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xl">⭐️</span>
             <div>
-              <h2 className="font-extrabold text-gray-900 dark:text-white text-sm">Clinical Favorites</h2>
-              <p className="text-[10px] text-gray-400 dark:text-gray-500">
+              <h2 className="font-display font-bold text-slate-900 dark:text-white text-sm">Clinical Favorites</h2>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500">
                 {starredDrugs.length + starredProtocols.length} saved item{starredDrugs.length + starredProtocols.length !== 1 ? 's' : ''}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-300 flex items-center justify-center text-xs font-bold transition-colors"
+            className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-300 flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
           >
             ✕
           </button>
@@ -72,8 +72,8 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
           {starredDrugs.length === 0 && starredProtocols.length === 0 && (
             <div className="py-16 text-center">
               <span className="text-3xl block mb-2">⭐</span>
-              <h3 className="font-bold text-gray-800 dark:text-gray-200 text-sm mb-1">No Saved Favorites</h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[220px] mx-auto leading-relaxed">
+              <h3 className="font-display font-bold text-slate-800 dark:text-slate-200 text-sm mb-1">No Saved Favorites</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed">
                 Tap the star icon on any drug monograph or switch protocol to bookmark it for fast bedside access.
               </p>
             </div>
@@ -82,7 +82,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
           {/* Starred Drugs */}
           {starredDrugs.length > 0 && (
             <div>
-              <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 flex items-center gap-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1">
                 <span>💊</span>
                 <span>Medications ({starredDrugs.length})</span>
               </p>
@@ -91,19 +91,19 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
                   <div
                     key={drug.id}
                     onClick={() => handleNavigate(`/drug/${drug.id}`)}
-                    className="p-3 bg-gray-50/80 dark:bg-gray-800/80 hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 rounded-2xl border border-gray-100 dark:border-gray-700 transition-colors cursor-pointer flex items-center justify-between group"
+                    className="p-3 bg-slate-50 dark:bg-[#0b0f19] hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-800/80 transition-all cursor-pointer flex items-center justify-between group shadow-2xs"
                   >
                     <div>
-                      <h4 className="font-extrabold text-xs text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                      <h4 className="font-display font-bold text-xs text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         {drug.name}
                       </h4>
-                      <p className="text-[10px] text-gray-400 dark:text-gray-500 truncate max-w-[200px]">
+                      <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[200px]">
                         {drug.subgroup}
                       </p>
                     </div>
                     <button
                       onClick={(e) => handleRemove(e, 'drug', drug.id)}
-                      className="text-amber-500 hover:text-gray-300 dark:hover:text-gray-600 text-sm p-1"
+                      className="text-amber-500 hover:text-slate-300 dark:hover:text-slate-600 text-sm p-1 cursor-pointer"
                       title="Remove from favorites"
                     >
                       ★
@@ -117,7 +117,7 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
           {/* Starred Protocols */}
           {starredProtocols.length > 0 && (
             <div>
-              <p className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-400 mb-2 flex items-center gap-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-1">
                 <span>🔄</span>
                 <span>Switch Protocols ({starredProtocols.length})</span>
               </p>
@@ -126,19 +126,19 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
                   <div
                     key={proto.id}
                     onClick={() => handleNavigate(`/cross-titration/${proto.id}`)}
-                    className="p-3 bg-purple-50/40 dark:bg-purple-950/30 hover:bg-purple-50 dark:hover:bg-purple-950/50 rounded-2xl border border-purple-100 dark:border-purple-900/40 transition-colors cursor-pointer flex items-center justify-between group"
+                    className="p-3 bg-slate-50 dark:bg-[#0b0f19] hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-800/80 transition-all cursor-pointer flex items-center justify-between group shadow-2xs"
                   >
                     <div>
-                      <h4 className="font-extrabold text-xs text-gray-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-300">
+                      <h4 className="font-display font-bold text-xs text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         #{proto.number} {proto.title}
                       </h4>
-                      <p className="text-[10px] text-purple-600 dark:text-purple-400 truncate max-w-[200px]">
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[200px]">
                         {proto.transitionTitle}
                       </p>
                     </div>
                     <button
                       onClick={(e) => handleRemove(e, 'protocol', proto.id)}
-                      className="text-amber-500 hover:text-gray-300 dark:hover:text-gray-600 text-sm p-1"
+                      className="text-amber-500 hover:text-slate-300 dark:hover:text-slate-600 text-sm p-1 cursor-pointer"
                       title="Remove from favorites"
                     >
                       ★
@@ -151,8 +151,8 @@ export default function FavoritesDrawer({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="p-3 bg-gray-50 dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-800 text-center">
-          <p className="text-[10px] text-gray-400 dark:text-gray-500">
+        <div className="p-3 bg-slate-50 dark:bg-[#0b0f19] border-t border-slate-200/80 dark:border-slate-800/80 text-center">
+          <p className="text-[10px] text-slate-400 dark:text-slate-500">
             Stored locally on your device for fast offline rounds
           </p>
         </div>

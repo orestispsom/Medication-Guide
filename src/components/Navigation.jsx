@@ -45,45 +45,42 @@ export default function Navigation({ onOpenSearch, onOpenFavorites }) {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-t border-gray-200/80 dark:border-gray-800 shadow-lg">
-      <div className="max-w-lg mx-auto px-2 flex items-center justify-between h-16">
+    <nav className="fixed bottom-3 sm:bottom-4 left-3 right-3 sm:left-4 sm:right-4 z-40 max-w-xl mx-auto bg-white/95 dark:bg-[#111827]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800/90 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.45)] p-1.5 transition-all">
+      <div className="flex items-center justify-between gap-1">
         {navItems.map(item => (
           <button
             key={item.label}
             onClick={() => navigate(item.path)}
-            className={`flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-xl transition-all relative ${
+            className={`flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl transition-all cursor-pointer ${
               item.isActive
-                ? 'text-indigo-600 dark:text-indigo-400 font-extrabold scale-105'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium'
+                ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold shadow-2xs'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50 font-medium'
             }`}
           >
             <span className="text-base leading-none mb-1">{item.icon}</span>
-            <span className="text-[10px] tracking-tight">{item.label}</span>
-            {item.isActive && (
-              <span className="absolute -top-1 w-5 h-0.5 bg-indigo-600 dark:bg-indigo-400 rounded-full" />
-            )}
+            <span className="text-[11px] tracking-tight">{item.label}</span>
           </button>
         ))}
 
         {onOpenFavorites && (
           <button
             onClick={onOpenFavorites}
-            className="flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-xl text-gray-500 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-all font-medium"
+            className="flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium cursor-pointer"
             title="Clinical Favorites"
           >
             <span className="text-base leading-none mb-1">⭐</span>
-            <span className="text-[10px] tracking-tight">Starred</span>
+            <span className="text-[11px] tracking-tight">Starred</span>
           </button>
         )}
 
         {onOpenSearch && (
           <button
             onClick={onOpenSearch}
-            className="flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-xl text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all font-medium"
+            className="flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-medium cursor-pointer"
             title="Spotlight Search (Ctrl+K or /)"
           >
             <span className="text-base leading-none mb-1">🔍</span>
-            <span className="text-[10px] tracking-tight">Search</span>
+            <span className="text-[11px] tracking-tight">Search</span>
           </button>
         )}
       </div>

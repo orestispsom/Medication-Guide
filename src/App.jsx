@@ -26,7 +26,7 @@ function AppLayout() {
   }, [location.pathname])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-slate-900 selection:text-white dark:selection:bg-white dark:selection:text-slate-900 transition-colors font-sans antialiased">
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<HomeScreen />} />
