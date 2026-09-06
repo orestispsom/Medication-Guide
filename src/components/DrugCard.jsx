@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import data from '../data.json'
 
 export default function DrugCard({ drug }) {
   const navigate = useNavigate()
@@ -6,6 +7,11 @@ export default function DrugCard({ drug }) {
   const cleanBrand = drug.brand
     ? drug.brand.replace('US:', '').split('·')[0].trim()
     : ''
+
+  const handleReceptorClick = (e, receptorId) => {
+    e.stopPropagation()
+    navigate(`/receptors/${receptorId}`)
+  }
 
   return (
     <button
@@ -51,13 +57,62 @@ export default function DrugCard({ drug }) {
         </div>
       </div>
 
+      {/* Primary Clinical Indications */}
       {drug.indications && drug.indications.length > 0 && (
-        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-1 mt-2.5 leading-relaxed">
+        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-1 mt-2 leading-relaxed">
           <span className="font-semibold text-slate-700 dark:text-slate-200">Indications: </span>
           {drug.indications.slice(0, 3).join(' · ')}
         </p>
       )}
+
+      {/* Molecular Receptor Targets - Clickable & Color-Coded */}
+      {drug.receptors && drug.receptors.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80">
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-0.5">
+            Targets:
+          </span>
+          {drug.receptors.slice(0, 5).map(r => {
+            const receptorObj = (data.receptors || []).find(rec => rec.id === r.receptor)
+            const color = receptorObj?.color || '#6366f1'
+            return (
+              <span
+                key={r.receptor}
+                onClick={(e) => handleReceptorClick(e, r.receptor)}
+                title={`View all drugs with ${r.receptor} affinity`}
+                className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-lg transition-transform hover:scale-105 border cursor-pointer"
+                style={{
+                  backgroundColor: `${color}14`,
+                  color: color,
+                  borderColor: `${color}35`,
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: color }}
+                />
+                <span>{r.receptor}</span>
+                {r.occupancy != null && (
+                  <span className="opacity-80 font-semibold">{r.occupancy}%</span>
+                )}
+              </span>
+            )
+          })}
+          {drug.receptors.length > 5 && (
+            <span
+              onClick={(e) => {
+                e.stopPropagation()
+                navigate(`/drug/${drug.id}#receptors`)
+              }}
+              className="text-xs font-bold text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 px-1 py-0.5 cursor-pointer"
+              title="View all receptor bindings in drug monograph"
+            >
+              +{drug.receptors.length - 5} more
+            </span>
+          )}
+        </div>
+      )}
     </button>
   )
 }
+
 

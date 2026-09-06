@@ -4,6 +4,7 @@ import data from '../data.json'
 import BackButton from '../components/BackButton'
 import ReceptorTag from '../components/ReceptorTag'
 import DrugCard from '../components/DrugCard'
+import { categorizeReceptor } from './ReceptorListScreen'
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
@@ -11,10 +12,12 @@ export default function AllDrugsScreen() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const initialSearch = searchParams.get('search') || ''
+  const initialReceptor = searchParams.get('receptor') || (searchParams.get('receptorFamily') ? `fam:${searchParams.get('receptorFamily')}` : 'all')
 
   const [searchQuery, setSearchQuery] = useState(initialSearch)
   const [selectedFamilyId, setSelectedFamilyId] = useState('all')
   const [selectedSubgroupId, setSelectedSubgroupId] = useState('all')
+  const [selectedReceptor, setSelectedReceptor] = useState(initialReceptor)
   const [selectedLetter, setSelectedLetter] = useState('all')
   const [clinicalFilter, setClinicalFilter] = useState('all')
   const [sortBy, setSortBy] = useState('name-asc') // 'name-asc' | 'halfLife'
@@ -48,6 +51,18 @@ export default function AllDrugsScreen() {
       // Subgroup filter
       if (selectedSubgroupId !== 'all' && drug.subgroupId !== selectedSubgroupId) {
         return false
+      }
+
+      // Receptor Target / Family filter
+      if (selectedReceptor !== 'all') {
+        if (selectedReceptor.startsWith('fam:')) {
+          const targetFam = selectedReceptor.replace('fam:', '')
+          const hasHit = (drug.receptors || []).some(r => categorizeReceptor(r.receptor) === targetFam)
+          if (!hasHit) return false
+        } else {
+          const hasTarget = (drug.receptors || []).some(r => (r.receptor || '').toUpperCase() === selectedReceptor.toUpperCase())
+          if (!hasTarget) return false
+        }
       }
 
       // Letter filter
@@ -106,7 +121,7 @@ export default function AllDrugsScreen() {
       }
       return a.name.localeCompare(b.name)
     })
-  }, [searchQuery, selectedFamilyId, selectedSubgroupId, selectedLetter, clinicalFilter, sortBy])
+  }, [searchQuery, selectedFamilyId, selectedSubgroupId, selectedReceptor, selectedLetter, clinicalFilter, sortBy])
 
   const handleFamilyChange = (famId) => {
     setSelectedFamilyId(famId)
@@ -117,6 +132,7 @@ export default function AllDrugsScreen() {
     setSearchQuery('')
     setSelectedFamilyId('all')
     setSelectedSubgroupId('all')
+    setSelectedReceptor('all')
     setSelectedLetter('all')
     setClinicalFilter('all')
     setSortBy('name-asc')
@@ -217,7 +233,7 @@ export default function AllDrugsScreen() {
           <select
             value={selectedSubgroupId}
             onChange={e => setSelectedSubgroupId(e.target.value)}
-            className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 max-w-[180px] sm:max-w-[200px] truncate cursor-pointer"
+            className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 max-w-[170px] sm:max-w-[190px] truncate cursor-pointer"
           >
             <option value="all">All Classes ({availableSubgroups.length})</option>
             {availableSubgroups.map(sg => (
@@ -227,6 +243,33 @@ export default function AllDrugsScreen() {
             ))}
           </select>
         )}
+
+        {/* Receptor Target & Family Filter Dropdown */}
+        <select
+          value={selectedReceptor}
+          onChange={e => setSelectedReceptor(e.target.value)}
+          className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 max-w-[180px] sm:max-w-[200px] truncate cursor-pointer"
+        >
+          <option value="all">🧬 Receptors: All Targets</option>
+          <optgroup label="Receptor Families">
+            <option value="fam:Serotonergic">Serotonin (5-HT)</option>
+            <option value="fam:Dopaminergic">Dopamine (D)</option>
+            <option value="fam:Transporters">Transporters (SERT/NET/DAT)</option>
+            <option value="fam:Adrenergic">Adrenergic (α/β)</option>
+            <option value="fam:Histaminergic">Histaminergic (H)</option>
+            <option value="fam:Muscarinic">Muscarinic (M)</option>
+            <option value="fam:GABA & Glutamate">GABA & Glutamate</option>
+            <option value="fam:Opioid & Neuropeptides">Opioid & Peptides</option>
+            <option value="fam:Enzymes & Channels">Enzymes & Channels</option>
+          </optgroup>
+          <optgroup label="Individual Targets">
+            {data.receptors.map(r => (
+              <option key={r.id} value={r.id}>
+                {r.id} ({r.fullName.length > 20 ? r.fullName.slice(0, 18) + '...' : r.fullName})
+              </option>
+            ))}
+          </optgroup>
+        </select>
 
         {/* Clinical Smart Filter Dropdown */}
         <select
@@ -255,7 +298,7 @@ export default function AllDrugsScreen() {
         </select>
 
         {/* Reset */}
-        {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedLetter !== 'all' || searchQuery || clinicalFilter !== 'all') && (
+        {(selectedFamilyId !== 'all' || selectedSubgroupId !== 'all' || selectedReceptor !== 'all' || selectedLetter !== 'all' || searchQuery || clinicalFilter !== 'all') && (
           <button
             onClick={handleClearAll}
             className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 ml-auto px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
