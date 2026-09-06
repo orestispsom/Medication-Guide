@@ -178,7 +178,7 @@ export default function ReceptorNavModal({ isOpen, onClose }) {
           </div>
 
           {filteredReceptors.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 sm:gap-3.5">
+            <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
               {filteredReceptors.map(receptor => {
                 const family = getReceptorFamily(receptor.id)
                 const famColor = family.color
@@ -191,66 +191,41 @@ export default function ReceptorNavModal({ isOpen, onClose }) {
                       onClose()
                       navigate(`/receptors/${receptor.id}`)
                     }}
-                    className="rounded-2xl p-4 sm:p-4.5 border text-left transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 group cursor-pointer relative overflow-hidden flex flex-col justify-between"
+                    className="rounded-xl px-3 py-2.5 border text-left transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 group cursor-pointer flex items-center gap-2.5"
                     style={{
                       backgroundColor: `${famColor}0C`,
-                      borderColor: `${famColor}38`,
+                      borderColor: `${famColor}35`,
                     }}
                   >
-                    <div>
-                      {/* Top Row: Symbol & Drug Count Badge */}
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                            style={{ backgroundColor: famColor }}
-                          />
-                          <span
-                            className="font-display font-black text-base sm:text-lg tracking-tight group-hover:scale-105 transition-transform"
-                            style={{ color: famColor }}
-                          >
-                            {receptor.id}
-                          </span>
-                        </div>
-
-                        <span
-                          className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border"
-                          style={{
-                            backgroundColor: `${famColor}15`,
-                            color: famColor,
-                            borderColor: `${famColor}40`,
-                          }}
-                        >
-                          {drugCount} {drugCount === 1 ? 'drug' : 'drugs'}
-                        </span>
-                      </div>
-
-                      {/* Full Name */}
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug mb-1">
-                        {receptor.fullName}
-                      </h4>
-
-                      {/* Mechanism / Clinical Action Summary */}
-                      {receptor.action && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
-                          {receptor.action}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Bottom Metadata: Family Pill & Explore Arrow */}
-                    <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between text-xs">
-                      <span className="font-semibold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
-                        {family.shortName}
-                      </span>
+                    {/* Color dot + Symbol */}
+                    <div className="flex items-center gap-1.5 flex-shrink-0 min-w-[55px]">
                       <span
-                        className="font-bold text-[11px] flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: famColor }}
+                      />
+                      <span
+                        className="font-display font-black text-sm tracking-tight"
                         style={{ color: famColor }}
                       >
-                        Affinities →
+                        {receptor.id}
                       </span>
                     </div>
+
+                    {/* Full Name — truncated */}
+                    <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 truncate flex-1 leading-tight">
+                      {receptor.fullName}
+                    </span>
+
+                    {/* Drug count badge */}
+                    <span
+                      className="text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                      style={{
+                        backgroundColor: `${famColor}18`,
+                        color: famColor,
+                      }}
+                    >
+                      {drugCount}
+                    </span>
                   </button>
                 )
               })}

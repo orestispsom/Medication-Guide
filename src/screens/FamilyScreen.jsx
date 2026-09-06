@@ -26,16 +26,14 @@ export default function FamilyScreen() {
         </p>
       </div>
 
-      {family.description && (
-        <div className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-5 mb-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-          <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-            {family.description}
-          </p>
-        </div>
-      )}
+      <div className="space-y-3 mb-6">
+        {subgroups.map(sg => (
+          <SubgroupCard key={sg.id} subgroup={sg} familyColor={family.color} />
+        ))}
+      </div>
 
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+      {/* Quick Access: Receptor Comparison & Adverse Risk Matrix — placed at bottom */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button
           onClick={() => navigate(`/family/${familyId}/comparison`)}
           className="bg-white dark:bg-[#111827] rounded-2xl p-4 font-bold text-xs border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 text-slate-800 dark:text-slate-200 transition-all hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer shadow-xs"
@@ -51,12 +49,6 @@ export default function FamilyScreen() {
           <span className="text-base">🛡️</span>
           <span>Adverse Risk Matrix</span>
         </button>
-      </div>
-
-      <div className="space-y-3">
-        {subgroups.map(sg => (
-          <SubgroupCard key={sg.id} subgroup={sg} familyColor={family.color} />
-        ))}
       </div>
     </div>
   )

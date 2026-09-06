@@ -218,8 +218,8 @@ export default function ComparisonTableScreen() {
       {/* Mode 1 & 2: Full Matrix Table */}
       {comparisonMode !== 'head-to-head' ? (
         drugs.length > 0 ? (
-          <div className="overflow-x-auto rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs bg-white dark:bg-[#0b0f19] mb-4">
-            <table className="min-w-full border-collapse text-xs">
+          <div className="overflow-x-auto -mx-4 sm:-mx-6 px-4 sm:px-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs bg-white dark:bg-[#0b0f19] mb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <table className="min-w-max border-collapse text-xs">
               <thead>
                 <tr className="bg-slate-50/90 dark:bg-[#111827]/90 border-b border-slate-200 dark:border-slate-700">
                   <th className="sticky left-0 bg-slate-50 dark:bg-[#111827] z-20 px-4 py-3 text-left font-bold text-slate-500 dark:text-slate-400 min-w-[150px] uppercase tracking-wider text-xs">

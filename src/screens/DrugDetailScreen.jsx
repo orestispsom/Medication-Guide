@@ -331,77 +331,69 @@ export default function DrugDetailScreen() {
 
       {/* Molecular Receptor Binding Profile */}
       {drug.receptors && drug.receptors.length > 0 && (
-        <div id="receptors" className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
-          <div className="flex items-center justify-between mb-4">
+        <div id="receptors" className="bg-white dark:bg-[#111827] rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-8 scroll-mt-20">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+              <h2 className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white">
                 Receptor Binding Profile & Occupancy
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Molecular affinities (Ki) and therapeutic target occupancies
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Molecular affinities (Ki) and target occupancies
               </p>
             </div>
             <button
               onClick={() => navigate('/receptors')}
-              className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer"
+              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer whitespace-nowrap"
             >
-              Receptor Guide →
+              Guide →
             </button>
           </div>
 
-          <div className="space-y-3.5">
+          <div className="space-y-1.5">
             {drug.receptors.map(r => {
               const receptorObj = data.receptors.find(rec => rec.id === r.receptor)
               const recColor = receptorObj?.color || '#4f46e5'
-              const width = Math.min(Math.max(r.occupancy || 50, 15), 100)
+              const width = Math.min(Math.max(r.occupancy || 50, 12), 100)
 
               return (
-                <div key={r.receptor} className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-4 border border-slate-200/80 dark:border-slate-800/80">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <div className="flex items-center gap-2">
-                      <ReceptorTag receptorId={r.receptor} />
-                      {r.rawTarget && (
-                        <span className="text-sm font-bold text-slate-900 dark:text-white">
-                          {r.rawTarget}
-                        </span>
-                      )}
-                    </div>
+                <div key={r.receptor} className="flex items-center gap-2 py-1.5 px-2 rounded-lg bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/60 dark:border-slate-800/60">
+                  {/* Receptor Symbol */}
+                  <button
+                    onClick={() => navigate(`/receptors/${r.receptor}`)}
+                    className="flex items-center gap-1.5 flex-shrink-0 min-w-[60px] cursor-pointer hover:opacity-80 transition-opacity"
+                  >
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: recColor }} />
+                    <span className="text-xs font-black" style={{ color: recColor }}>{r.receptor}</span>
+                  </button>
 
-                    <div className="flex items-center gap-2">
-                      {r.ki && (
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-800/90 shadow-2xs">
-                          Ki: {r.ki}
-                        </span>
-                      )}
-                      {r.action && (
-                        <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                          {r.action}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Occupancy Bar */}
-                  <div className="h-3.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-2">
+                  {/* Occupancy Bar — compact */}
+                  <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div
-                      className="h-full rounded-full transition-all flex items-center justify-end pr-2"
+                      className="h-full rounded-full"
                       style={{
                         width: `${width}%`,
                         backgroundColor: recColor,
-                        minWidth: '2.5rem',
                       }}
-                    >
-                      <span className="text-xs font-bold text-white drop-shadow-xs">
-                        {r.occupancy}%
-                      </span>
-                    </div>
+                    />
                   </div>
 
-                  {/* Clinical Action explanation */}
-                  {r.clinicalAction && (
-                    <p className="text-sm text-slate-600 dark:text-slate-300 font-normal leading-relaxed mt-2">
-                      <strong className="font-semibold text-slate-900 dark:text-white">Clinical Action:</strong> {r.clinicalAction}
-                    </p>
+                  {/* Occupancy % */}
+                  <span className="text-xs font-black w-9 text-right flex-shrink-0" style={{ color: recColor }}>
+                    {r.occupancy}%
+                  </span>
+
+                  {/* Ki badge — compact */}
+                  {r.ki && (
+                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 flex-shrink-0 w-16 text-right truncate">
+                      {r.ki}
+                    </span>
+                  )}
+
+                  {/* Action badge — compact */}
+                  {r.action && (
+                    <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex-shrink-0 hidden sm:block max-w-[80px] truncate">
+                      {r.action}
+                    </span>
                   )}
                 </div>
               )

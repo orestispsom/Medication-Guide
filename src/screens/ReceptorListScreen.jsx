@@ -299,7 +299,7 @@ export default function ReceptorListScreen() {
             <span>Click card to inspect binding drugs ranked by affinity</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
             {filteredReceptors.map(receptor => {
               const family = getReceptorFamily(receptor.id)
               const famColor = family.color
@@ -311,65 +311,49 @@ export default function ReceptorListScreen() {
                 <div
                   key={receptor.id}
                   onClick={() => navigate(`/receptors/${receptor.id}`)}
-                  className="rounded-2xl p-5 border shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between cursor-pointer group relative overflow-hidden"
+                  className="rounded-xl px-3 py-2.5 border transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer group flex items-center gap-2.5"
                   style={{
                     backgroundColor: `${famColor}0C`,
                     borderColor: `${famColor}35`,
                   }}
                 >
-                  <div>
-                    {/* Top Row: Symbol in family color & Drug Count */}
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: famColor }}
-                        />
-                        <span
-                          className="font-display font-black text-lg tracking-tight group-hover:scale-105 transition-transform"
-                          style={{ color: famColor }}
-                        >
-                          {receptor.id}
-                        </span>
-                      </div>
-
-                      <span
-                        className="text-xs font-bold px-2.5 py-0.5 rounded-full border"
-                        style={{
-                          backgroundColor: `${famColor}18`,
-                          color: famColor,
-                          borderColor: `${famColor}40`,
-                        }}
-                      >
-                        {drugCount} {drugCount === 1 ? 'drug' : 'drugs'}
-                      </span>
-                    </div>
-
-                    {/* Full Name */}
-                    <h3 className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-snug mb-1">
-                      {receptor.fullName}
-                    </h3>
-
-                    {/* Action */}
-                    {receptor.action && (
-                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-3">
-                        {receptor.action}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between text-xs">
-                    <span className="font-semibold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
-                      {family.shortName}
-                    </span>
+                  {/* Color dot + Symbol */}
+                  <div className="flex items-center gap-1.5 flex-shrink-0 min-w-[55px]">
                     <span
-                      className="font-bold text-xs flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: famColor }}
+                    />
+                    <span
+                      className="font-display font-black text-sm tracking-tight"
                       style={{ color: famColor }}
                     >
-                      Affinities →
+                      {receptor.id}
                     </span>
                   </div>
+
+                  {/* Full Name — truncated */}
+                  <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 truncate flex-1 leading-tight">
+                    {receptor.fullName}
+                  </span>
+
+                  {/* Drug count badge */}
+                  <span
+                    className="text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                    style={{
+                      backgroundColor: `${famColor}18`,
+                      color: famColor,
+                    }}
+                  >
+                    {drugCount}
+                  </span>
+
+                  {/* Arrow */}
+                  <span
+                    className="text-xs font-bold flex-shrink-0 group-hover:translate-x-0.5 transition-transform"
+                    style={{ color: famColor }}
+                  >
+                    →
+                  </span>
                 </div>
               )
             })}
