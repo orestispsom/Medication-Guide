@@ -14,3 +14,8 @@ At a natural pause, use:
 Do not derail the primary task. During board preparation, default to **note for later** unless capture takes only a few minutes and reinforces learning. Do not generate a full derivative asset without explicit user opt-in. Avoid generic/routine suggestions and normally surface no more than 1–2 candidates per substantive session.
 
 Preserve provenance and copyright. Do not repurpose proprietary tables/scales, copied textbook wording, or source-locked material as commercial/publishable copy. Any derivative clinical use may require fresh verification, sourcing, permissions, and scope review.
+
+
+## Canonical shared clinical knowledge
+
+`mental-health-core` (https://github.com/orestispsom/mental-health-core) is the canonical layer for clinical concepts shared across this ecosystem. Reference concept IDs rather than re-deriving shared definitions. Drug monographs are not core content — they live in `Psychiatry-Exams` and `btb-production`. See `MENTAL_HEALTH_CORE.md`.
