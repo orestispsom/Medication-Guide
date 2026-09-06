@@ -124,12 +124,12 @@ export default function ComparisonTableScreen() {
           </div>
 
           {/* Mode Switcher */}
-          <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-2xl flex-shrink-0 self-start sm:self-auto gap-0.5">
+          <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-2xl flex-shrink-0 self-start sm:self-auto gap-1">
             <button
               onClick={() => setComparisonMode('receptors')}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 comparisonMode === 'receptors'
-                  ? 'bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 shadow-xs'
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
@@ -137,9 +137,9 @@ export default function ComparisonTableScreen() {
             </button>
             <button
               onClick={() => setComparisonMode('adverse')}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 comparisonMode === 'adverse'
-                  ? 'bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 shadow-xs'
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
@@ -147,9 +147,9 @@ export default function ComparisonTableScreen() {
             </button>
             <button
               onClick={() => setComparisonMode('head-to-head')}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 comparisonMode === 'head-to-head'
-                  ? 'bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 shadow-xs'
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
@@ -220,18 +220,18 @@ export default function ComparisonTableScreen() {
             <table className="min-w-full border-collapse text-xs">
               <thead>
                 <tr className="bg-gray-50/90 dark:bg-gray-800/90 border-b border-gray-200 dark:border-gray-700">
-                  <th className="sticky left-0 bg-gray-50 dark:bg-gray-800 z-20 px-4 py-3 text-left font-black text-gray-600 dark:text-gray-300 min-w-[140px] uppercase tracking-wider text-[10px]">
+                  <th className="sticky left-0 bg-gray-50 dark:bg-gray-800 z-20 px-4 py-3 text-left font-bold text-gray-500 dark:text-gray-400 min-w-[150px] uppercase tracking-wider text-xs">
                     {comparisonMode === 'receptors' ? 'Receptor Target' : 'Adverse Domain'}
                   </th>
                   {drugs.map(drug => (
                     <th
                       key={drug.id}
                       onClick={() => navigate(`/drug/${drug.id}`)}
-                      className="px-3 py-3 text-center font-extrabold text-gray-900 dark:text-white border-l border-gray-100 dark:border-gray-800 min-w-[100px] cursor-pointer hover:bg-indigo-50/50 dark:hover:bg-gray-800/60 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                      className="px-3 py-3 text-center font-bold text-gray-900 dark:text-white border-l border-gray-200/80 dark:border-gray-800 min-w-[110px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
-                      <div className="text-xs font-black">{drug.name}</div>
+                      <div className="text-sm font-bold text-gray-900 dark:text-white">{drug.name}</div>
                       {drug.targetDose && (
-                        <div className="text-[10px] text-gray-400 dark:text-gray-500 font-normal mt-0.5">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
                           {drug.targetDose.split('·')[0]}
                         </div>
                       )}
@@ -248,14 +248,14 @@ export default function ComparisonTableScreen() {
                       <tr key={receptorId} className="hover:bg-gray-50/60 dark:hover:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
                         <td
                           onClick={() => navigate(`/receptors/${receptorId}`)}
-                          className="sticky left-0 bg-white dark:bg-gray-900 z-10 px-4 py-2.5 font-bold border-r border-gray-100 dark:border-gray-800 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                          className="sticky left-0 bg-white dark:bg-gray-900 z-10 px-4 py-2.5 font-bold border-r border-gray-200/80 dark:border-gray-800 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         >
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-2">
                             <span
                               className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                               style={{ backgroundColor: recObj?.color || '#6366f1' }}
                             />
-                            <span className="font-extrabold text-gray-900 dark:text-white">{receptorId}</span>
+                            <span className="font-bold text-sm text-gray-900 dark:text-white">{receptorId}</span>
                           </div>
                         </td>
 
@@ -266,7 +266,7 @@ export default function ComparisonTableScreen() {
                               {b ? (
                                 <div className="flex flex-col items-center">
                                   <span
-                                    className="text-[11px] font-black px-2 py-0.5 rounded-full"
+                                    className="text-xs font-black px-2.5 py-0.5 rounded-full"
                                     style={{
                                       backgroundColor: (recObj?.color || '#6366f1') + '20',
                                       color: recObj?.color || '#6366f1',
@@ -275,7 +275,7 @@ export default function ComparisonTableScreen() {
                                     {b.occupancy}%
                                   </span>
                                   {b.ki && (
-                                    <span className="text-[9px] text-gray-400 font-medium mt-0.5">
+                                    <span className="text-[10px] text-gray-500 font-medium mt-0.5">
                                       {b.ki}
                                     </span>
                                   )}
@@ -292,7 +292,7 @@ export default function ComparisonTableScreen() {
                 ) : (
                   standardAdverseDomains.map(domain => (
                     <tr key={domain} className="hover:bg-gray-50/60 dark:hover:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                      <td className="sticky left-0 bg-white dark:bg-gray-900 z-10 px-4 py-2.5 font-bold text-gray-800 dark:text-gray-200 border-r border-gray-100 dark:border-gray-800 text-xs">
+                      <td className="sticky left-0 bg-white dark:bg-gray-900 z-10 px-4 py-2.5 font-bold text-gray-800 dark:text-gray-200 border-r border-gray-200/80 dark:border-gray-800 text-xs">
                         {domain}
                       </td>
 
@@ -301,7 +301,7 @@ export default function ComparisonTableScreen() {
                         const badgeClass = getSeverityStyle(sev)
                         return (
                           <td key={drug.id} className="px-3 py-2.5 text-center border-l border-gray-100 dark:border-gray-800">
-                            <span className={`text-[10px] px-2 py-0.5 rounded-md inline-block whitespace-nowrap ${badgeClass}`}>
+                            <span className={`text-xs px-2.5 py-0.5 rounded-md inline-block whitespace-nowrap ${badgeClass}`}>
                               {sev}
                             </span>
                           </td>
@@ -339,10 +339,10 @@ export default function ComparisonTableScreen() {
                   <button
                     key={d.id}
                     onClick={() => togglePinDrug(d.id)}
-                    className={`text-xs font-semibold px-3 py-1 rounded-xl transition-all border ${
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all border ${
                       isPinned
-                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
-                        : 'bg-gray-50 dark:bg-gray-700/60 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-400'
+                        ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-2xs'
+                        : 'bg-gray-50 dark:bg-gray-700/60 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:border-gray-400'
                     }`}
                   >
                     {isPinned ? '✓ ' : '+ '}
@@ -356,21 +356,14 @@ export default function ComparisonTableScreen() {
           {/* Side-by-Side Comparison Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {pinnedDrugs.map(drug => {
-              const family = data.families.find(f => f.id === drug.familyId)
               return (
                 <div
                   key={drug.id}
-                  className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col justify-between"
+                  className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                        style={{
-                          backgroundColor: (family?.color || '#6366f1') + '15',
-                          color: family?.color || '#6366f1',
-                        }}
-                      >
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
                         {drug.subgroup}
                       </span>
                       <button
@@ -384,36 +377,36 @@ export default function ComparisonTableScreen() {
 
                     <h3
                       onClick={() => navigate(`/drug/${drug.id}`)}
-                      className="text-lg font-black text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors mb-1"
+                      className="text-xl font-black text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors mb-1"
                     >
                       {drug.name}
                     </h3>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">{drug.brand?.split('·')[0]}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{drug.brand?.split('·')[0]}</p>
 
                     {/* Dosing & Half Life */}
-                    <div className="space-y-1.5 mb-4 text-xs bg-gray-50 dark:bg-gray-900/60 p-3 rounded-2xl border border-gray-100 dark:border-gray-800">
+                    <div className="space-y-2 mb-4 text-xs bg-gray-50 dark:bg-gray-900/60 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800">
                       <div>
-                        <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase block">Target Dose:</span>
-                        <span className="font-bold text-indigo-950 dark:text-indigo-200">{drug.targetDose || 'N/A'}</span>
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase block mb-0.5">Target Dose:</span>
+                        <span className="font-bold text-sm text-gray-900 dark:text-white">{drug.targetDose || 'N/A'}</span>
                       </div>
                       <div>
-                        <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase block">Elimination t½:</span>
-                        <span className="font-semibold text-amber-800 dark:text-amber-300">{drug.halfLife || 'N/A'}</span>
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase block mb-0.5">Elimination t½:</span>
+                        <span className="font-semibold text-sm text-gray-800 dark:text-gray-200">{drug.halfLife || 'N/A'}</span>
                       </div>
                     </div>
 
                     {/* Adverse Footprint Mini Matrix */}
                     <div className="mb-4">
-                      <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-2">
+                      <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-2">
                         Adverse Safety Footprint:
                       </span>
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                         {standardAdverseDomains.slice(0, 5).map(domain => {
                           const sev = getAdverseSeverity(drug, domain)
                           return (
-                            <div key={domain} className="flex items-center justify-between text-[11px]">
-                              <span className="text-gray-600 dark:text-gray-400 truncate max-w-[120px]">{domain.split('&')[0]}</span>
-                              <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${getSeverityStyle(sev)}`}>
+                            <div key={domain} className="flex items-center justify-between text-xs">
+                              <span className="text-gray-700 dark:text-gray-300 font-medium truncate max-w-[130px]">{domain.split('&')[0]}</span>
+                              <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${getSeverityStyle(sev)}`}>
                                 {sev}
                               </span>
                             </div>
@@ -425,7 +418,7 @@ export default function ComparisonTableScreen() {
 
                   <button
                     onClick={() => navigate(`/drug/${drug.id}`)}
-                    className="w-full mt-3 py-2 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-bold text-xs rounded-xl transition-colors text-center"
+                    className="w-full mt-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white font-bold text-xs rounded-xl transition-all shadow-xs text-center"
                   >
                     View Full Monograph →
                   </button>

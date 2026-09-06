@@ -79,29 +79,29 @@ export default function CrossTitrationScreen() {
 
       {/* Header */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-100 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold mb-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold mb-2">
           <span>🔄</span>
           <span>Module 12: Cross-Titration & Deprescribing Master Tool</span>
         </div>
-        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Transition & Deprescribing Protocols
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
           20 evidence-based switch algorithms with 4-phase timelines, receptor shift dynamics, risk stratification meters, and emergency rescue guides.
         </p>
       </div>
 
       {/* Quick Direct Switch Finder Box */}
-      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950/30 dark:to-indigo-950/30 border border-purple-200/80 dark:border-purple-900/50 rounded-3xl p-4 mb-5 shadow-2xs">
-        <div className="flex items-center gap-2 mb-2.5">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200/90 dark:border-gray-700/90 rounded-3xl p-5 mb-5 shadow-xs">
+        <div className="flex items-center gap-2 mb-3">
           <span className="text-base">🎯</span>
-          <span className="text-xs font-bold text-purple-900 dark:text-purple-300 uppercase tracking-wider">
+          <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
             Direct Switch Protocol Matcher
           </span>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
           <div>
-            <label className="text-[10px] font-bold text-purple-900 dark:text-purple-300 uppercase block mb-1">
+            <label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase block mb-1.5">
               Switching From (Current Drug):
             </label>
             <input
@@ -109,11 +109,11 @@ export default function CrossTitrationScreen() {
               value={fromDrugFilter}
               onChange={e => setFromDrugFilter(e.target.value)}
               placeholder="e.g. Sertraline, Paroxetine, Olanzapine, BZD..."
-              className="w-full bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-900/50 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
             />
           </div>
           <div>
-            <label className="text-[10px] font-bold text-purple-900 dark:text-purple-300 uppercase block mb-1">
+            <label className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase block mb-1.5">
               Switching To (Target Drug):
             </label>
             <input
@@ -121,13 +121,13 @@ export default function CrossTitrationScreen() {
               value={toDrugFilter}
               onChange={e => setToDrugFilter(e.target.value)}
               placeholder="e.g. Venlafaxine, Aripiprazole, Clozapine..."
-              className="w-full bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-900/50 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
             />
           </div>
         </div>
         {(fromDrugFilter || toDrugFilter) && (
-          <div className="flex items-center justify-between pt-1 text-xs">
-            <span className="text-purple-700 dark:text-purple-300 font-semibold">
+          <div className="flex items-center justify-between pt-2 text-xs">
+            <span className="text-gray-700 dark:text-gray-300 font-semibold">
               Matched {filteredProtocols.length} protocol{filteredProtocols.length !== 1 ? 's' : ''}
             </span>
             <button
@@ -135,7 +135,7 @@ export default function CrossTitrationScreen() {
                 setFromDrugFilter('')
                 setToDrugFilter('')
               }}
-              className="text-purple-600 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-200 font-bold underline text-[11px]"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold underline text-xs"
             >
               Clear Matcher
             </button>
@@ -146,7 +146,7 @@ export default function CrossTitrationScreen() {
       {/* Global Search Input */}
       <div className="relative mb-4">
         <svg
-          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-3.5 pointer-events-none"
+          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-4 pointer-events-none"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -158,12 +158,12 @@ export default function CrossTitrationScreen() {
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Filter by keyword (e.g. Ashton, MAOI, UGT, Clozapine, Akathisia)..."
-          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-11 pr-10 py-3 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-10 py-3.5 text-base font-medium shadow-xs focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+            className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
           >
             ✕
           </button>
@@ -178,10 +178,10 @@ export default function CrossTitrationScreen() {
             <button
               key={st}
               onClick={() => setSelectedSwitchType(st)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
                 isSelected
-                  ? 'bg-purple-700 text-white border-purple-700 shadow-xs'
-                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300'
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-xs'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
               }`}
             >
               {st === 'ALL' ? `All Protocols (${protocols.length})` : st}
@@ -197,45 +197,45 @@ export default function CrossTitrationScreen() {
             <div
               key={proto.id}
               onClick={() => navigate(`/cross-titration/${proto.id}`)}
-              className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs hover:shadow-md hover:border-purple-200 dark:hover:border-purple-500/50 transition-all cursor-pointer group"
+              className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-200/90 dark:border-gray-700/90 shadow-xs hover:shadow-md hover:border-gray-400 dark:hover:border-gray-500 transition-all cursor-pointer group"
             >
               <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 font-extrabold text-xs flex items-center justify-center flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <span className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-extrabold text-sm flex items-center justify-center flex-shrink-0">
                     #{proto.number < 10 ? `0${proto.number}` : proto.number}
                   </span>
                   <div>
-                    <h3 className="font-extrabold text-base text-gray-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors">
+                    <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {proto.title}
                     </h3>
-                    <p className="text-xs font-semibold text-purple-600 dark:text-purple-400 mt-0.5">
+                    <p className="text-sm font-semibold text-gray-600 dark:text-gray-300 mt-0.5">
                       {proto.transitionTitle}
                     </p>
                   </div>
                 </div>
 
-                <span className="text-gray-300 dark:text-gray-600 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors text-lg flex-shrink-0">
+                <span className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors text-xl flex-shrink-0">
                   →
                 </span>
               </div>
 
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
                 {proto.classTransition}
               </p>
 
-              <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-50 dark:border-gray-700/60">
+              <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-100 dark:border-gray-700/60">
                 {proto.switchType && (
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-800">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
                     {proto.switchType}
                   </span>
                 )}
                 {proto.duration && (
-                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-100 dark:border-amber-800">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/80">
                     ⏱️ {proto.duration}
                   </span>
                 )}
                 {proto.coreMandate && (
-                  <span className="text-[11px] text-gray-500 dark:text-gray-400 italic ml-auto truncate max-w-xs">
+                  <span className="text-xs text-gray-600 dark:text-gray-400 italic ml-auto truncate max-w-xs">
                     Mandate: {proto.coreMandate}
                   </span>
                 )}
@@ -245,8 +245,8 @@ export default function CrossTitrationScreen() {
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700 shadow-xs">
-          <p className="text-sm font-bold text-gray-800 dark:text-white mb-1">No transition protocols found</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Try clearing your switch matcher inputs or adjusting search keywords.</p>
+          <p className="text-base font-bold text-gray-800 dark:text-white mb-1">No transition protocols found</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Try clearing your switch matcher inputs or adjusting search keywords.</p>
           <button
             onClick={() => {
               setSearchQuery('')
@@ -391,10 +391,10 @@ function ProtocolDetailView({ protocol, onBack }) {
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
       {/* Back Button & Action Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-purple-700 dark:text-gray-300 dark:hover:text-purple-300 transition-colors py-1 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors py-1.5 px-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -409,10 +409,10 @@ function ProtocolDetailView({ protocol, onBack }) {
               setStarred(isNow)
               setToastMessage(isNow ? `Protocol #${protocol.number} saved to Favorites!` : `Protocol #${protocol.number} removed from favorites`)
             }}
-            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold transition-all border ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
               starred
-                ? 'bg-amber-100 text-amber-800 border-amber-300 shadow-2xs'
-                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:text-amber-600 dark:hover:text-amber-400'
+                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
             }`}
             title={starred ? 'Starred in Favorites' : 'Add to Favorites'}
           >
@@ -422,7 +422,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <button
             onClick={() => setIsPrintModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold transition-all border border-indigo-200 dark:border-indigo-800 shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold transition-all border border-gray-200 dark:border-gray-700 shadow-2xs"
             title="Generate printable patient handout with calendar instructions"
           >
             <span>🖨️</span>
@@ -431,7 +431,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <button
             onClick={handleCopyEhrNote}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 hover:bg-purple-100 dark:hover:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200 dark:border-purple-800 shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold transition-all border border-gray-200 dark:border-gray-700 shadow-2xs"
             title="Copy structured clinical note for EHR documentation"
           >
             <span>📋</span>
@@ -440,7 +440,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <button
             onClick={handleCopyProtocol}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-semibold transition-all border border-gray-200 dark:border-gray-700"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-semibold transition-all border border-gray-200 dark:border-gray-700"
             title="Copy raw schedule to clipboard"
           >
             <span>Schedule</span>
@@ -449,50 +449,50 @@ function ProtocolDetailView({ protocol, onBack }) {
       </div>
 
       {/* Protocol Header Card */}
-      <div className="bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 text-white rounded-3xl p-6 shadow-xl mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-7 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <span className="px-2.5 py-0.5 rounded-full bg-purple-500/30 text-purple-200 text-xs font-bold border border-purple-400/30">
+          <span className="px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold border border-gray-200 dark:border-gray-600">
             Protocol #{protocol.number < 10 ? `0${protocol.number}` : protocol.number}
           </span>
-          <span className="text-xs font-semibold text-purple-300">
+          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
             Module 12 Compendium Reference
           </span>
         </div>
 
-        <h1 className="text-2xl font-black tracking-tight text-white mb-1">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-1.5">
           {protocol.title}
         </h1>
 
-        <p className="text-base font-bold text-purple-200 mb-2">
+        <p className="text-base sm:text-lg font-bold text-gray-700 dark:text-gray-200 mb-2">
           {protocol.transitionTitle}
         </p>
 
-        <p className="text-xs text-purple-300/80 mb-5">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
           {protocol.classTransition}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-purple-800/60 text-xs">
-          <div className="bg-white/10 rounded-xl p-3 backdrop-blur-xs">
-            <span className="text-[10px] uppercase font-bold text-purple-300 tracking-wider block mb-0.5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-gray-100 dark:border-gray-700 text-xs">
+          <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-800">
+            <span className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider block mb-0.5">
               Switch Paradigm
             </span>
-            <span className="font-bold text-white text-xs">
+            <span className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
               {protocol.switchType}
             </span>
           </div>
-          <div className="bg-white/10 rounded-xl p-3 backdrop-blur-xs">
-            <span className="text-[10px] uppercase font-bold text-purple-300 tracking-wider block mb-0.5">
+          <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-800">
+            <span className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider block mb-0.5">
               Standard Duration
             </span>
-            <span className="font-bold text-amber-300 text-xs">
+            <span className="font-bold text-amber-800 dark:text-amber-300 text-sm sm:text-base">
               ⏱️ {protocol.duration}
             </span>
           </div>
-          <div className="bg-white/10 rounded-xl p-3 backdrop-blur-xs">
-            <span className="text-[10px] uppercase font-bold text-purple-300 tracking-wider block mb-0.5">
+          <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-800">
+            <span className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider block mb-0.5">
               Core Clinical Mandate
             </span>
-            <span className="font-bold text-emerald-300 text-xs">
+            <span className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
               🎯 {protocol.coreMandate}
             </span>
           </div>
@@ -501,13 +501,13 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Critical Alert / Warning Callout if present */}
       {protocol.alertBox && (
-        <div className="bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-300 dark:border-rose-900/60 rounded-2xl p-4 mb-6 shadow-xs flex items-start gap-3">
+        <div className="bg-red-50/80 dark:bg-red-950/40 border-2 border-red-500/80 dark:border-red-800 rounded-2xl p-4 mb-6 shadow-xs flex items-start gap-3">
           <span className="text-2xl flex-shrink-0">⚠️</span>
           <div>
-            <h3 className="font-black text-rose-900 dark:text-rose-200 text-xs uppercase tracking-wider mb-1">
+            <h3 className="font-bold text-red-900 dark:text-red-300 text-xs uppercase tracking-wider mb-1">
               Critical Switch Precaution
             </h3>
-            <p className="text-xs text-rose-950 dark:text-rose-200 font-medium leading-relaxed">
+            <p className="text-sm text-red-950 dark:text-red-200 font-medium leading-relaxed">
               {protocol.alertBox}
             </p>
           </div>
@@ -515,13 +515,13 @@ function ProtocolDetailView({ protocol, onBack }) {
       )}
 
       {/* Patient Transition Schedule Date Picker */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-purple-200/80 dark:border-purple-900/50 shadow-2xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-5 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+          <span className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
             <span>🗓️</span>
             <span>Patient Transition Schedule Calculator</span>
           </span>
-          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             Select patient start date to generate exact calendar dates for each phase
           </p>
         </div>
@@ -531,19 +531,19 @@ function ProtocolDetailView({ protocol, onBack }) {
             type="date"
             value={startDate}
             onChange={e => setStartDate(e.target.value)}
-            className="bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 rounded-xl px-3 py-1.5 text-xs font-bold text-purple-900 dark:text-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5 text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
           />
         </div>
       </div>
 
       {/* Clinical Rationale */}
       {protocol.rationale && (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
             <span>🔬</span>
             <span>Clinical Neurobiological Rationale</span>
           </h2>
-          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed font-normal">
             {protocol.rationale}
           </p>
         </div>
@@ -551,16 +551,16 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Pharmacokinetic Profile */}
       {protocol.kinetics && protocol.kinetics.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <span>⏱️</span>
             <span>Pharmacokinetic Considerations & Elimination Kinetics</span>
           </h2>
           <div className="space-y-2">
             {protocol.kinetics.map((k, i) => (
-              <div key={i} className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-900/60 rounded-xl p-2.5 border border-gray-100 dark:border-gray-800">
-                <span className="text-purple-600 dark:text-purple-400 font-bold">•</span>
-                <span className="font-medium">{k}</span>
+              <div key={i} className="flex items-start gap-2.5 text-sm text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/60 rounded-xl p-3 border border-gray-100 dark:border-gray-800">
+                <span className="text-gray-400 dark:text-gray-500 font-bold">•</span>
+                <span className="font-medium leading-relaxed">{k}</span>
               </div>
             ))}
           </div>
@@ -569,9 +569,9 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* 4-Phase Execution Timeline with Interactive Tabs & Calculated Dates */}
       {protocol.phases && protocol.phases.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+            <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
               <span>📅</span>
               <span>Structured 4-Phase Execution Schedule</span>
             </h2>
@@ -579,8 +579,8 @@ function ProtocolDetailView({ protocol, onBack }) {
             <div className="flex bg-gray-100 dark:bg-gray-700/60 p-1 rounded-xl gap-1">
               <button
                 onClick={() => setActivePhaseIndex(null)}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
-                  activePhaseIndex === null ? 'bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 shadow-2xs' : 'text-gray-500 dark:text-gray-400'
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  activePhaseIndex === null ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-2xs' : 'text-gray-500 dark:text-gray-400'
                 }`}
               >
                 All
@@ -589,8 +589,8 @@ function ProtocolDetailView({ protocol, onBack }) {
                 <button
                   key={idx}
                   onClick={() => setActivePhaseIndex(idx)}
-                  className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
-                    activePhaseIndex === idx ? 'bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 shadow-2xs' : 'text-gray-500 dark:text-gray-400'
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    activePhaseIndex === idx ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-2xs' : 'text-gray-500 dark:text-gray-400'
                   }`}
                 >
                   Phase {idx + 1}
@@ -599,7 +599,7 @@ function ProtocolDetailView({ protocol, onBack }) {
             </div>
           </div>
 
-          <div className="relative border-l-2 border-purple-200 dark:border-purple-900/60 ml-4 pl-6 space-y-6">
+          <div className="relative border-l-2 border-gray-200 dark:border-gray-700 ml-4 pl-6 space-y-6">
             {protocol.phases
               .filter((_, idx) => activePhaseIndex === null || activePhaseIndex === idx)
               .map((ph, idx) => {
@@ -608,35 +608,35 @@ function ProtocolDetailView({ protocol, onBack }) {
                 return (
                   <div key={actualIndex} className="relative group">
                     {/* Stepper Bullet */}
-                    <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-purple-700 text-white font-black text-xs flex items-center justify-center shadow-md border-2 border-white dark:border-gray-800">
+                    <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-extrabold text-xs flex items-center justify-center shadow-md border-2 border-white dark:border-gray-800">
                       {actualIndex + 1}
                     </div>
 
-                    <div className="bg-purple-50/50 dark:bg-purple-950/20 hover:bg-purple-50 dark:hover:bg-purple-950/30 rounded-2xl p-4 border border-purple-100 dark:border-purple-900/40 transition-colors">
+                    <div className="bg-gray-50/80 dark:bg-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-2xl p-4 sm:p-5 border border-gray-200/80 dark:border-gray-700/80 transition-colors">
                       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <span className="text-xs font-black text-purple-900 dark:text-purple-300 uppercase tracking-wide">
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                           {ph.phase || `PHASE ${actualIndex + 1}`}
                         </span>
                         <div className="flex items-center gap-1.5">
                           {calculatedDateRange && (
-                            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/70 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
                               🗓️ {calculatedDateRange}
                             </span>
                           )}
                           {ph.timing && (
-                            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 shadow-xs">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 shadow-xs">
                               {ph.timing}
                             </span>
                           )}
                         </div>
                       </div>
 
-                      <h3 className="font-bold text-sm text-gray-900 dark:text-white mb-2 leading-snug">
+                      <h3 className="font-bold text-base text-gray-900 dark:text-white mb-2 leading-snug">
                         {ph.title}
                       </h3>
 
                       {ph.notes && (
-                        <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed bg-white dark:bg-gray-900/70 rounded-xl p-3 border border-purple-100/60 dark:border-purple-900/40 font-medium">
+                        <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed bg-white dark:bg-gray-900/80 rounded-xl p-3.5 border border-gray-200 dark:border-gray-700 font-normal">
                           {ph.notes}
                         </p>
                       )}
@@ -650,8 +650,8 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Receptor Shift Dynamics Table */}
       {protocol.receptorShiftDynamics && protocol.receptorShiftDynamics.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
             <span>🧬</span>
             <span>Receptor Shift Dynamics & Vulnerability Windows</span>
           </h2>
@@ -663,21 +663,21 @@ function ProtocolDetailView({ protocol, onBack }) {
             {protocol.receptorShiftDynamics.map((item, i) => {
               const riskInfo = getRiskColor(item.riskLevel)
               return (
-                <div key={i} className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-4 border border-gray-100 dark:border-gray-700">
+                <div key={i} className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-4 border border-gray-200/80 dark:border-gray-700/80">
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="font-extrabold text-sm text-gray-900 dark:text-white">
+                    <span className="font-extrabold text-base text-gray-900 dark:text-white">
                       {item.receptor}
                     </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
                       {item.riskLevel}
                     </span>
                   </div>
 
-                  <div className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-1">
+                  <div className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1">
                     Transition Shift: {item.shift}
                   </div>
 
-                  <p className="text-xs text-gray-600 dark:text-gray-300">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
                     <span className="font-semibold text-gray-700 dark:text-gray-200">Clinical Impact:</span> {item.hazard}
                   </p>
                 </div>
@@ -689,8 +689,8 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Adverse Risk Stratification Meters */}
       {protocol.riskMeters && protocol.riskMeters.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
             <span>📊</span>
             <span>Adverse Risk Stratification Meters</span>
           </h2>
@@ -701,10 +701,10 @@ function ProtocolDetailView({ protocol, onBack }) {
               return (
                 <div key={i} className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-3.5 border border-gray-100 dark:border-gray-700">
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-bold text-gray-800 dark:text-gray-200">
+                    <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
                       {rm.domain}
                     </span>
-                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
                       {rm.severity}
                     </span>
                   </div>
@@ -715,7 +715,7 @@ function ProtocolDetailView({ protocol, onBack }) {
                   </div>
 
                   {rm.notes && (
-                    <p className="text-[11px] text-gray-600 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                       {rm.notes}
                     </p>
                   )}
@@ -728,8 +728,8 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Emergency Rescue Actions */}
       {protocol.emergencyRescue && protocol.emergencyRescue.length > 0 && (
-        <div className="bg-rose-50/60 dark:bg-rose-950/30 rounded-3xl p-6 border border-rose-200 dark:border-rose-900/50 shadow-xs mb-6">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="bg-rose-50/60 dark:bg-rose-950/30 rounded-3xl p-5 sm:p-6 border border-rose-200 dark:border-rose-900/50 shadow-xs mb-6">
+          <div className="flex items-center gap-2.5 mb-3">
             <span className="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-base shadow-xs">
               🚨
             </span>
@@ -737,7 +737,7 @@ function ProtocolDetailView({ protocol, onBack }) {
               <h2 className="text-xs font-bold text-rose-950 dark:text-rose-200 uppercase tracking-wider">
                 Emergency Rescue & Toxicity Intervention Guidelines
               </h2>
-              <p className="text-[11px] text-rose-800 dark:text-rose-300">
+              <p className="text-xs text-rose-800 dark:text-rose-300">
                 Protocols for acute breakthrough symptoms, destabilization, or severe adverse events
               </p>
             </div>
@@ -745,7 +745,7 @@ function ProtocolDetailView({ protocol, onBack }) {
 
           <div className="space-y-2">
             {protocol.emergencyRescue.map((rescue, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900/80 rounded-xl p-3 border border-rose-100 dark:border-rose-900/40 text-xs text-gray-800 dark:text-gray-200 shadow-2xs leading-relaxed font-medium">
+              <div key={i} className="bg-white dark:bg-gray-900/80 rounded-xl p-3.5 border border-rose-100 dark:border-rose-900/40 text-sm text-gray-800 dark:text-gray-200 shadow-2xs leading-relaxed font-medium">
                 <span className="font-bold text-rose-700 dark:text-rose-400 mr-1.5">⚡</span>
                 {rescue}
               </div>
@@ -756,16 +756,16 @@ function ProtocolDetailView({ protocol, onBack }) {
 
       {/* Clinical Practice Pearls */}
       {protocol.clinicalPearls && protocol.clinicalPearls.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 border border-gray-100 dark:border-gray-700 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 sm:p-6 border border-gray-200/90 dark:border-gray-700/90 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
             <span>💡</span>
             <span>High-Yield Clinical Practice Pearls</span>
           </h2>
           <div className="space-y-2.5">
             {protocol.clinicalPearls.map((pearl, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-xs text-gray-700 dark:text-gray-300 bg-purple-50/40 dark:bg-purple-950/20 rounded-xl p-3 border border-purple-100/50 dark:border-purple-900/30">
-                <span className="text-purple-600 dark:text-purple-400 font-extrabold text-sm">✓</span>
-                <span className="leading-relaxed font-medium">{pearl}</span>
+              <div key={i} className="flex items-start gap-2.5 text-sm text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/60 rounded-xl p-3.5 border border-gray-200/80 dark:border-gray-700/80">
+                <span className="text-gray-500 dark:text-gray-400 font-extrabold text-sm">✓</span>
+                <span className="leading-relaxed font-normal">{pearl}</span>
               </div>
             ))}
           </div>

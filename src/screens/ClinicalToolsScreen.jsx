@@ -438,26 +438,26 @@ function CpzEquivalencyConverter({ navigate, initialDrug, showToast }) {
 
         {/* Dual Conversion Result Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/40 dark:to-blue-950/40 border-2 border-indigo-200 dark:border-indigo-800 rounded-3xl p-5 text-center">
-            <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300 block mb-1">
+          <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
               CPZ Equivalent Exposure
             </span>
-            <div className="text-3xl font-black text-indigo-950 dark:text-indigo-100">
+            <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
               {cpzEquivalent} mg
             </div>
-            <p className="text-xs text-indigo-800 dark:text-indigo-300 font-medium mt-1">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
               Chlorpromazine Equivalent / day
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/40 dark:to-pink-950/40 border-2 border-purple-200 dark:border-purple-800 rounded-3xl p-5 text-center">
-            <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 block mb-1">
+          <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
               Target Dose Equivalent
             </span>
-            <div className="text-3xl font-black text-purple-950 dark:text-purple-100">
+            <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
               ~{targetEquivalentDose} mg
             </div>
-            <p className="text-xs text-purple-800 dark:text-purple-300 font-medium mt-1">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
               {targetDrug.name} daily dose
             </p>
           </div>
@@ -777,14 +777,14 @@ function LithiumTdmTool({ navigate, showToast }) {
         </div>
 
         {/* Result Banner */}
-        <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 dark:from-indigo-950/40 dark:via-purple-950/40 dark:to-blue-950/40 border-2 border-indigo-200 dark:border-indigo-800 rounded-3xl p-5 text-center mb-5">
-          <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300 block mb-1">
+        <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center mb-5">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
             Calculated New Maintenance Dose
           </span>
-          <div className="text-3xl font-black text-indigo-950 dark:text-indigo-100">
+          <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
             {roundedDose} mg / day
           </div>
-          <p className="text-xs text-indigo-800 dark:text-indigo-300 font-medium mt-1">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
             Exact linear math: {predictedDose} mg/day (Adjust to nearest available 150 mg / 300 mg capsule)
           </p>
         </div>
@@ -1526,14 +1526,14 @@ function BzdEquivalencyCalculator({ navigate, initialDrug, showToast }) {
         </div>
 
         {/* Result Banner */}
-        <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/40 dark:to-indigo-950/40 border-2 border-purple-200 dark:border-purple-800 rounded-3xl p-5 text-center mb-5">
-          <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 block mb-1">
+        <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 text-center mb-5">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">
             Calculated Diazepam Equivalent
           </span>
-          <div className="text-3xl font-black text-purple-950 dark:text-purple-100">
+          <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
             {diazepamEquiv} mg Diazepam / day
           </div>
-          <p className="text-xs text-purple-800 dark:text-purple-300 font-medium mt-1">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium mt-1">
             {dose} mg of {currentBzd.name} = {diazepamEquiv} mg Diazepam
           </p>
         </div>
@@ -1691,17 +1691,17 @@ function MetabolicTrackerTool({ navigate, showToast }) {
         </div>
 
         {/* Metformin Augmentation Guideline Card */}
-        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-4 mb-6">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 sm:p-5 mb-6">
+          <div className="flex items-center gap-2 mb-2.5">
             <span className="text-lg">💊</span>
-            <h3 className="text-xs font-black text-emerald-950 dark:text-emerald-300 uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
               Metformin Augmentation Directive
             </h3>
           </div>
-          <p className="text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed mb-2 font-medium">
+          <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed mb-3">
             Initiate Metformin when a patient experiences <strong>≥ 5% weight gain</strong> within the first 3 months of SGA therapy or develops prediabetes (HbA1c 5.7%–6.4% / Fasting glucose 100–125 mg/dL).
           </p>
-          <div className="bg-white/80 dark:bg-gray-900/80 rounded-xl p-3 text-xs text-gray-800 dark:text-gray-200 font-semibold">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-3.5 text-sm text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 font-medium">
             Dosing: Start 500 mg daily with evening meal × 1 week, then increase to 500 mg BID, titrating to target 1000 mg BID with meals as tolerated to attenuate SGA-induced insulin resistance and hepatic lipogenesis. Verify eGFR ≥ 30 mL/min.
           </div>
         </div>

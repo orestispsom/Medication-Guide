@@ -22,25 +22,18 @@ export default function FamilyCard({ family }) {
   return (
     <button
       onClick={() => navigate(`/family/${family.id}`)}
-      className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-lg transition-all hover:-translate-y-1 text-left border border-gray-100 dark:border-gray-700 group relative overflow-hidden"
+      className="bg-white dark:bg-gray-800/90 rounded-2xl p-5 shadow-2xs hover:shadow-md transition-all text-left border border-gray-200/90 dark:border-gray-700/90 hover:border-indigo-400/60 dark:hover:border-indigo-500/60 group relative cursor-pointer"
     >
-      <div
-        className="absolute top-0 left-0 right-0 h-1"
-        style={{ backgroundColor: family.color }}
-      />
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-center justify-between mb-3">
         <span className="text-2xl">{familyIcons[family.id] || '💊'}</span>
-        <span
-          className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-          style={{ backgroundColor: family.color + '18', color: family.color }}
-        >
-          {drugCount} drugs
+        <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700/80 text-gray-700 dark:text-gray-200 border border-gray-200/60 dark:border-gray-600/60">
+          {drugCount} medications
         </span>
       </div>
-      <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight mb-1 group-hover:text-gray-700 dark:group-hover:text-gray-200">
+      <h3 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg leading-snug mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
         {family.name}
       </h3>
-      <p className="text-xs text-gray-400 dark:text-gray-500">
+      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
         {subgroupCount} subgroup{subgroupCount !== 1 ? 's' : ''}
       </p>
     </button>

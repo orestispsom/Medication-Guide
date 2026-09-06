@@ -146,7 +146,7 @@ export default function AllDrugsScreen() {
       {/* Search Input */}
       <div className="relative mb-3">
         <svg
-          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-3.5 pointer-events-none"
+          className="w-5 h-5 text-gray-400 dark:text-gray-500 absolute left-4 top-4 pointer-events-none"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -163,12 +163,12 @@ export default function AllDrugsScreen() {
             }
           }}
           placeholder="Filter by generic name, brand, indication, or mechanism..."
-          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-11 pr-10 py-3 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-10 py-3.5 text-base font-medium shadow-xs focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+            className="absolute right-3.5 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
           >
             ✕
           </button>
@@ -190,10 +190,10 @@ export default function AllDrugsScreen() {
           <button
             key={chip.id}
             onClick={() => setClinicalFilter(chip.id === clinicalFilter ? 'all' : chip.id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border flex-shrink-0 flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border flex-shrink-0 flex items-center gap-1.5 ${
               clinicalFilter === chip.id
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-xs'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-400'
             }`}
           >
             <span>{chip.icon}</span>
@@ -206,7 +206,7 @@ export default function AllDrugsScreen() {
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2 py-1 text-xs font-semibold text-gray-700 dark:text-gray-300 shadow-2xs focus:outline-none"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2.5 py-1 text-xs font-semibold text-gray-700 dark:text-gray-300 shadow-2xs focus:outline-none"
           >
             <option value="name-asc">A–Z</option>
             <option value="halfLife">Half-Life (t½)</option>
@@ -218,9 +218,9 @@ export default function AllDrugsScreen() {
       <div className="flex flex-wrap items-center gap-1 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
         <button
           onClick={() => setSelectedLetter('all')}
-          className={`px-2 py-1 text-xs font-bold rounded-lg transition-all ${
+          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all ${
             selectedLetter === 'all'
-              ? 'bg-indigo-600 text-white shadow-xs'
+              ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
               : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
           }`}
         >
@@ -232,7 +232,7 @@ export default function AllDrugsScreen() {
             return (
               <span
                 key={letter}
-                className="w-7 h-7 flex items-center justify-center text-[11px] font-semibold text-gray-300 dark:text-gray-700 cursor-not-allowed"
+                className="w-7 h-7 flex items-center justify-center text-xs font-semibold text-gray-300 dark:text-gray-700 cursor-not-allowed"
               >
                 {letter}
               </span>
@@ -245,10 +245,10 @@ export default function AllDrugsScreen() {
                 setSelectedLetter(letter)
                 setSearchQuery('')
               }}
-              className={`w-7 h-7 flex items-center justify-center text-[11px] font-bold rounded-lg transition-all ${
+              className={`w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg transition-all ${
                 selectedLetter === letter
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 hover:text-indigo-600 dark:hover:text-indigo-400'
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-xs'
+                  : 'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
               title={`${count} drugs starting with ${letter}`}
             >
@@ -333,44 +333,44 @@ export default function AllDrugsScreen() {
               <div
                 key={drug.id}
                 onClick={() => navigate(`/drug/${drug.id}`)}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 shadow-xs hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-500/50 transition-all cursor-pointer group"
+                className="bg-white dark:bg-gray-800 rounded-3xl p-5 border border-gray-200/90 dark:border-gray-700/90 shadow-xs hover:shadow-md hover:border-gray-400 dark:hover:border-gray-500 transition-all cursor-pointer group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="font-extrabold text-base text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {drug.name}
                       </h3>
                       {cleanBrand && (
-                        <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           ({cleanBrand})
                         </span>
                       )}
                       {drug.blackBox && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800" title="Black Box / Boxed Warning">
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800" title="Black Box / Boxed Warning">
                           ⚠️ Boxed Warning
                         </span>
                       )}
                       {drug.foodRequirement && drug.foodRequirement.toLowerCase().includes('meal') && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800" title={drug.foodRequirement}>
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800" title={drug.foodRequirement}>
                           🍽️ Meal Req
                         </span>
                       )}
                     </div>
 
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-2.5">
                       {drug.subgroup}
                     </p>
 
                     {/* Dosing & Half-Life Badges */}
                     <div className="flex flex-wrap items-center gap-2 mb-2.5">
                       {drug.targetDose && (
-                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+                        <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
                           🎯 Target: {drug.targetDose}
                         </span>
                       )}
                       {drug.halfLife && (
-                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-100 dark:border-amber-800">
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
                           ⏱️ t½: {drug.halfLife}
                         </span>
                       )}
@@ -378,12 +378,12 @@ export default function AllDrugsScreen() {
 
                     {/* Top Receptor Affinity Badges */}
                     {drug.receptors && drug.receptors.length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                      <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
                         {drug.receptors.slice(0, 4).map(r => (
                           <ReceptorTag key={r.receptor} receptorId={r.receptor} occupancy={r.occupancy} />
                         ))}
                         {drug.receptors.length > 4 && (
-                          <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                             +{drug.receptors.length - 4} more
                           </span>
                         )}
@@ -392,23 +392,17 @@ export default function AllDrugsScreen() {
 
                     {/* Indications */}
                     {drug.indications && drug.indications.length > 0 && (
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500 line-clamp-1">
-                        <span className="font-semibold text-gray-500 dark:text-gray-400">Indications:</span> {drug.indications.join(' · ')}
+                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                        <span className="font-semibold text-gray-700 dark:text-gray-200">Indications:</span> {drug.indications.join(' · ')}
                       </p>
                     )}
                   </div>
 
                   <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                    <span
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                      style={{
-                        backgroundColor: (family?.color || '#6366f1') + '15',
-                        color: family?.color || '#6366f1',
-                      }}
-                    >
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
                       {family?.shortName || drug.family}
                     </span>
-                    <span className="text-gray-300 dark:text-gray-600 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors text-sm">
+                    <span className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors text-base">
                       →
                     </span>
                   </div>
