@@ -1,5 +1,9 @@
 # Medication Guide — Agent Rules
 
+## Ecosystem process governance
+
+For multi-agent and cross-repository coordination, follow `orestispsom/mental-health-core/docs/ECOSYSTEM_GOVERNANCE.md`. It governs sync, task claims, explicit supersession, semantic merge preflight, and version-bound validation; this file remains authoritative for medication-guide-specific rules.
+
 ## Reusable knowledge asset detection
 
 While completing the primary medication-guide task, flag only **unusually reusable original clinical synthesis**: prescribing/monitoring algorithms, high-information comparison tables, adverse-effect management frameworks, difficult pharmacology explained clearly, differential pitfalls, patient/family explanations, teaching modules, or clinical-AI evaluation cases.
