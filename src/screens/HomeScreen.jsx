@@ -261,15 +261,61 @@ export default function HomeScreen() {
               Point-of-Care Clinical Tools
             </span>
             <h3 className="font-extrabold text-base mt-2 mb-1 group-hover:text-teal-300 transition-colors">
-              Pharmacokinetic Checkers & Decision Calculators
+              Clinical Decision Calculators & Pharmacokinetic Engines
             </h3>
             <p className="text-xs text-teal-200/90 leading-relaxed max-w-md">
-              CYP450 Drug-Drug Collision Checker · Additive QTc Cardiac Risk Stacker · Ashton BZD Diazepam Equivalency · Emergency Toxidromes Playbook · Organ Adjuster.
+              CPZ & BZD equivalencies · Lithium 12h TDM · Clozapine REMS triage · CYP450 collisions · QTc stacker · SGA metabolic tracking.
             </p>
           </div>
           <span className="text-2xl text-teal-300 group-hover:translate-x-1 transition-transform flex-shrink-0">
             🛠️
           </span>
+        </div>
+
+        {/* 1-Tap Quick Tool Chips */}
+        <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-teal-800/40">
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=cpz'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            🎭 CPZ Converter
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=lithium'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            🧪 Lithium TDM
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=clozapine'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            🩸 Clozapine REMS
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=cyp'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            ⚡ CYP450
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=qtc'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            ❤️ QTc Stacker
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=bzd'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            ⚖️ BZD / Ashton
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); navigate('/tools?tab=metabolic'); }}
+            className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-bold text-teal-200 transition-colors"
+          >
+            📊 Metabolic
+          </button>
         </div>
       </div>
 

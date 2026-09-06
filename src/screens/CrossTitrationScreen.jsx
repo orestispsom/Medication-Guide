@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
 import Toast from '../components/Toast'
+import PatientHandoutModal from '../components/PatientHandoutModal'
 import { isFavorite, toggleFavorite } from '../utils/favorites'
 
 export default function CrossTitrationScreen() {
@@ -268,6 +269,7 @@ function ProtocolDetailView({ protocol, onBack }) {
   const [toastMessage, setToastMessage] = useState('')
   const [activePhaseIndex, setActivePhaseIndex] = useState(null) // null = all
   const [starred, setStarred] = useState(isFavorite('protocol', protocol.id))
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
 
   // Start Date for Patient Schedule Calculator (defaults to today)
   const todayStr = new Date().toISOString().split('T')[0]
@@ -307,6 +309,14 @@ function ProtocolDetailView({ protocol, onBack }) {
     }
   }
 
+  // Pre-calculate phases with calendar date strings for modal
+  const phasesWithDates = useMemo(() => {
+    return (protocol.phases || []).map((ph, idx) => ({
+      ...ph,
+      calculatedDates: calculatePhaseDates(idx)
+    }))
+  }, [protocol.phases, startDate])
+
   // Copy switch protocol with dates to clipboard
   const handleCopyProtocol = () => {
     const lines = [
@@ -335,6 +345,37 @@ function ProtocolDetailView({ protocol, onBack }) {
     })
   }
 
+  // Copy structured EHR Progress Note
+  const handleCopyEhrNote = () => {
+    const lines = [
+      `=== MEDICATION CROSS-TITRATION / TRANSITION NOTE ===`,
+      `Protocol: #${protocol.number} - ${protocol.title}`,
+      `Transition: ${protocol.transitionTitle} (${protocol.switchType})`,
+      `Target Duration: ${protocol.duration} | Initiation Date: ${startDate}`,
+      `Core Mandate: ${protocol.coreMandate}`,
+      '',
+      `CLINICAL NEUROBIOLOGICAL RATIONALE:`,
+      protocol.rationale || 'Cross-titration indicated per clinical psychopharmacology assessment.',
+      '',
+      `SCHEDULED PHASES & DOSING:`,
+      ...(protocol.phases || []).map((ph, idx) =>
+        `• Phase ${idx + 1} (${calculatePhaseDates(idx)}): ${ph.title} — ${ph.notes || ''}`
+      ),
+      '',
+      protocol.alertBox ? `CRITICAL PRECAUTION: ${protocol.alertBox}` : '',
+      protocol.emergencyRescue ? `EMERGENCY RESCUE INTERVENTION: ${protocol.emergencyRescue}` : '',
+      '',
+      `COUNSELING & MONITORING: Patient and caregiver counseled on scheduled stepped titration, potential discontinuation/rebound vs shift symptoms, and emergency red flags. Calendar-stamped patient handout provided in writing.`,
+      `====================================================`,
+    ].filter(Boolean).join('\n')
+
+    navigator.clipboard.writeText(lines).then(() => {
+      setToastMessage('EHR Clinical Progress Note copied to clipboard!')
+    }).catch(() => {
+      setToastMessage('Failed to copy to clipboard')
+    })
+  }
+
   // Risk meter severity color helper
   const getRiskColor = (severity) => {
     const s = (severity || '').toUpperCase()
@@ -349,8 +390,8 @@ function ProtocolDetailView({ protocol, onBack }) {
     <div className="max-w-3xl mx-auto px-4 py-6 pb-28">
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
-      {/* Back Button & Copy Protocol Button */}
-      <div className="flex items-center justify-between mb-4">
+      {/* Back Button & Action Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
         <button
           onClick={onBack}
           className="inline-flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-purple-700 transition-colors py-1 px-2 rounded-lg hover:bg-gray-100"
@@ -361,7 +402,7 @@ function ProtocolDetailView({ protocol, onBack }) {
           <span>All 20 Protocols</span>
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
             onClick={() => {
               const isNow = toggleFavorite('protocol', protocol.id)
@@ -380,12 +421,29 @@ function ProtocolDetailView({ protocol, onBack }) {
           </button>
 
           <button
-            onClick={handleCopyProtocol}
+            onClick={() => setIsPrintModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all border border-indigo-200 shadow-2xs"
+            title="Generate printable patient handout with calendar instructions"
+          >
+            <span>🖨️</span>
+            <span>Patient Handout</span>
+          </button>
+
+          <button
+            onClick={handleCopyEhrNote}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition-all border border-purple-200 shadow-2xs"
-            title="Copy protocol with exact patient dates to clipboard"
+            title="Copy structured clinical note for EHR documentation"
           >
             <span>📋</span>
-            <span>Copy Patient Schedule</span>
+            <span>Copy EHR Note</span>
+          </button>
+
+          <button
+            onClick={handleCopyProtocol}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-all border border-gray-200"
+            title="Copy raw schedule to clipboard"
+          >
+            <span>Schedule</span>
           </button>
         </div>
       </div>
@@ -723,6 +781,19 @@ function ProtocolDetailView({ protocol, onBack }) {
           ← Return to All 20 Protocols
         </button>
       </div>
+
+      {/* Printable Patient Handout Modal */}
+      <PatientHandoutModal
+        isOpen={isPrintModalOpen}
+        onClose={() => setIsPrintModalOpen(false)}
+        title={protocol.title}
+        transitionTitle={protocol.transitionTitle}
+        startDate={startDate}
+        duration={protocol.duration}
+        phases={phasesWithDates}
+        warnings={protocol.alertBox}
+        emergency={Array.isArray(protocol.emergencyRescue) ? protocol.emergencyRescue.join(' ') : protocol.emergencyRescue}
+      />
     </div>
   )
 }

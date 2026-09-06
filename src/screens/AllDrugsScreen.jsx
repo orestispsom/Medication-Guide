@@ -15,8 +15,7 @@ export default function AllDrugsScreen() {
   const [selectedFamilyId, setSelectedFamilyId] = useState('all')
   const [selectedSubgroupId, setSelectedSubgroupId] = useState('all')
   const [selectedLetter, setSelectedLetter] = useState('all')
-  const [filterBoxedWarning, setFilterBoxedWarning] = useState(false)
-  const [filterMealReq, setFilterMealReq] = useState(false)
+  const [clinicalFilter, setClinicalFilter] = useState('all')
   const [sortBy, setSortBy] = useState('name-asc') // 'name-asc' | 'halfLife'
 
   // Subgroups available for the currently selected family
@@ -57,14 +56,35 @@ export default function AllDrugsScreen() {
         }
       }
 
-      // Boxed warning filter
-      if (filterBoxedWarning && !drug.blackBox) {
-        return false
-      }
-
-      // Meal requirement filter
-      if (filterMealReq && (!drug.foodRequirement || !drug.foodRequirement.toLowerCase().includes('meal'))) {
-        return false
+      // Clinical Smart Filters
+      if (clinicalFilter === 'weight-neutral') {
+        const wt = (drug.adverseFootprint || []).find(a => a.domain.toLowerCase().includes('weight') || a.domain.toLowerCase().includes('metabolic'))
+        if (wt && (wt.severity.toLowerCase().includes('high') || wt.severity.toLowerCase().includes('severe') || wt.severity.toLowerCase().includes('mod'))) {
+          return false
+        }
+      } else if (clinicalFilter === 'low-qtc') {
+        const qtc = (drug.adverseFootprint || []).find(a => a.domain.toLowerCase().includes('qtc'))
+        if (qtc && (qtc.severity.toLowerCase().includes('high') || qtc.severity.toLowerCase().includes('severe') || qtc.severity.toLowerCase().includes('mod'))) {
+          return false
+        }
+      } else if (clinicalFilter === 'sedating') {
+        const sed = (drug.adverseFootprint || []).find(a => a.domain.toLowerCase().includes('sedation'))
+        if (!sed || (!sed.severity.toLowerCase().includes('high') && !sed.severity.toLowerCase().includes('severe') && !sed.severity.toLowerCase().includes('mod'))) {
+          return false
+        }
+      } else if (clinicalFilter === 'activating') {
+        const sed = (drug.adverseFootprint || []).find(a => a.domain.toLowerCase().includes('sedation'))
+        const isLowSed = sed && (sed.severity.toLowerCase().includes('low') || sed.severity.toLowerCase().includes('near zero') || sed.severity.toLowerCase().includes('sparing'))
+        const pearls = (drug.clinicalPearls || []).join(' ').toLowerCase()
+        const isActivatingMention = pearls.includes('morning') || pearls.includes('activating') || pearls.includes('insomnia') || pearls.includes('alerting')
+        if (!isLowSed && !isActivatingMention) return false
+      } else if (clinicalFilter === 'renal-safe') {
+        const clearance = (drug.benchmarks?.clearance || '').toLowerCase()
+        if (!clearance.includes('hepatic') && !clearance.includes('cyp')) return false
+      } else if (clinicalFilter === 'meal-req') {
+        if (!drug.foodRequirement || !drug.foodRequirement.toLowerCase().includes('meal')) return false
+      } else if (clinicalFilter === 'boxed-warning') {
+        if (!drug.blackBox) return false
       }
 
       // Search query filter
@@ -85,7 +105,7 @@ export default function AllDrugsScreen() {
       }
       return a.name.localeCompare(b.name)
     })
-  }, [searchQuery, selectedFamilyId, selectedSubgroupId, selectedLetter, filterBoxedWarning, filterMealReq, sortBy])
+  }, [searchQuery, selectedFamilyId, selectedSubgroupId, selectedLetter, clinicalFilter, sortBy])
 
   const handleFamilyChange = (famId) => {
     setSelectedFamilyId(famId)
@@ -97,8 +117,7 @@ export default function AllDrugsScreen() {
     setSelectedFamilyId('all')
     setSelectedSubgroupId('all')
     setSelectedLetter('all')
-    setFilterBoxedWarning(false)
-    setFilterMealReq(false)
+    setClinicalFilter('all')
     setSortBy('name-asc')
     setSearchParams({})
   }
@@ -156,36 +175,38 @@ export default function AllDrugsScreen() {
         )}
       </div>
 
-      {/* Quick Clinical Filter Toggles */}
-      <div className="flex flex-wrap items-center gap-2 mb-3">
-        <button
-          onClick={() => setFilterBoxedWarning(!filterBoxedWarning)}
-          className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
-            filterBoxedWarning
-              ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-amber-300'
-          }`}
-        >
-          ⚠️ Boxed Warnings Only
-        </button>
+      {/* Quick Clinical Smart Filter Chips */}
+      <div className="flex items-center gap-1.5 mb-3 overflow-x-auto hide-scrollbar pb-1">
+        {[
+          { id: 'all', label: 'All', icon: '💊' },
+          { id: 'weight-neutral', label: 'Weight Neutral', icon: '⚡' },
+          { id: 'low-qtc', label: 'Low QTc', icon: '❤️' },
+          { id: 'sedating', label: 'Bedtime / Sedating', icon: '🌙' },
+          { id: 'activating', label: 'Morning / Activating', icon: '☀️' },
+          { id: 'renal-safe', label: 'Hepatic Cleared', icon: '🩺' },
+          { id: 'meal-req', label: 'Meal Required', icon: '🍽️' },
+          { id: 'boxed-warning', label: 'Boxed Warnings', icon: '⚠️' },
+        ].map(chip => (
+          <button
+            key={chip.id}
+            onClick={() => setClinicalFilter(chip.id === clinicalFilter ? 'all' : chip.id)}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border flex-shrink-0 flex items-center gap-1.5 ${
+              clinicalFilter === chip.id
+                ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
+            }`}
+          >
+            <span>{chip.icon}</span>
+            <span>{chip.label}</span>
+          </button>
+        ))}
 
-        <button
-          onClick={() => setFilterMealReq(!filterMealReq)}
-          className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
-            filterMealReq
-              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300'
-          }`}
-        >
-          🍽️ Meal Required Only
-        </button>
-
-        <div className="ml-auto flex items-center gap-1.5 text-xs font-medium text-gray-500">
+        <div className="ml-auto flex items-center gap-1.5 text-xs font-medium text-gray-500 flex-shrink-0">
           <span>Sort:</span>
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
-            className="bg-white border border-gray-200 rounded-xl px-2 py-1 text-xs font-semibold text-gray-700 shadow-2xs focus:outline-none"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2 py-1 text-xs font-semibold text-gray-700 dark:text-gray-300 shadow-2xs focus:outline-none"
           >
             <option value="name-asc">A–Z</option>
             <option value="halfLife">Half-Life (t½)</option>

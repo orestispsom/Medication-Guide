@@ -191,22 +191,91 @@ export default function DrugDetailScreen() {
           {drug.name}
         </h1>
 
-        {/* Quick Clinical Tool Shortcuts */}
-        <div className="flex flex-wrap items-center gap-2 mb-2">
+        {/* Context-Aware Point-of-Care Clinical Action Bar */}
+        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+          {(drug.familyId === 'antipsychotics' || (drug.subgroup && drug.subgroup.toLowerCase().includes('antipsychotic'))) && (
+            <button
+              onClick={() => navigate(`/tools?tab=cpz&drug=${encodeURIComponent(drug.name.toLowerCase())}`)}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
+            >
+              <span>🎭</span>
+              <span>Convert CPZ Equivalents</span>
+            </button>
+          )}
+
+          {(drug.familyId === 'antipsychotics' || (drug.subgroup && drug.subgroup.toLowerCase().includes('antipsychotic'))) && (
+            <button
+              onClick={() => navigate('/tools?tab=metabolic')}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
+            >
+              <span>📊</span>
+              <span>SGA Metabolic Protocol</span>
+            </button>
+          )}
+
+          {drug.name.toLowerCase().includes('clozapine') && (
+            <button
+              onClick={() => navigate('/tools?tab=clozapine')}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
+            >
+              <span>🩸</span>
+              <span>Clozapine REMS ANC Triage</span>
+            </button>
+          )}
+
+          {drug.name.toLowerCase().includes('lithium') && (
+            <button
+              onClick={() => navigate('/tools?tab=lithium')}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
+            >
+              <span>🧪</span>
+              <span>Lithium 12h Trough & TDM</span>
+            </button>
+          )}
+
+          {(drug.familyId === 'anxiolytics' || (drug.subgroup && drug.subgroup.toLowerCase().includes('benzodiazepine'))) && (
+            <button
+              onClick={() => navigate(`/tools?tab=bzd&drug=${encodeURIComponent(drug.name.toLowerCase())}`)}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
+            >
+              <span>⚖️</span>
+              <span>Diazepam Equivalents & Ashton Taper</span>
+            </button>
+          )}
+
           <button
-            onClick={() => navigate('/tools')}
-            className="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-100 hover:bg-purple-100 transition-colors inline-flex items-center gap-1"
+            onClick={() => navigate(`/tools?tab=cyp&drug=${encodeURIComponent(drug.id)}`)}
+            className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
           >
             <span>⚡</span>
             <span>Screen CYP450 Collisions</span>
           </button>
+
           <button
-            onClick={() => navigate('/tools')}
-            className="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-100 hover:bg-rose-100 transition-colors inline-flex items-center gap-1"
+            onClick={() => navigate(`/tools?tab=qtc&drug=${encodeURIComponent(drug.id)}`)}
+            className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 transition-colors inline-flex items-center gap-1 shadow-2xs"
           >
             <span>❤️</span>
             <span>Screen QTc Risk</span>
           </button>
+
+          {relatedProtocols.length > 0 ? (
+            <button
+              onClick={() => navigate(`/cross-titration/${relatedProtocols[0].id}`)}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-900 dark:text-purple-200 border border-purple-300 dark:border-purple-700 hover:bg-purple-200 transition-colors inline-flex items-center gap-1 shadow-2xs"
+            >
+              <span>🔄</span>
+              <span>Switch Protocol ({relatedProtocols.length} Available)</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/cross-titration')}
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 transition-colors inline-flex items-center gap-1"
+            >
+              <span>🔄</span>
+              <span>Find Switch Protocol</span>
+            </button>
+          )}
         </div>
 
         {drug.brand && (
