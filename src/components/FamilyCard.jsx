@@ -5,26 +5,34 @@ const familyIcons = {
   antidepressants: '💊',
   antipsychotics: '🧠',
   'mood-stabilizers': '⚖️',
-  anxiolytics: '🌿',
+  anxiolytics: '🌙',
   adhd: '⚡',
-  dementia: '🔬',
+  'substance-use': '🛡️',
+  neuropsychiatry: '🩺',
+  neurology: '🔬',
+  'antidotes-interventional': '🚨',
+  dementia: '💡',
 }
 
 export default function FamilyCard({ family }) {
   const navigate = useNavigate()
   const drugCount = data.drugs.filter(d => d.familyId === family.id).length
-  const subgroupCount = family.subgroups.length
+  const subgroupCount = (data.subgroups || []).filter(s => s.familyId === family.id).length
 
   return (
     <button
       onClick={() => navigate(`/family/${family.id}`)}
-      className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 text-left border border-gray-100 group"
+      className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 text-left border border-gray-100 group relative overflow-hidden"
     >
+      <div
+        className="absolute top-0 left-0 right-0 h-1"
+        style={{ backgroundColor: family.color }}
+      />
       <div className="flex items-start justify-between mb-3">
-        <span className="text-2xl">{familyIcons[family.id]}</span>
+        <span className="text-2xl">{familyIcons[family.id] || '💊'}</span>
         <span
-          className="text-xs font-bold px-2 py-1 rounded-full"
-          style={{ backgroundColor: family.color + '20', color: family.color }}
+          className="text-[11px] font-bold px-2 py-0.5 rounded-full"
+          style={{ backgroundColor: family.color + '18', color: family.color }}
         >
           {drugCount} drugs
         </span>

@@ -7,171 +7,506 @@ export default function DrugDetailScreen() {
   const { drugId } = useParams()
   const navigate = useNavigate()
   const drug = data.drugs.find(d => d.id === drugId)
-  if (!drug) return <div className="p-8 text-center text-gray-500">Drug not found</div>
+
+  if (!drug) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-12 text-center">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">Medication Not Found</h2>
+        <p className="text-sm text-gray-500 mb-4">The requested drug monograph does not exist in the compendium.</p>
+        <button
+          onClick={() => navigate('/all-drugs')}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-xs hover:bg-indigo-700"
+        >
+          Browse All Medications
+        </button>
+      </div>
+    )
+  }
 
   const family = data.families.find(f => f.id === drug.familyId)
-  const maxOccupancy = Math.max(...drug.receptors.map(r => r.occupancy), 1)
+
+  // Find any related Module 12 switch protocols
+  const relatedProtocols = (data.protocols || []).filter(p => {
+    const nameMatch = p.transitionTitle && p.transitionTitle.toLowerCase().includes(drug.name.toLowerCase())
+    const titleMatch = p.title && p.title.toLowerCase().includes(drug.name.toLowerCase())
+    const rationaleMatch = p.rationale && p.rationale.toLowerCase().includes(drug.name.toLowerCase())
+    return nameMatch || titleMatch || rationaleMatch
+  })
+
+  // Severity color mapper for Adverse Footprint
+  const getSeverityBadge = (severity) => {
+    const s = (severity || '').toLowerCase()
+    if (s.includes('severe')) {
+      return { bg: 'bg-red-100 text-red-800 border-red-200', dot: 'bg-red-600' }
+    }
+    if (s.includes('very high')) {
+      return { bg: 'bg-orange-100 text-orange-900 border-orange-200', dot: 'bg-orange-600' }
+    }
+    if (s.includes('high')) {
+      return { bg: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-600' }
+    }
+    if (s.includes('mod')) {
+      return { bg: 'bg-yellow-100 text-yellow-800 border-yellow-200', dot: 'bg-yellow-500' }
+    }
+    if (s.includes('low')) {
+      return { bg: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500' }
+    }
+    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) {
+      return { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-400' }
+    }
+    return { bg: 'bg-gray-100 text-gray-700 border-gray-200', dot: 'bg-gray-400' }
+  }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="max-w-3xl mx-auto px-4 py-6">
       <BackButton />
 
-      {/* Header */}
+      {/* Header & Taxonomy Badges */}
       <div className="mb-5">
-        <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: family?.color }}>
-          {drug.subgroup}
-        </p>
-        <h1 className="text-2xl font-extrabold text-gray-900">{drug.name}</h1>
-        <p className="text-sm text-gray-500">{drug.brand}</p>
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          {family && (
+            <button
+              onClick={() => navigate(`/family/${family.id}`)}
+              className="text-xs font-bold px-2.5 py-1 rounded-full transition-opacity hover:opacity-80 border"
+              style={{
+                backgroundColor: family.color + '15',
+                color: family.color,
+                borderColor: family.color + '30',
+              }}
+            >
+              {family.name}
+            </button>
+          )}
+          {drug.subgroupId && (
+            <button
+              onClick={() => navigate(`/subgroup/${drug.subgroupId}`)}
+              className="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            >
+              {drug.subgroup}
+            </button>
+          )}
+        </div>
+
+        <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-1">
+          {drug.name}
+        </h1>
+
+        {drug.brand && (
+          <p className="text-sm font-medium text-gray-500 mb-3">
+            {drug.brand}
+          </p>
+        )}
+
+        {/* Target Maintenance & Max Ceiling Banners */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
+          {drug.targetDose && (
+            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
+                🎯
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-indigo-900 uppercase tracking-wider">
+                  Target Maintenance Dose
+                </p>
+                <p className="text-sm font-black text-indigo-950">
+                  {drug.targetDose}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {drug.maxDose && (
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-100 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
+                ⚡
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-purple-900 uppercase tracking-wider">
+                  Max Approved Ceiling
+                </p>
+                <p className="text-sm font-black text-purple-950 truncate">
+                  {drug.maxDose}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Half-life badge */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-5 flex items-center gap-3">
-        <div className="bg-amber-100 rounded-lg p-2">
-          <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+      {/* 4-Card Benchmark Metrics Grid */}
+      {drug.benchmarkMetrics && drug.benchmarkMetrics.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+            <span>📐</span>
+            <span>Clinical Benchmark Metrics</span>
+          </h2>
+          <div className="grid grid-cols-2 gap-2.5">
+            {drug.benchmarkMetrics.map((bm, i) => (
+              <div
+                key={i}
+                className="bg-white border border-gray-100 rounded-2xl p-3.5 shadow-xs hover:border-gray-200 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">
+                    {bm.label}
+                  </span>
+                  <p className="text-sm font-black text-gray-900 leading-snug">
+                    {bm.value}
+                  </p>
+                </div>
+                {bm.detail && (
+                  <p className="text-[11px] font-medium text-indigo-600 mt-2 pt-2 border-t border-gray-50">
+                    {bm.detail}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-        <div>
-          <p className="text-[10px] font-semibold text-amber-600 uppercase tracking-wider">Half-life</p>
-          <p className="text-sm font-bold text-amber-800">{drug.halfLife}</p>
-        </div>
-      </div>
+      )}
 
-      {/* Receptor Binding */}
-      {drug.receptors.length > 0 && (
-        <Section title="Receptor Binding Profile">
-          <div className="space-y-2.5">
+      {/* Black Box Warning / Critical Alerts */}
+      {drug.blackBox && (
+        <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 mb-6 shadow-xs">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl flex-shrink-0">⚠️</span>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider">
+                  Boxed Warning
+                </span>
+                <h3 className="font-black text-rose-950 text-xs uppercase tracking-wide">
+                  {drug.blackBox.title || 'CRITICAL CLINICAL ALERT'}
+                </h3>
+              </div>
+              <p className="text-xs text-rose-950 leading-relaxed font-medium">
+                {drug.blackBox.warning}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Food & Administration Mandate */}
+      {drug.foodRequirement && (
+        <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3 shadow-xs">
+          <span className="text-xl flex-shrink-0">🍽️</span>
+          <div>
+            <h3 className="text-xs font-extrabold text-amber-900 uppercase tracking-wider mb-0.5">
+              Food & Administration Requirements
+            </h3>
+            <p className="text-xs text-amber-950 font-semibold leading-relaxed">
+              {drug.foodRequirement}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Molecular Receptor Binding Profile */}
+      {drug.receptors && drug.receptors.length > 0 && (
+        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+              <span>🧬</span>
+              <span>Receptor Binding Profile & Occupancy</span>
+            </h2>
+            <button
+              onClick={() => navigate('/receptors')}
+              className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              Receptor Guide →
+            </button>
+          </div>
+
+          <div className="space-y-4">
             {drug.receptors.map(r => {
-              const receptor = data.receptors.find(rec => rec.id === r.receptor)
-              const width = (r.occupancy / 100) * 100
+              const receptorObj = data.receptors.find(rec => rec.id === r.receptor)
+              const recColor = receptorObj?.color || '#6366f1'
+              const width = Math.min(Math.max(r.occupancy || 50, 15), 100)
+
               return (
-                <div key={r.receptor} className="flex items-center gap-3">
-                  <ReceptorTag receptorId={r.receptor} />
-                  <div className="flex-1 min-w-0">
-                    <div className="h-5 bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all flex items-center justify-end pr-2"
-                        style={{
-                          width: `${width}%`,
-                          backgroundColor: receptor?.color || '#9ca3af',
-                          minWidth: '2rem',
-                        }}
-                      >
-                        <span className="text-[10px] font-bold text-white drop-shadow-sm">{r.occupancy}%</span>
-                      </div>
+                <div key={r.receptor} className="bg-gray-50/60 rounded-2xl p-3 border border-gray-100">
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-2">
+                      <ReceptorTag receptorId={r.receptor} />
+                      {r.rawTarget && (
+                        <span className="text-xs font-semibold text-gray-700">
+                          {r.rawTarget}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {r.ki && (
+                        <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
+                          Ki: {r.ki}
+                        </span>
+                      )}
+                      {r.action && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-gray-200 text-gray-800">
+                          {r.action}
+                        </span>
+                      )}
                     </div>
                   </div>
+
+                  {/* Occupancy Bar */}
+                  <div className="h-4 bg-gray-200 rounded-full overflow-hidden mb-2">
+                    <div
+                      className="h-full rounded-full transition-all flex items-center justify-end pr-2"
+                      style={{
+                        width: `${width}%`,
+                        backgroundColor: recColor,
+                        minWidth: '2rem',
+                      }}
+                    >
+                      <span className="text-[10px] font-bold text-white drop-shadow-xs">
+                        {r.occupancy}%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Clinical Action explanation */}
+                  {r.clinicalAction && (
+                    <p className="text-xs text-gray-600 font-medium leading-relaxed mt-1">
+                      <span className="font-bold text-gray-800">Clinical Action:</span> {r.clinicalAction}
+                    </p>
+                  )}
                 </div>
               )
             })}
           </div>
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {drug.receptors.map(r => (
-              <span key={r.receptor} className="text-[10px] text-gray-500">
-                {r.receptor}: {r.action}
-              </span>
-            ))}
-          </div>
-        </Section>
+        </div>
       )}
 
-      {/* Pharmacokinetics */}
-      <Section title="Pharmacokinetics">
-        <div className="space-y-2">
-          <PkRow label="Half-life" value={drug.halfLife} />
-          <PkRow label="Metabolism" value={drug.metabolism} />
-          {drug.cyp450.substrate.length > 0 && (
-            <PkRow label="CYP Substrate" value={drug.cyp450.substrate.join(', ')} />
-          )}
-          {drug.cyp450.inhibits.length > 0 && (
-            <PkRow label="CYP Inhibitor" value={drug.cyp450.inhibits.join(', ')} />
-          )}
-        </div>
-      </Section>
+      {/* Adverse Effect Risk Footprint (8 Domains) */}
+      {drug.adverseFootprint && drug.adverseFootprint.length > 0 && (
+        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <span>🛡️</span>
+            <span>Adverse Effect Risk Footprint</span>
+          </h2>
+          <p className="text-xs text-gray-500 mb-4">
+            Standardized 8-domain clinical risk profile according to compendium pharmacology benchmarks:
+          </p>
 
-      {/* Indications */}
-      <Section title="Indications">
-        <div className="space-y-1">
-          {drug.indications.map((ind, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <span className="text-green-500 mt-0.5 text-xs">●</span>
-              <span className="text-sm text-gray-700">{ind}</span>
-            </div>
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {drug.adverseFootprint.map((af, i) => {
+              const badge = getSeverityBadge(af.severity)
+              return (
+                <div
+                  key={i}
+                  className="bg-gray-50/70 border border-gray-100 rounded-2xl p-3 flex items-center justify-between gap-2"
+                >
+                  <span className="text-xs font-bold text-gray-800">
+                    {af.domain}
+                  </span>
+                  <span className={`text-[10px] font-black px-2.5 py-1 rounded-full border flex items-center gap-1.5 flex-shrink-0 ${badge.bg}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
+                    {af.severity}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
         </div>
-        {drug.offLabel.length > 0 && (
-          <>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-3 mb-1">Off-label</p>
-            <div className="space-y-1">
-              {drug.offLabel.map((ind, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span className="text-gray-300 mt-0.5 text-xs">○</span>
-                  <span className="text-sm text-gray-500">{ind}</span>
+      )}
+
+      {/* Structured 4-Step Titration Schedule */}
+      {drug.titrationSchedule && drug.titrationSchedule.length > 0 && (
+        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <span>📈</span>
+            <span>Structured 4-Step Titration Schedule</span>
+          </h2>
+
+          <div className="space-y-3">
+            {drug.titrationSchedule.map((step, idx) => (
+              <div
+                key={idx}
+                className="bg-gray-50/70 border border-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-indigo-50/20 transition-colors"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="px-2.5 py-1 rounded-xl bg-indigo-600 text-white font-black text-xs flex-shrink-0 shadow-2xs">
+                    {step.step || `STEP ${idx + 1}`}
+                  </span>
+                  <div>
+                    <h3 className="font-extrabold text-sm text-gray-900">
+                      {step.dose}
+                    </h3>
+                    {step.timing && (
+                      <p className="text-xs font-semibold text-indigo-700 mt-0.5">
+                        ⏱️ {step.timing}
+                      </p>
+                    )}
+                    {step.directive && (
+                      <p className="text-xs text-gray-600 mt-1">
+                        {step.directive}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Special Populations & Organ Impairment */}
+      {drug.specialPopulations && (
+        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <span>👥</span>
+            <span>Special Populations & Organ Adjustments</span>
+          </h2>
+
+          <div className="space-y-2.5">
+            {drug.specialPopulations.perinatal && (
+              <div className="bg-pink-50/40 rounded-2xl p-3 border border-pink-100">
+                <span className="text-[10px] font-black text-pink-700 uppercase tracking-wider block mb-0.5">
+                  Perinatal & Pregnancy
+                </span>
+                <p className="text-xs text-gray-700 font-medium">
+                  {drug.specialPopulations.perinatal}
+                </p>
+              </div>
+            )}
+
+            {drug.specialPopulations.pediatric && (
+              <div className="bg-blue-50/40 rounded-2xl p-3 border border-blue-100">
+                <span className="text-[10px] font-black text-blue-700 uppercase tracking-wider block mb-0.5">
+                  Pediatric Considerations
+                </span>
+                <p className="text-xs text-gray-700 font-medium">
+                  {drug.specialPopulations.pediatric}
+                </p>
+              </div>
+            )}
+
+            {drug.specialPopulations.geriatric && (
+              <div className="bg-amber-50/40 rounded-2xl p-3 border border-amber-100">
+                <span className="text-[10px] font-black text-amber-700 uppercase tracking-wider block mb-0.5">
+                  Geriatric & Beers Criteria
+                </span>
+                <p className="text-xs text-gray-700 font-medium">
+                  {drug.specialPopulations.geriatric}
+                </p>
+              </div>
+            )}
+
+            {drug.specialPopulations.organImpairment && (
+              <div className="bg-purple-50/40 rounded-2xl p-3 border border-purple-100">
+                <span className="text-[10px] font-black text-purple-700 uppercase tracking-wider block mb-0.5">
+                  Renal & Hepatic Impairment
+                </span>
+                <p className="text-xs text-gray-700 font-medium">
+                  {drug.specialPopulations.organImpairment}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Indications & Off-Label */}
+      <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+        <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <span>🎯</span>
+          <span>Indications & Clinical Utility</span>
+        </h2>
+
+        {drug.indications && drug.indications.length > 0 && (
+          <div className="mb-4">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              FDA Approved / Core Indications
+            </p>
+            <div className="space-y-1.5">
+              {drug.indications.map((ind, i) => (
+                <div key={i} className="flex items-start gap-2 text-xs text-gray-800">
+                  <span className="text-emerald-500 font-bold mt-0.5">✓</span>
+                  <span className="font-semibold">{ind}</span>
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
-      </Section>
 
-      {/* Side Effects */}
-      <Section title="Key Side Effects">
-        <div className="space-y-1">
-          {drug.sideEffects.map((se, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <span className="text-red-400 mt-0.5 text-xs">▲</span>
-              <span className="text-sm text-gray-700">{se}</span>
+        {drug.offLabel && drug.offLabel.length > 0 && (
+          <div>
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              Evidence-Based Off-Label Uses
+            </p>
+            <div className="space-y-1.5">
+              {drug.offLabel.map((ind, i) => (
+                <div key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                  <span className="text-gray-400 mt-0.5">○</span>
+                  <span>{ind}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </Section>
+          </div>
+        )}
+      </div>
 
       {/* Clinical Pearls */}
-      <Section title="Clinical Pearls">
-        <p className="text-sm text-gray-700 leading-relaxed">{drug.clinicalPearls}</p>
-      </Section>
-
-      {/* Dosing */}
-      <Section title="Dosing">
-        <div className="space-y-2">
-          <PkRow label="Start" value={drug.dosing.start} />
-          <PkRow label="Range" value={drug.dosing.range} />
-          <PkRow label="Frequency" value={drug.dosing.frequency} />
+      {drug.clinicalPearls && drug.clinicalPearls.length > 0 && (
+        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-xs mb-6">
+          <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <span>💡</span>
+            <span>High-Yield Clinical Practice Pearls</span>
+          </h2>
+          <div className="space-y-2.5">
+            {drug.clinicalPearls.map((pearl, i) => (
+              <div key={i} className="flex items-start gap-2.5 text-xs text-gray-700 bg-indigo-50/40 rounded-2xl p-3 border border-indigo-100/50">
+                <span className="text-indigo-600 font-black text-sm">✓</span>
+                <span className="leading-relaxed font-medium">{pearl}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </Section>
+      )}
 
-      {/* Pregnancy */}
-      <Section title="Pregnancy">
-        <p className="text-sm text-gray-700">{drug.pregnancy}</p>
-      </Section>
+      {/* Related Cross-Titration Protocols Link if applicable */}
+      {relatedProtocols.length > 0 && (
+        <div className="bg-gradient-to-r from-purple-900 to-indigo-900 text-white rounded-3xl p-5 shadow-lg mb-6">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-purple-700 text-purple-200">
+            Module 12 Cross-Titration
+          </span>
+          <h3 className="font-extrabold text-base mt-2 mb-1">
+            Transition Protocols Involving {drug.name}
+          </h3>
+          <p className="text-xs text-purple-200 mb-3">
+            Switching to or from {drug.name}? View structured taper algorithms and receptor kinetics:
+          </p>
 
-      {/* Source badge */}
-      <div className="mt-6 text-center">
-        <span className="text-[10px] px-2 py-1 rounded-full bg-gray-100 text-gray-400">
-          Source: {drug.dataSource}
+          <div className="space-y-2">
+            {relatedProtocols.map(proto => (
+              <button
+                key={proto.id}
+                onClick={() => navigate(`/cross-titration/${proto.id}`)}
+                className="w-full bg-white/10 hover:bg-white/20 rounded-xl p-3 text-left transition-colors flex items-center justify-between text-xs backdrop-blur-xs group"
+              >
+                <div>
+                  <span className="font-bold text-white group-hover:text-purple-200">
+                    Protocol #{proto.number}: {proto.title}
+                  </span>
+                  <p className="text-[11px] text-purple-300 mt-0.5">{proto.transitionTitle}</p>
+                </div>
+                <span className="text-purple-300 group-hover:text-white font-bold ml-2">
+                  Launch →
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* DataSource Footer */}
+      <div className="mt-8 text-center pb-6">
+        <span className="text-[11px] px-3 py-1 rounded-full bg-gray-100 text-gray-500 font-medium">
+          Source: {drug.dataSource || '12-Module Master Psychopharmacology Reference Compendium'}
         </span>
       </div>
-    </div>
-  )
-}
-
-function Section({ title, children }) {
-  return (
-    <div className="mb-5">
-      <h2 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-1">
-        {title}
-      </h2>
-      {children}
-    </div>
-  )
-}
-
-function PkRow({ label, value }) {
-  return (
-    <div className="flex items-start gap-2">
-      <span className="text-xs font-semibold text-gray-400 w-24 flex-shrink-0">{label}</span>
-      <span className="text-sm text-gray-700">{value}</span>
     </div>
   )
 }
