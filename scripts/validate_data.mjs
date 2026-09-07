@@ -31,8 +31,8 @@ let errors = []
 let warnings = []
 
 // Guard 1: Record count
-if (drugs.length !== 179) {
-  errors.push(`Expected exactly 179 drug records, found ${drugs.length}`)
+if (drugs.length !== 185) {
+  errors.push(`Expected exactly 185 drug records, found ${drugs.length}`)
 }
 
 // Allowed clinical dose ending suffixes / qualifiers

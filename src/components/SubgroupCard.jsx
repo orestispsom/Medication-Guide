@@ -6,9 +6,17 @@ export default function SubgroupCard({ subgroup }) {
   const drugsInSubgroup = data.drugs.filter(d => d.subgroupId === subgroup.id)
   const drugCount = drugsInSubgroup.length
 
+  const handleClick = () => {
+    if (subgroup.id === 'sg-lithium') {
+      navigate('/drug/lithium')
+      return
+    }
+    navigate(`/subgroup/${subgroup.id}`)
+  }
+
   return (
     <button
-      onClick={() => navigate(`/subgroup/${subgroup.id}`)}
+      onClick={handleClick}
       className="bg-white dark:bg-[#111827] rounded-2xl px-4 py-3.5 sm:px-5 sm:py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all duration-200 text-left border border-slate-200/90 dark:border-slate-800/90 group w-full cursor-pointer flex items-center justify-between gap-3"
     >
       <h3 className="font-display font-bold text-slate-900 dark:text-white text-[15px] sm:text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">

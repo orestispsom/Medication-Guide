@@ -48,6 +48,7 @@ export const RECEPTOR_COLORS = {
   'MOR': '#E11D48',
   'KOR': '#BE123C',
   'DOR': '#9F1239',
+  'CGRP': '#E11D48',
   'OX1R_OX2R': '#4F46E5',
   'MT1MT2': '#9333EA',
   'Sigma1': '#D97706',
@@ -141,7 +142,7 @@ export const categorizeReceptor = (recId) => {
   if (['H1', 'H2', 'H3', 'H4'].includes(u)) return 'Histaminergic'
   if (['M1', 'M2', 'M3', 'M4', 'M5'].includes(u)) return 'Muscarinic'
   if (u.includes('GABA') || ['NMDA', 'AMPA'].includes(u)) return 'GABA & Glutamate'
-  if (['MOR', 'KOR', 'DOR', 'SIGMA1', 'OX1R_OX2R', 'MT1MT2'].includes(u)) return 'Opioid & Neuropeptides'
+  if (['MOR', 'KOR', 'DOR', 'SIGMA1', 'OX1R_OX2R', 'MT1MT2', 'CGRP'].includes(u)) return 'Opioid & Neuropeptides'
   return 'Enzymes & Channels'
 }
 
