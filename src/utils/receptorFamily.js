@@ -1,76 +1,142 @@
 // src/utils/receptorFamily.js
 
+export const RECEPTOR_COLORS = {
+  // Serotonergic (5-HT & SERT) - Light blue hues
+  '5HT1A': '#38BDF8',
+  '5HT1B': '#0EA5E9',
+  '5HT1D': '#0284C7',
+  '5HT2A': '#06B6D4',
+  '5HT2C': '#0891B2',
+  '5HT3': '#60A5FA',
+  '5HT6': '#818CF8',
+  '5HT7': '#3B82F6',
+  'SERT': '#0284C7',
+
+  // Dopaminergic (D & DAT) - Pink and soft pink hues
+  'D1': '#F472B6',
+  'D2': '#EC4899',
+  'D3': '#DB2777',
+  'D4': '#FB7185',
+  'DAT': '#F43F5E',
+
+  // Transporters - NET in brimstone yellow, others distinct
+  'NET': '#CA8A04',
+  'VMAT2': '#A855F7',
+  'SV2A': '#2563EB',
+
+  // Adrenergic - Yellowgreen hues
+  'Alpha1': '#84CC16',
+  'Alpha2A': '#65A30D',
+
+  // Histaminergic - Light yellow hues
+  'H1': '#EAB308',
+  'H3': '#F59E0B',
+
+  // Muscarinic - Teal / Turquoise hues
+  'M1': '#0D9488',
+  'M2': '#0F766E',
+  'M3': '#14B8A6',
+  'M4': '#06B6D4',
+
+  // GABA & Glutamate - Purple (GABA) vs Orange (Glutamate)
+  'GABAA': '#7C3AED',
+  'GABAB': '#6D28D9',
+  'NMDA': '#EA580C',
+  'AMPA': '#F97316',
+
+  // Opioid & Neuropeptides - Ruby/Crimson (Opioids) vs Violet/Indigo/Ochre
+  'MOR': '#E11D48',
+  'KOR': '#BE123C',
+  'DOR': '#9F1239',
+  'OX1R_OX2R': '#4F46E5',
+  'MT1MT2': '#9333EA',
+  'Sigma1': '#D97706',
+
+  // Voltage-Gated Ion Channels - Red / Coral / Magenta
+  'Nav': '#DC2626',
+  'Cav': '#B91C1C',
+  'hERG': '#C026D3',
+  'RyR1': '#991B1B',
+
+  // Enzymes - Emerald (Cholinesterase) & Amber/Bronze (MAO/ALDH)
+  'AChE': '#059669',
+  'BuChE': '#047857',
+  'MAO-A': '#B45309',
+  'MAO-B': '#92400E',
+  'ALDH': '#78350F',
+}
+
 export const RECEPTOR_FAMILIES = [
   {
     id: 'Serotonergic',
-    name: 'Serotonin (5-HT)',
+    name: 'Serotonin (5-HT & SERT)',
     shortName: '5-HT Serotonin',
-    color: '#10B981', // Emerald Green
+    color: '#0EA5E9', // Light Blue
     description: 'Mood, anxiety, cognition, impulsivity, and sleep architecture',
   },
   {
     id: 'Dopaminergic',
-    name: 'Dopamine (D)',
+    name: 'Dopamine (D & DAT)',
     shortName: 'D Dopamine',
-    color: '#8B5CF6', // Violet / Purple
+    color: '#EC4899', // Pink
     description: 'Motivation, reward, motor gating, and prefrontal executive function',
   },
   {
     id: 'Transporters',
-    name: 'Transporters (SERT/NET/DAT)',
+    name: 'Transporters (NET / VMAT2 / SV2A)',
     shortName: 'Transporters',
-    color: '#3B82F6', // Sapphire Blue
+    color: '#CA8A04', // Brimstone Yellow / Transporters
     description: 'Presynaptic monoamine reuptake clearance and vesicular packaging',
   },
   {
     id: 'Adrenergic',
     name: 'Adrenergic (α/β)',
     shortName: 'Adrenergic',
-    color: '#EF4444', // Crimson Red
+    color: '#84CC16', // Yellowgreen
     description: 'Arousal, blood pressure tone, vigilance, and autonomic feedback',
   },
   {
     id: 'Histaminergic',
     name: 'Histamine (H)',
     shortName: 'Histamine',
-    color: '#F59E0B', // Amber / Warm Orange
+    color: '#EAB308', // Light Yellow
     description: 'Wakefulness, sedation threshold, appetite, and metabolic regulation',
   },
   {
     id: 'Muscarinic',
     name: 'Muscarinic (M)',
     shortName: 'Muscarinic',
-    color: '#06B6D4', // Cyan / Teal
+    color: '#0D9488', // Teal / Turquoise
     description: 'Parasympathetic tone, secretions, memory, and striatal balance',
   },
   {
     id: 'GABA & Glutamate',
     name: 'GABA & Glutamate',
     shortName: 'GABA/Glutamate',
-    color: '#6366F1', // Royal Indigo
-    description: 'Major inhibitory and excitatory neurotransmission and synaptic plasticity',
+    color: '#7C3AED', // Royal Purple
+    description: 'Major inhibitory (GABA) and excitatory (Glutamate) neurotransmission',
   },
   {
     id: 'Opioid & Neuropeptides',
     name: 'Opioid & Neuropeptides',
     shortName: 'Opioids/Peptides',
-    color: '#EC4899', // Pink / Magenta
+    color: '#E11D48', // Ruby Crimson / Peptides
     description: 'Endorphin hedonic tone, analgesia, circadian timing, and orexin gating',
   },
   {
     id: 'Enzymes & Channels',
     name: 'Enzymes & Ion Channels',
     shortName: 'Enzymes/Channels',
-    color: '#F97316', // Orange / Coral
+    color: '#DC2626', // Red / Emerald
     description: 'Voltage-gated cardiac/neuronal channels, monoamine catabolism, and release',
   }
 ]
 
 export const categorizeReceptor = (recId) => {
   const u = (recId || '').toUpperCase()
-  if (u.startsWith('5HT') || u.startsWith('5-HT')) return 'Serotonergic'
-  if (u.startsWith('D') && ['D1', 'D2', 'D3', 'D4', 'D5'].includes(u)) return 'Dopaminergic'
-  if (['SERT', 'NET', 'DAT', 'VMAT2'].includes(u)) return 'Transporters'
+  if (u.startsWith('5HT') || u.startsWith('5-HT') || u === 'SERT') return 'Serotonergic'
+  if ((u.startsWith('D') && ['D1', 'D2', 'D3', 'D4', 'D5'].includes(u)) || u === 'DAT') return 'Dopaminergic'
+  if (['NET', 'VMAT2', 'SV2A'].includes(u)) return 'Transporters'
   if (u.startsWith('ALPHA') || u.startsWith('BETA') || u.startsWith('Α') || u.startsWith('Β')) return 'Adrenergic'
   if (['H1', 'H2', 'H3', 'H4'].includes(u)) return 'Histaminergic'
   if (['M1', 'M2', 'M3', 'M4', 'M5'].includes(u)) return 'Muscarinic'
@@ -84,6 +150,12 @@ export const getReceptorFamily = (recId) => {
   return RECEPTOR_FAMILIES.find(f => f.id === famId) || RECEPTOR_FAMILIES[8]
 }
 
+export const getReceptorColor = (recId) => {
+  if (RECEPTOR_COLORS[recId]) return RECEPTOR_COLORS[recId]
+  const fam = getReceptorFamily(recId)
+  return fam ? fam.color : '#0EA5E9'
+}
+
 export const getReceptorFamilyColor = (recId) => {
-  return getReceptorFamily(recId).color
+  return getReceptorColor(recId)
 }

@@ -296,7 +296,7 @@
       "id": "5HT1A",
       "fullName": "Serotonin 5-HT1A Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#27AE60",
+      "color": "#38BDF8",
       "action": "Partial agonism / Somatodendritic autoreceptor agonism",
       "therapeuticEffect": "Anxiolytic, antidepressant, neuroprotective, reduces EPS",
       "sideEffects": "Transient nausea, dizziness"
@@ -305,7 +305,7 @@
       "id": "5HT1B",
       "fullName": "Serotonin 5-HT1B Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#1E8449",
+      "color": "#0EA5E9",
       "action": "Partial agonism / Agonism",
       "therapeuticEffect": "Modulates terminal serotonin and dopamine release; anti-migraine and pro-cognitive",
       "sideEffects": "Dizziness, chest tightness (triptans)"
@@ -314,7 +314,7 @@
       "id": "5HT1D",
       "fullName": "Serotonin 5-HT1D Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#196F3D",
+      "color": "#0284C7",
       "action": "Antagonism / Agonism",
       "therapeuticEffect": "Presynaptic terminal autoreceptor; disinhibits serotonin release",
       "sideEffects": "Well tolerated"
@@ -323,7 +323,7 @@
       "id": "5HT2A",
       "fullName": "Serotonin 5-HT2A Receptor",
       "type": "GPCR (Gq/11)",
-      "color": "#2ECC71",
+      "color": "#06B6D4",
       "action": "Inverse agonism / Antagonism",
       "therapeuticEffect": "Disinhibits striatal dopamine (reduces EPS), improves slow-wave sleep, broad antidepressant enhancement",
       "sideEffects": "Low liability; sedation in combination"
@@ -332,7 +332,7 @@
       "id": "5HT2C",
       "fullName": "Serotonin 5-HT2C Receptor",
       "type": "GPCR (Gq/11)",
-      "color": "#16A085",
+      "color": "#0891B2",
       "action": "Antagonism",
       "therapeuticEffect": "Disinhibits dopamine and norepinephrine release in prefrontal cortex (pro-cognitive)",
       "sideEffects": "Hyperphagia, appetite surge, metabolic weight gain"
@@ -341,7 +341,7 @@
       "id": "5HT3",
       "fullName": "Serotonin 5-HT3 Receptor",
       "type": "Ligand-gated Cation Channel",
-      "color": "#52BE80",
+      "color": "#60A5FA",
       "action": "Antagonism",
       "therapeuticEffect": "Potent antiemetic, improves GI tolerance, enhances prefrontal acetylcholine/histamine release",
       "sideEffects": "Constipation, headache"
@@ -350,7 +350,7 @@
       "id": "5HT6",
       "fullName": "Serotonin 5-HT6 Receptor",
       "type": "GPCR (Gs)",
-      "color": "#48C9B0",
+      "color": "#818CF8",
       "action": "Antagonism",
       "therapeuticEffect": "Enhances prefrontal cholinergic and glutamatergic neurotransmission; pro-cognitive",
       "sideEffects": "Well tolerated"
@@ -359,7 +359,7 @@
       "id": "5HT7",
       "fullName": "Serotonin 5-HT7 Receptor",
       "type": "GPCR (Gs)",
-      "color": "#1ABC9C",
+      "color": "#3B82F6",
       "action": "Antagonism",
       "therapeuticEffect": "Circadian rhythm regulation, REM sleep normalization, pro-cognitive and antidepressant synergy",
       "sideEffects": "Well tolerated"
@@ -368,7 +368,7 @@
       "id": "D1",
       "fullName": "Dopamine D1 Receptor",
       "type": "GPCR (Gs/olf)",
-      "color": "#8E44AD",
+      "color": "#F472B6",
       "action": "Agonism / Antagonism",
       "therapeuticEffect": "Direct pathway motor activation, working memory enhancement in prefrontal cortex",
       "sideEffects": "Restlessness, tachycardia"
@@ -377,7 +377,7 @@
       "id": "D2",
       "fullName": "Dopamine D2 Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#9B59B6",
+      "color": "#EC4899",
       "action": "Antagonism / Partial Agonism",
       "therapeuticEffect": "Antipsychotic efficacy (positive symptoms) via mesolimbic blockade (65-80% window)",
       "sideEffects": "EPS, tardive dyskinesia (>80% occupancy), hyperprolactinemia, motor flattening"
@@ -386,7 +386,7 @@
       "id": "D3",
       "fullName": "Dopamine D3 Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#A569BD",
+      "color": "#DB2777",
       "action": "Partial Agonism / Antagonism",
       "therapeuticEffect": "Mesolimbic/ventral striatal gating; antidepressant, pro-motivational, and pro-cognitive",
       "sideEffects": "Nausea, restlessness, insomnia"
@@ -395,7 +395,7 @@
       "id": "D4",
       "fullName": "Dopamine D4 Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#BB8FCE",
+      "color": "#FB7185",
       "action": "Antagonism",
       "therapeuticEffect": "Cortical and hippocampal attention processing; atypical antipsychotic signature",
       "sideEffects": "Well tolerated"
@@ -404,7 +404,7 @@
       "id": "H1",
       "fullName": "Histamine H1 Receptor",
       "type": "GPCR (Gq/11)",
-      "color": "#E67E22",
+      "color": "#EAB308",
       "action": "Antagonism (Inverse Agonism)",
       "therapeuticEffect": "Sedation, hypnotic synergy, relief of anxious insomnia, antipruritic",
       "sideEffects": "Daytime drowsiness, heavy sedation, appetite stimulation, massive weight gain"
@@ -413,7 +413,7 @@
       "id": "H3",
       "fullName": "Histamine H3 Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#D35400",
+      "color": "#F59E0B",
       "action": "Inverse Agonism / Antagonism",
       "therapeuticEffect": "Disinhibits cerebral histamine and acetylcholine release; promotes wakefulness and alertness",
       "sideEffects": "Insomnia, mild agitation"
@@ -422,7 +422,7 @@
       "id": "M1",
       "fullName": "Muscarinic M1 Receptor",
       "type": "GPCR (Gq/11)",
-      "color": "#34495E",
+      "color": "#0D9488",
       "action": "Antagonism / Agonism",
       "therapeuticEffect": "Antagonism reduces EPS; central M1 agonism (Cobenfy) enhances cognition and working memory",
       "sideEffects": "Dry mouth, blurred vision, constipation, urinary retention, delirium, cognitive impairment"
@@ -431,7 +431,7 @@
       "id": "M2",
       "fullName": "Muscarinic M2 Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#2C3E50",
+      "color": "#0F766E",
       "action": "Antagonism / Agonism",
       "therapeuticEffect": "Autoreceptor modulation and cardiac parasympathetic tone",
       "sideEffects": "Tachycardia"
@@ -440,7 +440,7 @@
       "id": "M3",
       "fullName": "Muscarinic M3 Receptor",
       "type": "GPCR (Gq/11)",
-      "color": "#1C2833",
+      "color": "#14B8A6",
       "action": "Antagonism",
       "therapeuticEffect": "Reduces peripheral secretions and smooth muscle spasms",
       "sideEffects": "Severe constipation, paralytic ileus, dry eyes/mouth"
@@ -449,7 +449,7 @@
       "id": "M4",
       "fullName": "Muscarinic M4 Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#2E4053",
+      "color": "#06B6D4",
       "action": "Agonism / Antagonism",
       "therapeuticEffect": "Presynaptic striatal M4 agonism (Cobenfy) inhibits excess dopamine release without direct D2 blockade",
       "sideEffects": "Sialorrhea (clozapine), sweating, mild nausea"
@@ -458,7 +458,7 @@
       "id": "Alpha1",
       "fullName": "Alpha-1 Adrenergic Receptor",
       "type": "GPCR (Gq/11)",
-      "color": "#E74C3C",
+      "color": "#84CC16",
       "action": "Antagonism",
       "therapeuticEffect": "Prazosin PTSD nightmare reduction, anxiolytic motor dampening",
       "sideEffects": "Orthostatic hypotension, reflex tachycardia, nasal congestion, syncope, priapism"
@@ -467,7 +467,7 @@
       "id": "Alpha2A",
       "fullName": "Alpha-2A Adrenergic Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#C0392B",
+      "color": "#65A30D",
       "action": "Postsynaptic Agonism / Antagonism",
       "therapeuticEffect": "Strengthens prefrontal cortical networks (ADHD, tics, PTSD); reduces sympathetic outflow",
       "sideEffects": "Hypotension, bradycardia, sedation, rebound hypertension upon abrupt withdrawal"
@@ -476,7 +476,7 @@
       "id": "GABAA",
       "fullName": "GABA-A Receptor Complex",
       "type": "Ligand-gated Chloride Channel",
-      "color": "#27AE60",
+      "color": "#7C3AED",
       "action": "Positive Allosteric Modulation (PAM)",
       "therapeuticEffect": "Rapid anxiolysis, anticonvulsant, muscle relaxation, sedation, catatonia reversal",
       "sideEffects": "Sedation, ataxia, anterograde amnesia, respiratory depression (with opioids), physical dependence"
@@ -485,7 +485,7 @@
       "id": "GABAB",
       "fullName": "GABA-B Receptor",
       "type": "GPCR (Gi/o)",
-      "color": "#229954",
+      "color": "#6D28D9",
       "action": "Agonism (Baclofen)",
       "therapeuticEffect": "Spasticity reduction, dampens dopaminergic reward surges in AUD/addiction",
       "sideEffects": "Sedation, dizziness, weakness, withdrawal delirium"
@@ -494,7 +494,7 @@
       "id": "OX1R_OX2R",
       "fullName": "Dual Orexin Receptors (OX1R / OX2R)",
       "type": "GPCR (Gq/Gi)",
-      "color": "#117A65",
+      "color": "#4F46E5",
       "action": "Antagonism",
       "therapeuticEffect": "Inactivates wake-promoting orexinergic neuropeptides, enabling physiological sleep architecture",
       "sideEffects": "Somnolence, rare sleep paralysis, vivid dreams"
@@ -503,7 +503,7 @@
       "id": "NMDA",
       "fullName": "NMDA Glutamate Receptor",
       "type": "Ionotropic Cation Channel",
-      "color": "#D4AC0D",
+      "color": "#EA580C",
       "action": "Antagonism / Uncompetitive Channel Block",
       "therapeuticEffect": "Rapid synaptogenesis and antidepressant action (ketamine/esketamine), neuroprotection (memantine)",
       "sideEffects": "Dissociation, depersonalization, transient hypertension, psychotomimesis"
@@ -512,7 +512,7 @@
       "id": "AMPA",
       "fullName": "AMPA / Kainate Glutamate Receptor",
       "type": "Ionotropic Cation Channel",
-      "color": "#F39C12",
+      "color": "#F97316",
       "action": "Allosteric Antagonism (Perampanel)",
       "therapeuticEffect": "Inhibits fast excitatory transmission; potent broad-spectrum seizure control",
       "sideEffects": "Irritability, aggression, dizziness, ataxia"
@@ -521,7 +521,7 @@
       "id": "MT1MT2",
       "fullName": "Melatonin MT1 / MT2 Receptors",
       "type": "GPCR (Gi/o)",
-      "color": "#7D3C98",
+      "color": "#9333EA",
       "action": "Agonism",
       "therapeuticEffect": "Re-synchronizes suprachiasmatic circadian rhythm; sleep-phase shifts",
       "sideEffects": "Drowsiness, fatigue, headache"
@@ -530,7 +530,7 @@
       "id": "Sigma1",
       "fullName": "Sigma-1 Chaperone Receptor",
       "type": "Endoplasmic Reticulum Chaperone",
-      "color": "#F4D03F",
+      "color": "#D97706",
       "action": "Agonism",
       "therapeuticEffect": "Neuroplasticity, BDNF upregulation, cognitive enhancement, anti-inflammatory",
       "sideEffects": "Well tolerated"
@@ -539,7 +539,7 @@
       "id": "MOR",
       "fullName": "Mu-Opioid Receptor (MOR)",
       "type": "GPCR (Gi/o)",
-      "color": "#884EA0",
+      "color": "#E11D48",
       "action": "Partial Agonism / Antagonism / Agonism",
       "therapeuticEffect": "Analgesia, euphoria, maintenance therapy in OUD (buprenorphine, methadone)",
       "sideEffects": "Respiratory depression, constipation, physical dependence, sedation, nausea"
@@ -548,7 +548,7 @@
       "id": "KOR",
       "fullName": "Kappa-Opioid Receptor (KOR)",
       "type": "GPCR (Gi/o)",
-      "color": "#76448A",
+      "color": "#BE123C",
       "action": "Antagonism (Buprenorphine)",
       "therapeuticEffect": "Blocks dynorphin stress-induced dysphoria and anhedonia; antidepressant synergy",
       "sideEffects": "Well tolerated (antagonists)"
@@ -557,7 +557,7 @@
       "id": "DOR",
       "fullName": "Delta-Opioid Receptor (DOR)",
       "type": "GPCR (Gi/o)",
-      "color": "#633974",
+      "color": "#9F1239",
       "action": "Modulation",
       "therapeuticEffect": "Emotional regulation, anxiolysis, antinociception",
       "sideEffects": "Well tolerated"
@@ -566,7 +566,7 @@
       "id": "SERT",
       "fullName": "Serotonin Transporter",
       "type": "Monoamine SLC6A4 Transporter",
-      "color": "#2980B9",
+      "color": "#0284C7",
       "action": "Reuptake Inhibition",
       "therapeuticEffect": "Increases synaptic serotonin; primary mechanism of SSRIs/SNRIs for depression/anxiety",
       "sideEffects": "GI nausea/diarrhea, sexual dysfunction, insomnia, platelet anti-aggregation"
@@ -575,7 +575,7 @@
       "id": "NET",
       "fullName": "Norepinephrine Transporter",
       "type": "Monoamine SLC6A2 Transporter",
-      "color": "#3498DB",
+      "color": "#CA8A04",
       "action": "Reuptake Inhibition",
       "therapeuticEffect": "Increases synaptic norepinephrine; energy, focus, psychomotor activation, neuropathic pain relief",
       "sideEffects": "Tachycardia, hypertension, diaphoresis, urinary hesitancy, tremor, dry mouth"
@@ -584,7 +584,7 @@
       "id": "DAT",
       "fullName": "Dopamine Transporter",
       "type": "Monoamine SLC6A3 Transporter",
-      "color": "#5DADE2",
+      "color": "#F43F5E",
       "action": "Reuptake Inhibition",
       "therapeuticEffect": "Increases synaptic dopamine in nucleus accumbens & cortex; motivation, reward, focus in ADHD",
       "sideEffects": "Appetite suppression, insomnia, motor restlessness, abuse liability"
@@ -593,7 +593,7 @@
       "id": "VMAT2",
       "fullName": "Vesicular Monoamine Transporter 2",
       "type": "Presynaptic Vesicular Transporter",
-      "color": "#6C3483",
+      "color": "#A855F7",
       "action": "Inhibition",
       "therapeuticEffect": "Depletes presynaptic dopamine storage, resolving involuntary movements in Tardive Dyskinesia",
       "sideEffects": "Somnolence, depression, parkinsonism, QTc prolongation"
@@ -602,7 +602,7 @@
       "id": "SV2A",
       "fullName": "Synaptic Vesicle Protein 2A",
       "type": "Presynaptic Vesicle Glycoprotein",
-      "color": "#1F618D",
+      "color": "#2563EB",
       "action": "Ligand Binding (Levetiracetam / Brivaracetam)",
       "therapeuticEffect": "Inhibits vesicle exocytosis and excessive burst firing; broad seizure control",
       "sideEffects": "Somnolence, fatigue, behavioral irritability, aggression"
@@ -611,7 +611,7 @@
       "id": "Nav",
       "fullName": "Voltage-Gated Sodium Channels (Fast/Slow)",
       "type": "Voltage-gated Ion Channel",
-      "color": "#B03A2E",
+      "color": "#DC2626",
       "action": "Inactivation State Stabilization",
       "therapeuticEffect": "Suppresses high-frequency neuronal firing; mood stabilization and antiepileptic efficacy",
       "sideEffects": "Ataxia, dizziness, diplopia, cognitive slowing, Stevens-Johnson Syndrome (rare)"
@@ -620,7 +620,7 @@
       "id": "Cav",
       "fullName": "Voltage-Gated Calcium Channels (T-Type / Alpha-2-Delta)",
       "type": "Voltage-gated Ion Channel",
-      "color": "#922B21",
+      "color": "#B91C1C",
       "action": "Blockade / Ligand Binding",
       "therapeuticEffect": "Gabapentinoids reduce glutamate release; ethosuximide/zonisamide block absence bursts",
       "sideEffects": "Sedation, peripheral edema, weight gain, dizziness"
@@ -629,7 +629,7 @@
       "id": "hERG",
       "fullName": "hERG Potassium Channel (IKr)",
       "type": "Cardiac Potassium Channel",
-      "color": "#A93226",
+      "color": "#C026D3",
       "action": "Channel Blockade (Hazard)",
       "therapeuticEffect": "Zero therapeutic gain (off-target cardiac liability)",
       "sideEffects": "Delayed ventricular repolarization, QTc prolongation, Torsades de Pointes hazard"
@@ -638,7 +638,7 @@
       "id": "RyR1",
       "fullName": "Ryanodine Receptor 1 (Skeletal)",
       "type": "Sarcoplasmic Reticulum Calcium Channel",
-      "color": "#78281F",
+      "color": "#991B1B",
       "action": "Inhibition (Dantrolene)",
       "therapeuticEffect": "Halts excitation-contraction uncoupling, rapid hyperthermia and rigidity reversal in NMS",
       "sideEffects": "Muscle flaccidity, weakness, hepatotoxicity (chronic oral)"
@@ -647,7 +647,7 @@
       "id": "AChE",
       "fullName": "Acetylcholinesterase Enzyme",
       "type": "Hydrolytic Serine Protease",
-      "color": "#148F77",
+      "color": "#059669",
       "action": "Reversible Inhibition",
       "therapeuticEffect": "Increases acetylcholine availability in cortical synaptosomes; enhances cognition in Alzheimer's disease",
       "sideEffects": "Nausea, diarrhea, vomiting, bradycardia, syncope, vivid dreams"
@@ -656,7 +656,7 @@
       "id": "BuChE",
       "fullName": "Butyrylcholinesterase Enzyme",
       "type": "Esterase Enzyme",
-      "color": "#117864",
+      "color": "#047857",
       "action": "Dual Inhibition (Rivastigmine)",
       "therapeuticEffect": "Glial acetylcholine hydrolysis blockade; advanced neuroprotection",
       "sideEffects": "GI hypermotility, weight loss"
@@ -665,7 +665,7 @@
       "id": "MAO-A",
       "fullName": "Monoamine Oxidase A",
       "type": "Mitochondrial Outer Membrane Enzyme",
-      "color": "#B7950B",
+      "color": "#B45309",
       "action": "Irreversible / Reversible Inhibition",
       "therapeuticEffect": "Prevents degradation of 5-HT, NE, and DA; powerful antidepressant and anxiolytic efficacy",
       "sideEffects": "Hypertensive crisis (tyramine interaction), serotonin syndrome with serotonergic drugs"
@@ -674,7 +674,7 @@
       "id": "MAO-B",
       "fullName": "Monoamine Oxidase B",
       "type": "Mitochondrial Outer Membrane Enzyme",
-      "color": "#9A7D0A",
+      "color": "#92400E",
       "action": "Irreversible Inhibition (Selegiline)",
       "therapeuticEffect": "Selectively spares dopamine degradation in basal ganglia; antiparkinsonian and antidepressant action",
       "sideEffects": "Insomnia, nausea, orthostatic hypotension"
@@ -683,7 +683,7 @@
       "id": "ALDH",
       "fullName": "Aldehyde Dehydrogenase",
       "type": "Mitochondrial Aldehyde Dehydrogenase",
-      "color": "#6E2C00",
+      "color": "#78350F",
       "action": "Irreversible Inactivation (Disulfiram)",
       "therapeuticEffect": "Accumulates toxic acetaldehyde upon alcohol ingestion; psychological deterrent for AUD",
       "sideEffects": "Severe flushing, tachycardia, hypotension, nausea/vomiting upon ethanol consumption"

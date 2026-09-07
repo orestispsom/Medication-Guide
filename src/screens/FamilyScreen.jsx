@@ -10,8 +10,14 @@ export default function FamilyScreen() {
   if (!family) return <div className="p-8 text-center text-slate-500">Family not found</div>
 
 
-  const subgroups = data.subgroups.filter(s => s.familyId === familyId)
-  const drugCount = data.drugs.filter(d => d.familyId === familyId).length
+  const rawSubgroups = data.subgroups.filter(s => s.familyId === familyId)
+  const subgroups = familyId === 'antipsychotics'
+    ? [
+        rawSubgroups.find(s => s.id === 'sg-fga'),
+        rawSubgroups.find(s => s.id === 'sg-sga'),
+        ...rawSubgroups.filter(s => s.id !== 'sg-fga' && s.id !== 'sg-sga'),
+      ].filter(Boolean)
+    : rawSubgroups
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-28">
@@ -21,9 +27,6 @@ export default function FamilyScreen() {
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           {family.name}
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          {drugCount} medications across {subgroups.length} clinical subgroups
-        </p>
       </div>
 
       <div className="space-y-3 mb-6">
