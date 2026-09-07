@@ -927,8 +927,8 @@
       "benchmarkMetrics": [
         {
           "label": "DOPAMINE D2 OCCUPANCY",
-          "value": "Moderate Block (70-",
-          "detail": "80%)"
+          "value": "Moderate Block (70-80%)",
+          "detail": "Antipsychotic window buffered by potent 5-HT2A inverse agonism"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -937,8 +937,8 @@
         },
         {
           "label": "HEPATIC METABOLISM",
-          "value": "CYP1A2 (~40%), UGT1A4,",
-          "detail": "2D6"
+          "value": "CYP1A2 (~40%), UGT1A4, 2D6",
+          "detail": "CYP1A2 strongly induced by tobacco smoking hydrocarbons"
         },
         {
           "label": "METABOLIC PROFILE",
@@ -1108,7 +1108,7 @@
         {
           "label": "DOPAMINE D2 OCCUPANCY",
           "value": "Potent Block (70-85%)",
-          "detail": "Sub-Nanomolar Striatal"
+          "detail": "Dose-dependent EPS threshold crossed above 4-6 mg/day"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -1286,7 +1286,7 @@
         {
           "label": "DOPAMINE D2 OCCUPANCY",
           "value": "Potent Block (70-80%)",
-          "detail": "Smooth Steady Plasma Profile"
+          "detail": "Continuous plasma delivery reduces peak-dose EPS surges"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -1583,8 +1583,8 @@
       "benchmarkMetrics": [
         {
           "label": "DOPAMINE D2 OCCUPANCY",
-          "value": "Partial Agonist (~30%)",
-          "detail": "High Occupancy (> 85%), Low"
+          "value": "Partial Agonist (~30% Intrinsic Activity)",
+          "detail": "High D2 occupancy (>85%) with low EPS risk; dopamine stabilizer"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -1922,8 +1922,8 @@
       "benchmarkMetrics": [
         {
           "label": "DOPAMINE D2 OCCUPANCY",
-          "value": "Lower Intrinsic Activity",
-          "detail": "~15% vs Aripiprazole's ~30%"
+          "value": "Partial Agonist (~15% Intrinsic Activity)",
+          "detail": "Lower intrinsic activity than aripiprazole; less akathisia"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -2108,6 +2108,14 @@
           "ki": "4.8 nM",
           "action": "High Affinity Block",
           "clinicalAction": "Inhibits SERT and NET reuptake; unique intrinsic antidepressant-like pharmacology among SGAs."
+        },
+        {
+          "receptor": "hERG",
+          "rawTarget": "hERG Potassium Channel (IKr / Cardiac Liability)",
+          "occupancy": 70,
+          "ki": "Cardiac Delayed Rectifier Blockade",
+          "action": "Channel Blockade (Hazard)",
+          "clinicalAction": "Delays phase 3 ventricular cardiac repolarization (IKr blockade), lengthening the QT interval and creating arrhythmogenic liability for Torsades de Pointes."
         }
       ],
       "adverseFootprint": [
@@ -3058,13 +3066,13 @@
       "benchmarkMetrics": [
         {
           "label": "DOPAMINE D2 OCCUPANCY",
-          "value": "Sub-Nanomolar D2",
-          "detail": "Block"
+          "value": "Potent Block (> 75-85%)",
+          "detail": "Crosses 80% EPS threshold at therapeutic doses (High EPS & Prolactin)"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
-          "value": "18 Hours (Oral) · 3",
-          "detail": "Weeks (Depot)"
+          "value": "18 Hours (Oral) · 3 Weeks (Depot)",
+          "detail": "Steady-state depot reached in ~3 months"
         },
         {
           "label": "HEPATIC METABOLISM",
@@ -3117,6 +3125,14 @@
           "ki": "1800 nM / > 10,000 nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Zero anticholinergic action (zero dry mouth, but zero dystonia buffer); zero antihistaminic weight gain."
+        },
+        {
+          "receptor": "hERG",
+          "rawTarget": "hERG Potassium Channel (IKr / Cardiac Liability)",
+          "occupancy": 70,
+          "ki": "Cardiac Delayed Rectifier Blockade",
+          "action": "Channel Blockade (Hazard)",
+          "clinicalAction": "Delays phase 3 ventricular cardiac repolarization (IKr blockade), lengthening the QT interval and creating arrhythmogenic liability for Torsades de Pointes."
         }
       ],
       "adverseFootprint": [
@@ -3256,6 +3272,14 @@
           "ki": "25 nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Anticholinergic activity buffers against acute dystonia, but causes dry mouth, blurry vision, and constipation."
+        },
+        {
+          "receptor": "hERG",
+          "rawTarget": "hERG Potassium Channel (IKr / Cardiac Liability)",
+          "occupancy": 70,
+          "ki": "Cardiac Delayed Rectifier Blockade",
+          "action": "Channel Blockade (Hazard)",
+          "clinicalAction": "Delays phase 3 ventricular cardiac repolarization (IKr blockade), lengthening the QT interval and creating arrhythmogenic liability for Torsades de Pointes."
         }
       ],
       "adverseFootprint": [
@@ -3769,7 +3793,7 @@
       ],
       "blackBox": {
         "title": "TAMOXIFEN ONCOLOGY FAILURE",
-        "warning": "Tamoxifen is an inactive prodrug requiring bioactivation to endoxifen by hepatic CYP2D6. Fluoxetine shuts down CYP2D6 completely, slashing endoxifen levels by 75% and doubling breast cancer recurrence mortality! Switch immediately to Venlafaxine or Escitalopram. 🌸 SARAFEM LUTEAL-PHASE REGIMEN Fluoxetine is FDA-approved for Premenstrual Dysphoric Disorder (PMDD) under the brand Sarafem. Unlike major depression, PMDD responds within hours! Dosing can be administered intermittently: 20 mg daily during the 14- day luteal phase, stopped at menses. PEARLS"
+        "warning": "Tamoxifen is an inactive prodrug requiring bioactivation to endoxifen by hepatic CYP2D6. Fluoxetine shuts down CYP2D6 completely, slashing endoxifen levels by 75% and doubling breast cancer recurrence mortality! Switch immediately to Venlafaxine or Escitalopram. 🌸 SARAFEM LUTEAL-PHASE REGIMEN Fluoxetine is FDA-approved for Premenstrual Dysphoric Disorder (PMDD) under the brand Sarafem. Unlike major depression, PMDD responds within hours! Dosing can be administered intermittently: 20 mg daily during the 14- day luteal phase, stopped at menses."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -3977,6 +4001,14 @@
           "ki": "> 1500 nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Pure S-enantiomer lacks the moderate H1 antihistaminergic antagonism of R-citalopram, avoiding daytime sedation"
+        },
+        {
+          "receptor": "hERG",
+          "rawTarget": "hERG Potassium Channel (IKr / Cardiac Liability)",
+          "occupancy": 70,
+          "ki": "Cardiac Delayed Rectifier Blockade",
+          "action": "Channel Blockade (Hazard)",
+          "clinicalAction": "Delays phase 3 ventricular cardiac repolarization (IKr blockade), lengthening the QT interval and creating arrhythmogenic liability for Torsades de Pointes."
         }
       ],
       "adverseFootprint": [
@@ -4184,7 +4216,7 @@
       ],
       "blackBox": {
         "title": "MECHANISM-BASED CYP2D6 SUICIDE BLOCK",
-        "warning": "Paroxetine’s reactive metabolite covalently binds and irreversibly inactivates CYP2D6 enzymes. It completely blocks codeine/tramadol analgesic conversion and quadruples blood levels of co-prescribed TCAs, Perphenazine, and Haloperidol. PEARLS"
+        "warning": "Paroxetine’s reactive metabolite covalently binds and irreversibly inactivates CYP2D6 enzymes. It completely blocks codeine/tramadol analgesic conversion and quadruples blood levels of co-prescribed TCAs, Perphenazine, and Haloperidol."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -4983,7 +5015,7 @@
       ],
       "blackBox": {
         "title": "BOXED WARNING: SEIZURE IN BULIMIA",
-        "warning": "Bupropion is strictly contraindicated in patients with current or prior Bulimia Nervosa or Anorexia Nervosa! Electrolyte shifts and purging drastically increase seizure incidence (up to 4-fold surge). Also contraindicated in abrupt alcohol/benzo withdrawal! ⚠️ POTENT CYP2D6 ENZYME INHIBITION Bupropion and hydroxybupropion are potent inhibitors of CYP2D6. Co-prescribing doubles to triples blood levels of Metoprolol, Atomoxetine, TCAs, and Aripiprazole. Adjust doses of co-prescribed 2D6 substrates downwards by 50%. PEARLS"
+        "warning": "Bupropion is strictly contraindicated in patients with current or prior Bulimia Nervosa or Anorexia Nervosa! Electrolyte shifts and purging drastically increase seizure incidence (up to 4-fold surge). Also contraindicated in abrupt alcohol/benzo withdrawal! ⚠️ POTENT CYP2D6 ENZYME INHIBITION Bupropion and hydroxybupropion are potent inhibitors of CYP2D6. Co-prescribing doubles to triples blood levels of Metoprolol, Atomoxetine, TCAs, and Aripiprazole. Adjust doses of co-prescribed 2D6 substrates downwards by 50%."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -5551,7 +5583,7 @@
       "titrationSchedule": [],
       "blackBox": {
         "title": "UROLOGICAL EMERGENCY: PRIAPISM",
-        "warning": "Alpha-1 adrenergic antagonism in corpora cavernosa can cause prolonged, painful erections (> 4 hours). If not treated emergently with intracavernous phenylephrine within 12 hours, ischemic tissue necrosis and permanent impotence ensue! 🫀 NEFAZODONE HEPATOTOXICITY Nefazodone carries an FDA Black Box Warning for fulminant liver failure (1 in 250,000 patient-years). Obtain baseline LFTs and monitor transaminases every 3-6 months. Discontinue immediately if AST/ALT exceed 3x ULN. PEARLS"
+        "warning": "Alpha-1 adrenergic antagonism in corpora cavernosa can cause prolonged, painful erections (> 4 hours). If not treated emergently with intracavernous phenylephrine within 12 hours, ischemic tissue necrosis and permanent impotence ensue! 🫀 NEFAZODONE HEPATOTOXICITY Nefazodone carries an FDA Black Box Warning for fulminant liver failure (1 in 250,000 patient-years). Obtain baseline LFTs and monitor transaminases every 3-6 months. Discontinue immediately if AST/ALT exceed 3x ULN."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -5782,7 +5814,7 @@
       ],
       "blackBox": {
         "title": "SEROTONIN SYNDROME VULNERABILITY",
-        "warning": "Because Dextromethorphan inhibits SERT, combining Auvelity with MAOIs is strictly contraindicated (14-day washout required). Exercise caution when co-prescribing with high-dose SSRIs, SNRIs, or Triptans to avoid serotonin toxicity. PEARLS"
+        "warning": "Because Dextromethorphan inhibits SERT, combining Auvelity with MAOIs is strictly contraindicated (14-day washout required). Exercise caution when co-prescribing with high-dose SSRIs, SNRIs, or Triptans to avoid serotonin toxicity."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6163,7 +6195,7 @@
       ],
       "blackBox": {
         "title": "BLACK BOX: PREGNANCY CONTRAINDICATION",
-        "warning": "First-trimester exposure causes a 10% risk of major congenital malformations (neural tube defects, spina bifida, cardiac defects) and a 30%-40% risk of permanent neurodevelopmental impairment (lower IQ, autism). Contraindicated in females of reproductive age! 🩸 HYPERAMMONEMIA WITH NORMAL LFTS Valproate inhibits urea cycle enzyme CPS-1, causing severe hyperammonemia with acute lethargy, confusion, and asterixis despite completely normal liver enzymes! Check stat blood ammonia; treat immediately with IV L- Carnitine. PEARLS"
+        "warning": "First-trimester exposure causes a 10% risk of major congenital malformations (neural tube defects, spina bifida, cardiac defects) and a 30%-40% risk of permanent neurodevelopmental impairment (lower IQ, autism). Contraindicated in females of reproductive age! 🩸 HYPERAMMONEMIA WITH NORMAL LFTS Valproate inhibits urea cycle enzyme CPS-1, causing severe hyperammonemia with acute lethargy, confusion, and asterixis despite completely normal liver enzymes! Check stat blood ammonia; treat immediately with IV L- Carnitine."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6279,7 +6311,7 @@
       ],
       "blackBox": {
         "title": "THE 5-DAY MISSED DOSE RULE",
-        "warning": "If a patient stops Lamotrigine for 5 consecutive days or more, hepatic glucuronidation enzymes reset! Resuming at the previous maintenance dose carries an extreme risk of fatal SJS. You must completely restart titration at 25 mg daily! 💊 ESTROGEN CONTRACEPTIVE CRASH Estrogen-containing oral contraceptives induce UGT1A4 glucuronidation, cutting Lamotrigine blood levels by 50% and triggering severe depressive relapses! During the 7- day pill-free week, levels double, causing toxic dizziness and ataxia. PEARLS"
+        "warning": "If a patient stops Lamotrigine for 5 consecutive days or more, hepatic glucuronidation enzymes reset! Resuming at the previous maintenance dose carries an extreme risk of fatal SJS. You must completely restart titration at 25 mg daily! 💊 ESTROGEN CONTRACEPTIVE CRASH Estrogen-containing oral contraceptives induce UGT1A4 glucuronidation, cutting Lamotrigine blood levels by 50% and triggering severe depressive relapses! During the 7- day pill-free week, levels double, causing toxic dizziness and ataxia."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6399,7 +6431,7 @@
       ],
       "blackBox": {
         "title": "ORAL CONTRACEPTIVE FAILURE",
-        "warning": "Extreme induction of CYP3A4 accelerates estrogen and progestin clearance by over 50%, resulting in breakthrough ovulation and unplanned pregnancy! Female patients must use alternative non-hormonal barrier contraception or an IUD. PEARLS"
+        "warning": "Extreme induction of CYP3A4 accelerates estrogen and progestin clearance by over 50%, resulting in breakthrough ovulation and unplanned pregnancy! Female patients must use alternative non-hormonal barrier contraception or an IUD."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6537,7 +6569,7 @@
       ],
       "blackBox": {
         "title": "30% CROSS-REACTIVITY WITH CBZ",
-        "warning": "Approximately 25% to 30% of patients who have experienced a drug rash or allergic reaction to Carbamazepine will exhibit cross-reactivity to Oxcarbazepine. Exercise extreme caution in patients with prior anticonvulsant cutaneous reactions! 💊 OXTELLAR XR EMPTY STOMACH RULE Unlike immediate-release Trileptal (which can be taken with food), extended-release Oxtellar XR tablets must be taken on an empty stomach (at least 1 hour before or 2 hours after food); food significantly increases peak plasma levels, worsening sedation. PEARLS"
+        "warning": "Approximately 25% to 30% of patients who have experienced a drug rash or allergic reaction to Carbamazepine will exhibit cross-reactivity to Oxcarbazepine. Exercise extreme caution in patients with prior anticonvulsant cutaneous reactions! 💊 OXTELLAR XR EMPTY STOMACH RULE Unlike immediate-release Trileptal (which can be taken with food), extended-release Oxtellar XR tablets must be taken on an empty stomach (at least 1 hour before or 2 hours after food); food significantly increases peak plasma levels, worsening sedation."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6659,7 +6691,7 @@
       ],
       "blackBox": {
         "title": "RENAL DOSE ADJUSTMENT (CRCL < 50)",
-        "warning": "In moderate-to-severe renal impairment (CrCl < 50 mL/ min), clearance of S-licarbazepine is reduced by 50%. Reduce initial and maintenance doses by 50% (start 200 mg QHS; maximum 600-800 mg QHS). 💊 CYP2C19 INHIBITION & PHENYTOIN Eslicarbazepine is an inhibitor of CYP2C19. Co- administration with phenytoin increases phenytoin plasma concentrations by 30%-40%, requiring therapeutic drug monitoring and potential phenytoin dose reduction. PEARLS"
+        "warning": "In moderate-to-severe renal impairment (CrCl < 50 mL/ min), clearance of S-licarbazepine is reduced by 50%. Reduce initial and maintenance doses by 50% (start 200 mg QHS; maximum 600-800 mg QHS). 💊 CYP2C19 INHIBITION & PHENYTOIN Eslicarbazepine is an inhibitor of CYP2C19. Co- administration with phenytoin increases phenytoin plasma concentrations by 30%-40%, requiring therapeutic drug monitoring and potential phenytoin dose reduction."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6785,7 +6817,7 @@
       ],
       "blackBox": {
         "title": "ORAL CONTRACEPTIVE FAILURE (>= 200 MG)",
-        "warning": "At doses >= 200 mg/day, topiramate mildly induces CYP3A4, reducing ethinyl estradiol and progestin exposure. Patients must be warned of contraceptive failure; recommend barrier methods or IUDs. 👁️ ACUTE ANGLE-CLOSURE GLAUCOMA Presents within the first 2-4 weeks with sudden ocular pain, periorbital headache, acute myopia, and visual blurring due to ciliochoroidal effusion. Immediate emergency: permanently discontinue topiramate! PEARLS"
+        "warning": "At doses >= 200 mg/day, topiramate mildly induces CYP3A4, reducing ethinyl estradiol and progestin exposure. Patients must be warned of contraceptive failure; recommend barrier methods or IUDs. 👁️ ACUTE ANGLE-CLOSURE GLAUCOMA Presents within the first 2-4 weeks with sudden ocular pain, periorbital headache, acute myopia, and visual blurring due to ciliochoroidal effusion. Immediate emergency: permanently discontinue topiramate!"
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -6925,7 +6957,7 @@
       ],
       "blackBox": {
         "title": "MANDATORY RENAL GFR SCALING",
-        "warning": "Eliminated 100% unchanged in urine. In renal insufficiency, adjust strictly by CrCl: CrCl 30-59 mL/min: max 1400 mg/day; CrCl 15-29 mL/min: max 700 mg/day; CrCl < 15 mL/min: max 300 mg/day. Post-hemodialysis: supplemental dose needed. ☠️ OPIOID CO-PRESCRIBING BLACK BOX Concomitant use of gabapentinoids with opioids (buprenorphine, oxycodone, morphine) produces synergistic central respiratory depression, carrying an FDA black-box warning for fatal respiratory arrest. Monitor closely! PEARLS"
+        "warning": "Eliminated 100% unchanged in urine. In renal insufficiency, adjust strictly by CrCl: CrCl 30-59 mL/min: max 1400 mg/day; CrCl 15-29 mL/min: max 700 mg/day; CrCl < 15 mL/min: max 300 mg/day. Post-hemodialysis: supplemental dose needed. ☠️ OPIOID CO-PRESCRIBING BLACK BOX Concomitant use of gabapentinoids with opioids (buprenorphine, oxycodone, morphine) produces synergistic central respiratory depression, carrying an FDA black-box warning for fatal respiratory arrest. Monitor closely!"
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -7050,7 +7082,7 @@
       ],
       "blackBox": {
         "title": "RENAL GFR DOSING MANDATE",
-        "warning": "Eliminated > 90% unchanged by the kidneys. Mandatory dose adjustments: CrCl 30-59 mL/min: 75-300 mg/day (divided BID); CrCl 15-29 mL/min: 25-150 mg/day; CrCl < 15 mL/min: 25-75 mg once daily. Administer 25-100 mg supplemental post-hemodialysis. ☠️ OPIOID SYNERGY & RESPIRATORY COLLAPSE Co-prescribing with opioids (methadone, oxycodone, morphine) produces synergistic central nervous system and respiratory depression. FDA boxed warnings apply; initiate at lowest doses with continuous vigilance. PEARLS"
+        "warning": "Eliminated > 90% unchanged by the kidneys. Mandatory dose adjustments: CrCl 30-59 mL/min: 75-300 mg/day (divided BID); CrCl 15-29 mL/min: 25-150 mg/day; CrCl < 15 mL/min: 25-75 mg once daily. Administer 25-100 mg supplemental post-hemodialysis. ☠️ OPIOID SYNERGY & RESPIRATORY COLLAPSE Co-prescribing with opioids (methadone, oxycodone, morphine) produces synergistic central nervous system and respiratory depression. FDA boxed warnings apply; initiate at lowest doses with continuous vigilance."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -7182,7 +7214,7 @@
       ],
       "blackBox": {
         "title": "CARBAMAZEPINE INDUCTION COLLAPSE",
-        "warning": "Carbamazepine powerfully induces hepatic CYP3A4, increasing quetiapine clearance by up to 5-fold and dropping plasma concentrations by 80%! Co- administration is clinically irrational; quetiapine becomes ineffective at standard doses. 🩸 METABOLIC SYNDROME SCREENING MANDATE High liability for rapid weight gain, insulin resistance, and profound hypertriglyceridemia. Mandatory monitoring: fasting glucose, lipid panel, HbA1c, and waist circumference at baseline, 12 weeks, and annually thereafter. PEARLS"
+        "warning": "Carbamazepine powerfully induces hepatic CYP3A4, increasing quetiapine clearance by up to 5-fold and dropping plasma concentrations by 80%! Co- administration is clinically irrational; quetiapine becomes ineffective at standard doses. 🩸 METABOLIC SYNDROME SCREENING MANDATE High liability for rapid weight gain, insulin resistance, and profound hypertriglyceridemia. Mandatory monitoring: fasting glucose, lipid panel, HbA1c, and waist circumference at baseline, 12 weeks, and annually thereafter."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -7343,7 +7375,7 @@
       ],
       "blackBox": {
         "title": "AKATHISIA RECOGNITION & TREATMENT",
-        "warning": "Akathisia affects 10%-15% of patients, typically appearing within the first 2 weeks. Differentiate from bipolar agitation! Treat promptly with low-dose Propranolol (20- 40 mg BID) or oral Propranolol/Mirtazapine rather than raising doses. PEARLS"
+        "warning": "Akathisia affects 10%-15% of patients, typically appearing within the first 2 weeks. Differentiate from bipolar agitation! Treat promptly with low-dose Propranolol (20- 40 mg BID) or oral Propranolol/Mirtazapine rather than raising doses."
       },
       "foodRequirement": "Take with food (>= 350 calories, light meal/snack) to double systemic absorption.",
       "clinicalPearls": [
@@ -7482,7 +7514,7 @@
       ],
       "blackBox": {
         "title": "DELAYED AKATHISIA SURGE",
-        "warning": "Because DDCAR builds up over weeks, akathisia often surfaces late (weeks 3-6). Warn patients early; avoid premature dose escalations. Manage with Propranolol (40-80 mg/day) or drop back down to 1.5 mg every other day if needed. 💊 CYP3A4 METABOLIC BURDEN Cariprazine and DDCAR are cleared primarily by CYP3A4. Strong inhibitors (ketoconazole) double exposure (reduce cariprazine dose by 50%). Concomitant use with strong CYP3A4 inducers (carbamazepine) is not recommended. PEARLS"
+        "warning": "Because DDCAR builds up over weeks, akathisia often surfaces late (weeks 3-6). Warn patients early; avoid premature dose escalations. Manage with Propranolol (40-80 mg/day) or drop back down to 1.5 mg every other day if needed. 💊 CYP3A4 METABOLIC BURDEN Cariprazine and DDCAR are cleared primarily by CYP3A4. Strong inhibitors (ketoconazole) double exposure (reduce cariprazine dose by 50%). Concomitant use with strong CYP3A4 inducers (carbamazepine) is not recommended."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -7604,7 +7636,7 @@
       "titrationSchedule": [],
       "blackBox": {
         "title": "HEPATIC IMPAIRMENT CEILING",
-        "warning": "In moderate-to-severe hepatic impairment (Child-Pugh B or C), lumateperone exposure is significantly increased. Reduce daily dose to 21 mg once daily (or avoid in severe end-stage cirrhosis). PEARLS"
+        "warning": "In moderate-to-severe hepatic impairment (Child-Pugh B or C), lumateperone exposure is significantly increased. Reduce daily dose to 21 mg once daily (or avoid in severe end-stage cirrhosis)."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -7722,7 +7754,7 @@
       ],
       "blackBox": {
         "title": "FLUOXETINE CYP2D6 INHIBITION",
-        "warning": "Fluoxetine is a potent CYP2D6 inhibitor with an ultra-long active metabolite (norfluoxetine t½ 7-15 days). Expect profound drug interactions with CYP2D6 substrates (atomoxetine, beta-blockers, codeine, tamoxifen). PEARLS"
+        "warning": "Fluoxetine is a potent CYP2D6 inhibitor with an ultra-long active metabolite (norfluoxetine t½ 7-15 days). Expect profound drug interactions with CYP2D6 substrates (atomoxetine, beta-blockers, codeine, tamoxifen)."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -7857,7 +7889,7 @@
       ],
       "blackBox": {
         "title": "TYPE I HYPERSENSITIVITY WARNING",
-        "warning": "FDA black-box warning for severe allergic reactions, including anaphylaxis, angioedema, swollen tongue, and bronchospasm, occurring as early as the first dose. Discontinue immediately if oral swelling or dyspnea occurs! 🚫 HEPATIC IMPAIRMENT RESTRICTION Contraindicated in severe hepatic impairment (Child-Pugh C) due to 7-fold higher drug exposure. In moderate hepatic impairment (Child-Pugh B), use with caution; no dose adjustment needed in mild impairment. PEARLS"
+        "warning": "FDA black-box warning for severe allergic reactions, including anaphylaxis, angioedema, swollen tongue, and bronchospasm, occurring as early as the first dose. Discontinue immediately if oral swelling or dyspnea occurs! 🚫 HEPATIC IMPAIRMENT RESTRICTION Contraindicated in severe hepatic impairment (Child-Pugh C) due to 7-fold higher drug exposure. In moderate hepatic impairment (Child-Pugh B), use with caution; no dose adjustment needed in mild impairment."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -8012,7 +8044,7 @@
       ],
       "blackBox": {
         "title": "Compulsive Behavioral Disinhibition: Partial D2/D3",
-        "warning": "stimulation can trigger compulsive gambling, hypersexuality, binge eating, and uncontrollable shopping sprees. Warn patients and families explicitly; immediately discontinue if compulsive habits emerge! ⚠️ CYP2D6 & CYP3A4 DOSING RULES Metabolized heavily by CYP2D6 and CYP3A4. Reduce dose by 50% if co-prescribing with strong CYP2D6 inhibitors (fluoxetine, paroxetine) or CYP3A4 inhibitors (clarithromycin). In poor CYP2D6 metabolizers, cut dose in half! 💡 PROLACTIN SUPPRESSION PARADOX Because aripiprazole is a partial D2 agonist with high affinity, it actively suppresses serum prolactin. It can be clinically co-prescribed (5 mg/day) to reverse severe hyperprolactinemia induced by risperidone or paliperidone! PEARLS"
+        "warning": "stimulation can trigger compulsive gambling, hypersexuality, binge eating, and uncontrollable shopping sprees. Warn patients and families explicitly; immediately discontinue if compulsive habits emerge! ⚠️ CYP2D6 & CYP3A4 DOSING RULES Metabolized heavily by CYP2D6 and CYP3A4. Reduce dose by 50% if co-prescribing with strong CYP2D6 inhibitors (fluoxetine, paroxetine) or CYP3A4 inhibitors (clarithromycin). In poor CYP2D6 metabolizers, cut dose in half! 💡 PROLACTIN SUPPRESSION PARADOX Because aripiprazole is a partial D2 agonist with high affinity, it actively suppresses serum prolactin. It can be clinically co-prescribed (5 mg/day) to reverse severe hyperprolactinemia induced by risperidone or paliperidone!"
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -8138,7 +8170,7 @@
       ],
       "blackBox": {
         "title": "INEFFECTIVE AS SOLE MOOD STABILIZER",
-        "warning": "Double-blind placebo-controlled trials have conclusively shown that levetiracetam is completely ineffective as a monotherapy mood stabilizer for acute mania or bipolar maintenance. Do not use as standalone therapy! 💧 RENAL CLEARANCE & DIALYSIS Eliminated 66% unchanged by glomerular filtration. In renal impairment, adjust dose: CrCl 50-80 mL/min: 500- 1000 mg BID; CrCl 30-50 mL/min: 250-750 mg BID; CrCl < 30 mL/min: 250-500 mg BID. Dialysis removes 50% (supplement needed). PEARLS"
+        "warning": "Double-blind placebo-controlled trials have conclusively shown that levetiracetam is completely ineffective as a monotherapy mood stabilizer for acute mania or bipolar maintenance. Do not use as standalone therapy! 💧 RENAL CLEARANCE & DIALYSIS Eliminated 66% unchanged by glomerular filtration. In renal impairment, adjust dose: CrCl 50-80 mL/min: 500- 1000 mg BID; CrCl 30-50 mL/min: 250-750 mg BID; CrCl < 30 mL/min: 250-500 mg BID. Dialysis removes 50% (supplement needed)."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -9115,7 +9147,7 @@
       "titrationSchedule": [],
       "blackBox": {
         "title": "Even though temazepam has no active metabolites, elderly patients who",
-        "warning": "awaken to urinate at 2:00 AM remain at high risk for vestibular ataxia and femoral neck hip fractures. Implement strict fall precautions! ⏰RAPID TOLERANCE TO HYPNOTIC EFFECT Tolerance to the sleep-inducing effects of temazepam develops within 14 to 28 days of nightly use due to GABA-A receptor uncoupling. Educate patients early; do not escalate doses beyond 30 mg/day! PEARLS"
+        "warning": "awaken to urinate at 2:00 AM remain at high risk for vestibular ataxia and femoral neck hip fractures. Implement strict fall precautions! ⏰RAPID TOLERANCE TO HYPNOTIC EFFECT Tolerance to the sleep-inducing effects of temazepam develops within 14 to 28 days of nightly use due to GABA-A receptor uncoupling. Educate patients early; do not escalate doses beyond 30 mg/day!"
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -9445,7 +9477,7 @@
       "titrationSchedule": [],
       "blackBox": {
         "title": "Rare Life-Threatening Dermatitis: Clobazam carries an FDA",
-        "warning": "black-box warning for Stevens-Johnson syndrome (SJS) and toxic epidermal necrolysis (TEN), typically emerging in the first 8 weeks. Immediately discontinue if any rash or mucosal blistering develops! 🌿CANNABIDIOL (EPIDIOLEX) INTERACTION Concomitant therapy with Cannabidiol (CBD) potently inhibits CYP2C19, increasing active norclobazam plasma levels by 300% to 500%! Expect extreme sedation; reduce clobazam dose by 50% immediately. 💊MILD CYP2D6 INHIBITION Clobazam is a weak-to-moderate inhibitor of CYP2D6. Co-administra­ tion increases plasma concentrations of CYP2D6 substrates (fluoxetine, paroxetine, atomoxetine, nebivolol) by 50% to 100%. PEARLS"
+        "warning": "black-box warning for Stevens-Johnson syndrome (SJS) and toxic epidermal necrolysis (TEN), typically emerging in the first 8 weeks. Immediately discontinue if any rash or mucosal blistering develops! 🌿CANNABIDIOL (EPIDIOLEX) INTERACTION Concomitant therapy with Cannabidiol (CBD) potently inhibits CYP2C19, increasing active norclobazam plasma levels by 300% to 500%! Expect extreme sedation; reduce clobazam dose by 50% immediately. 💊MILD CYP2D6 INHIBITION Clobazam is a weak-to-moderate inhibitor of CYP2D6. Co-administra­ tion increases plasma concentrations of CYP2D6 substrates (fluoxetine, paroxetine, atomoxetine, nebivolol) by 50% to 100%."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -9903,7 +9935,7 @@
       "titrationSchedule": [],
       "blackBox": {
         "title": "Sleepwalking, Sleep-Driving & Sleep-Eating: Zolpidem can provoke",
-        "warning": "complex motor behaviors while asleep, including driving vehicles, cooking meals, and making financial transactions with zero conscious awareness! Contraindicated if any parasomnia occurs; discontinue permanently. THE 50% FEMALE DOSE MANDATE Driving Simulator Discoveries: In 2013, the FDA slashed zolpi­ dem doses for women by 50% after driving simulation trials proved women clear zolpidem 30% slower than men, leaving dangerous, intoxicating blood levels at 8:00 AM on a 10 mg dose! 🍽️THE EMPTY STOMACH REQUIREMENT Administering zolpidem with or immediately after a high-fat meal delays peak absorption by over 1 hour and reduces Cmax by 30%. Instruct patients to take on an empty stomach (>= 2h post-dinner). 🌙REBOUND INSOMNIA ADVISORY Warn patients that stopping zolpidem abruptly after regular use triggers intense rebound insomnia on nights 1 and 2, which is often worse than baseline. Taper by halving tablets over 1 week. PEARLS"
+        "warning": "complex motor behaviors while asleep, including driving vehicles, cooking meals, and making financial transactions with zero conscious awareness! Contraindicated if any parasomnia occurs; discontinue permanently. THE 50% FEMALE DOSE MANDATE Driving Simulator Discoveries: In 2013, the FDA slashed zolpi­ dem doses for women by 50% after driving simulation trials proved women clear zolpidem 30% slower than men, leaving dangerous, intoxicating blood levels at 8:00 AM on a 10 mg dose! 🍽️THE EMPTY STOMACH REQUIREMENT Administering zolpidem with or immediately after a high-fat meal delays peak absorption by over 1 hour and reduces Cmax by 30%. Instruct patients to take on an empty stomach (>= 2h post-dinner). 🌙REBOUND INSOMNIA ADVISORY Warn patients that stopping zolpidem abruptly after regular use triggers intense rebound insomnia on nights 1 and 2, which is often worse than baseline. Taper by halving tablets over 1 week."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -10396,7 +10428,7 @@
       "titrationSchedule": [],
       "blackBox": {
         "title": "Massive Pharmacokinetic Surge: Fluvoxamine potently inhibits CYP1A2,",
-        "warning": "increasing ramelteon AUC by an unprecedented 190-fold and Cmax by 70- fold! Concomitant prescribing is strictly contraindicated due to profound, unarousable hypothermia and coma! THE NON-SCHEDULED SAFE HAVEN The Premier Hypnotic in Substance Abuse: Ramelteon is the only prescription hypnotic in the US not classified as a DEA controlled substance. In patients with active alcoholism, opioid addiction, or BZD abuse, it is the safest choice available! 🍽️HIGH-FAT MEAL ABSORPTION DELAY Administering ramelteon with or immediately following a high-fat meal reduces Cmax by 22% and delays peak absorption by 45 minutes. Enforce strict bedtime administration on an empty stomach. 🩸ENDOCRINE PROLACTIN MONITORING Ramelteon can mildly elevate serum prolactin levels and decrease testosterone in males. Inquire about amenorrhea, galactorrhea, or de­ creased libido in long-term chronic therapy. PEARLS"
+        "warning": "increasing ramelteon AUC by an unprecedented 190-fold and Cmax by 70- fold! Concomitant prescribing is strictly contraindicated due to profound, unarousable hypothermia and coma! THE NON-SCHEDULED SAFE HAVEN The Premier Hypnotic in Substance Abuse: Ramelteon is the only prescription hypnotic in the US not classified as a DEA controlled substance. In patients with active alcoholism, opioid addiction, or BZD abuse, it is the safest choice available! 🍽️HIGH-FAT MEAL ABSORPTION DELAY Administering ramelteon with or immediately following a high-fat meal reduces Cmax by 22% and delays peak absorption by 45 minutes. Enforce strict bedtime administration on an empty stomach. 🩸ENDOCRINE PROLACTIN MONITORING Ramelteon can mildly elevate serum prolactin levels and decrease testosterone in males. Inquire about amenorrhea, galactorrhea, or de­ creased libido in long-term chronic therapy."
       },
       "foodRequirement": "Take with or without food.",
       "clinicalPearls": [
@@ -12812,6 +12844,14 @@
           "ki": "Ki ~ 18 uM",
           "action": "Weak Blocker",
           "clinicalAction": "Weak serotonin reuptake inhibition; potential contributor to serotonin syndrome when combined with high-dose SSRIs or MAOIs."
+        },
+        {
+          "receptor": "hERG",
+          "rawTarget": "hERG Potassium Channel (IKr / Cardiac Liability)",
+          "occupancy": 70,
+          "ki": "Cardiac Delayed Rectifier Blockade",
+          "action": "Channel Blockade (Hazard)",
+          "clinicalAction": "Delays phase 3 ventricular cardiac repolarization (IKr blockade), lengthening the QT interval and creating arrhythmogenic liability for Torsades de Pointes."
         }
       ],
       "adverseFootprint": [

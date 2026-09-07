@@ -84,15 +84,22 @@ export default function ComparisonTableScreen() {
     return af ? af.severity : 'N/A'
   }
 
+  const cleanSeverity = (sev) => {
+    if (!sev) return ''
+    const match = sev.match(/^(Extreme|Severe|Very High|High|Moderate|Low|Near Zero|Sparing|Minimal|Absent|Pristine)\b/i)
+    return match ? match[1] : sev.split('(')[0].trim()
+  }
+
   const getSeverityStyle = (severity) => {
     const s = (severity || '').toLowerCase()
-    if (s.includes('severe')) return 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 font-bold'
+    if (s.includes('extreme') || s.includes('critical')) return 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-200 border border-rose-300 dark:border-rose-800 font-bold'
+    if (s.includes('severe')) return 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/80 dark:border-red-900/60 font-bold'
     if (s.includes('very high')) return 'bg-orange-50 dark:bg-orange-950/50 text-orange-800 dark:text-orange-300 border border-orange-200/80 dark:border-orange-900/60 font-bold'
     if (s.includes('high')) return 'bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/60 font-bold'
     if (s.includes('mod')) return 'bg-yellow-50 dark:bg-yellow-950/40 text-yellow-800 dark:text-yellow-300 border border-yellow-200/80 dark:border-yellow-900/60 font-semibold'
-    if (s.includes('low')) return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 font-medium'
-    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) return 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 font-medium'
-    return 'bg-slate-50 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500'
+    if (s.includes('low') || s.includes('mild')) return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 font-medium'
+    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal') || s.includes('pristine')) return 'bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/60 font-medium'
+    return 'bg-rose-50/50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200/60 dark:border-rose-900/40'
   }
 
 
@@ -408,8 +415,8 @@ export default function ComparisonTableScreen() {
                           return (
                             <div key={domain} className="flex items-center justify-between text-xs">
                               <span className="text-slate-700 dark:text-slate-300 font-medium truncate max-w-[130px]">{domain.split('&')[0]}</span>
-                              <span className={`text-xs px-2 py-0.5 rounded font-bold ${getSeverityStyle(sev)}`}>
-                                {sev}
+                              <span className={`text-xs px-2 py-0.5 rounded font-bold ${getSeverityStyle(sev)}`} title={sev}>
+                                {cleanSeverity(sev)}
                               </span>
                             </div>
                           )

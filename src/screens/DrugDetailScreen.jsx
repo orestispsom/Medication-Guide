@@ -66,28 +66,73 @@ export default function DrugDetailScreen() {
     })
   }
 
-  // Severity color mapper for Adverse Footprint
+  // Helper to strip verbose parentheticals for adverse footprint badges
+  const cleanSeverity = (sev) => {
+    if (!sev) return ''
+    const match = sev.match(/^(Extreme|Severe|Very High|High|Moderate|Low|Near Zero|Sparing|Minimal|Absent|Pristine)\b/i)
+    return match ? match[1] : sev.split('(')[0].trim()
+  }
+
+  // Format FDA Boxed Warning into readable indented lines
+  const formatBoxedWarning = (text) => {
+    if (!text) return []
+    const cleaned = text.replace(/\s*PEARLS\s*$/, '').trim()
+    const items = cleaned
+      .split(/(?:\r?\n|•|(?<=[.!?])\s*(?=[A-Z\s/'-]{4,}:)|(?<=[.!?\s])(?=[⚠️🚨⚡💉👅🏆⏳⭐🌸]))/u)
+      .map(s => s.trim())
+      .filter(Boolean)
+    return items.length > 0 ? items : [cleaned]
+  }
+
+  // Severity color mapper for Adverse Footprint (never black/grey)
   const getSeverityBadge = (severity) => {
     const s = (severity || '').toLowerCase()
+    if (s.includes('extreme') || s.includes('critical')) {
+      return { 
+        bg: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-200 border-rose-300 dark:border-rose-800', 
+        dot: 'bg-rose-600 dark:bg-rose-500' 
+      }
+    }
     if (s.includes('severe')) {
-      return { bg: 'bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-200 dark:border-red-900/50', dot: 'bg-red-600 dark:bg-red-500' }
+      return { 
+        bg: 'bg-red-100 dark:bg-red-950/50 text-red-800 dark:text-red-200 border-red-200 dark:border-red-900/60', 
+        dot: 'bg-red-600 dark:bg-red-500' 
+      }
     }
     if (s.includes('very high')) {
-      return { bg: 'bg-orange-100 dark:bg-orange-950/40 text-orange-900 dark:text-orange-300 border-orange-200 dark:border-orange-900/50', dot: 'bg-orange-600 dark:bg-orange-500' }
+      return { 
+        bg: 'bg-orange-100 dark:bg-orange-950/50 text-orange-900 dark:text-orange-200 border-orange-200 dark:border-orange-900/60', 
+        dot: 'bg-orange-600 dark:bg-orange-500' 
+      }
     }
     if (s.includes('high')) {
-      return { bg: 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-900/50', dot: 'bg-amber-600 dark:bg-amber-500' }
+      return { 
+        bg: 'bg-amber-100 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border-amber-200 dark:border-amber-900/60', 
+        dot: 'bg-amber-600 dark:bg-amber-500' 
+      }
     }
     if (s.includes('mod')) {
-      return { bg: 'bg-yellow-100 dark:bg-yellow-950/40 text-yellow-800 dark:text-yellow-300 border-yellow-200 dark:border-yellow-900/50', dot: 'bg-yellow-500' }
+      return { 
+        bg: 'bg-yellow-100 dark:bg-yellow-950/50 text-yellow-900 dark:text-yellow-200 border-yellow-200 dark:border-yellow-900/60', 
+        dot: 'bg-yellow-500' 
+      }
     }
-    if (s.includes('low')) {
-      return { bg: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900/50', dot: 'bg-emerald-500' }
+    if (s.includes('low') || s.includes('mild')) {
+      return { 
+        bg: 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-900/60', 
+        dot: 'bg-emerald-500' 
+      }
     }
-    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal')) {
-      return { bg: 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/50', dot: 'bg-blue-400' }
+    if (s.includes('near zero') || s.includes('sparing') || s.includes('minimal') || s.includes('pristine') || s.includes('absent')) {
+      return { 
+        bg: 'bg-sky-100 dark:bg-sky-950/50 text-sky-800 dark:text-sky-200 border-sky-200 dark:border-sky-900/60', 
+        dot: 'bg-sky-500' 
+      }
     }
-    return { bg: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700', dot: 'bg-slate-400' }
+    return { 
+      bg: 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-900/40', 
+      dot: 'bg-rose-400' 
+    }
   }
 
   return (
@@ -322,11 +367,11 @@ export default function DrugDetailScreen() {
                   className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between gap-2.5"
                 >
                   <div className="min-w-0 flex-1">
-                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate block">
+                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug block">
                       {af.domain}
                     </span>
                     {tiedReceptors && tiedReceptors.length > 0 && (
-                      <div className="flex items-center gap-1 mt-0.5 flex-wrap">
+                      <div className="flex items-center gap-1 mt-1 flex-wrap">
                         <span className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">
                           Via:
                         </span>
@@ -338,7 +383,7 @@ export default function DrugDetailScreen() {
                               e.stopPropagation()
                               navigate(`/receptors/${tr.id}`)
                             }}
-                            className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.2 rounded hover:opacity-80 transition-opacity cursor-pointer border"
+                            className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded hover:opacity-80 transition-opacity cursor-pointer border"
                             style={{
                               backgroundColor: `${tr.color}15`,
                               color: tr.color,
@@ -350,17 +395,15 @@ export default function DrugDetailScreen() {
                             {tr.id}
                           </button>
                         ))}
-                        {tiedReceptors[0]?.mechanism && (
-                          <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate hidden sm:inline">
-                            · {tiedReceptors[0].mechanism}
-                          </span>
-                        )}
                       </div>
                     )}
                   </div>
-                  <span className={`text-[11px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap ${badge.bg}`}>
+                  <span
+                    className={`text-[11px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap ${badge.bg}`}
+                    title={af.severity}
+                  >
                     <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
-                    {af.severity}
+                    {cleanSeverity(af.severity)}
                   </span>
                 </div>
               )
@@ -415,8 +458,8 @@ export default function DrugDetailScreen() {
         <div id="warnings" className="bg-red-50/50 dark:bg-red-950/20 border-2 border-red-500/80 dark:border-red-500/60 rounded-2xl p-4 sm:p-5 mb-6 shadow-xs">
           <div className="flex items-start gap-3">
             <span className="text-xl flex-shrink-0 mt-0.5">⚠️</span>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 mb-2">
                 <span className="px-2 py-0.5 rounded bg-red-600 text-white text-[10px] font-black uppercase tracking-wider">
                   FDA Boxed Warning
                 </span>
@@ -424,9 +467,16 @@ export default function DrugDetailScreen() {
                   {drug.blackBox.title || 'CRITICAL CLINICAL ALERT'}
                 </h3>
               </div>
-              <p className="text-xs sm:text-sm text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-                {drug.blackBox.warning}
-              </p>
+              <div className="space-y-1.5">
+                {formatBoxedWarning(drug.blackBox.warning).map((line, idx) => (
+                  <div
+                    key={idx}
+                    className="pl-3 border-l-2 border-red-400/60 dark:border-red-600/60 text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

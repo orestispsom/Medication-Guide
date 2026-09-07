@@ -230,16 +230,15 @@ export const DOMAIN_RECEPTOR_MAP = [
 ]
 
 export const getDomainReceptorTies = (domainName, drugReceptors = []) => {
-  if (!domainName) return null
+  if (!domainName) return []
   const match = DOMAIN_RECEPTOR_MAP.find(m => m.pattern.test(domainName))
-  if (!match) return null
+  if (!match) return []
 
   const drugRecIds = new Set((drugReceptors || []).map(r => (r.receptor || '').toUpperCase()))
   const matchedRecs = match.receptors.filter(rid => drugRecIds.has(rid.toUpperCase()))
 
-  const targetRecs = matchedRecs.length > 0 ? matchedRecs : match.receptors.slice(0, 2)
-
-  return targetRecs.map(rid => ({
+  // Only return receptors that are actually in the drug's binding profile
+  return matchedRecs.map(rid => ({
     id: rid,
     color: getReceptorColor(rid),
     mechanism: match.mechanism,
