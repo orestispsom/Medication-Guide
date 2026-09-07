@@ -4,295 +4,606 @@ import data from '../data.json'
 import BackButton from '../components/BackButton'
 import Toast from '../components/Toast'
 import PatientHandoutModal from '../components/PatientHandoutModal'
+import DrugFamilySelect from '../components/DrugFamilySelect'
 import { isFavorite, toggleFavorite } from '../utils/favorites'
+import {
+  getGroupedDrugs,
+  generateSwitchProtocol,
+  generateDeprescribingProtocol
+} from '../utils/transitionEngine'
 
 export default function CrossTitrationScreen() {
   const { protocolId } = useParams()
   const navigate = useNavigate()
 
   const protocols = data.protocols || []
+  const groupedDrugs = useMemo(() => getGroupedDrugs(), [])
 
-  // Active protocol if protocolId is provided
+  // Active protocol if protocolId is provided via URL
   const activeProtocol = useMemo(() => {
     if (!protocolId) return null
     return protocols.find(p => p.id === protocolId) || null
   }, [protocolId, protocols])
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedSwitchType, setSelectedSwitchType] = useState('ALL')
-  const [fromDrugFilter, setFromDrugFilter] = useState('')
-  const [toDrugFilter, setToDrugFilter] = useState('')
+  // Function 1: Switch Protocol State
+  const [switchFromDrug, setSwitchFromDrug] = useState(null)
+  const [switchToDrug, setSwitchToDrug] = useState(null)
+  const [switchPace, setSwitchPace] = useState('mid') // 'slow' | 'mid' | 'fast'
 
-  // Collect distinct switch types
-  const switchTypes = useMemo(() => {
-    const types = new Set()
-    protocols.forEach(p => {
-      if (p.switchType) types.add(p.switchType)
+  // Function 2: Deprescribing Protocol State
+  const [deprescribeDrug, setDeprescribeDrug] = useState(null)
+  const [deprescribePace, setDeprescribePace] = useState('mid') // 'slow' | 'mid' | 'fast'
+
+  // Toast feedback
+  const [toastMessage, setToastMessage] = useState('')
+
+  // Dynamically compute switch protocol answer
+  const switchResult = useMemo(() => {
+    if (!switchFromDrug || !switchToDrug) return null
+    return generateSwitchProtocol(switchFromDrug, switchToDrug, switchPace)
+  }, [switchFromDrug, switchToDrug, switchPace])
+
+  // Dynamically compute deprescribing protocol answer
+  const deprescribeResult = useMemo(() => {
+    if (!deprescribeDrug) return null
+    return generateDeprescribingProtocol(deprescribeDrug, deprescribePace)
+  }, [deprescribeDrug, deprescribePace])
+
+  // Copy EHR note for Switch Protocol
+  const handleCopySwitchEhrNote = () => {
+    if (!switchResult) return
+    const lines = [
+      `=== MEDICATION CROSS-TITRATION NOTE ===`,
+      `Transition: ${switchResult.title}`,
+      `Strategy: ${switchResult.switchType}`,
+      `Pace: ${switchResult.pace.toUpperCase()} · Target Duration: ${switchResult.duration}`,
+      `Core Mandate: ${switchResult.coreMandate || ''}`,
+      '',
+      switchResult.precaution ? `CRITICAL PRECAUTION: ${switchResult.precaution}\n` : '',
+      'SCHEDULED PHASES:',
+      ...(switchResult.phases || []).map(ph => `• [${ph.timing}] ${ph.title}: ${ph.notes || ''}`),
+      '',
+      'RECEPTOR DYNAMICS & VULNERABILITY:',
+      ...(switchResult.receptorDynamics || []).map(rd => `• ${rd.receptor}: ${rd.shift} — ${rd.hazard}`),
+      '',
+      'CLINICAL RESCUE / PEARLS:',
+      ...(switchResult.rescuePearls || []).map(rp => `• ${rp}`),
+      '======================================='
+    ].filter(Boolean).join('\n')
+
+    navigator.clipboard.writeText(lines).then(() => {
+      setToastMessage('Switch protocol EHR note copied to clipboard!')
+    }).catch(() => {
+      setToastMessage('Failed to copy to clipboard')
     })
-    return ['ALL', ...Array.from(types)]
-  }, [protocols])
+  }
 
-  // Filter protocols for list view
-  const filteredProtocols = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase()
-    const fromQ = fromDrugFilter.trim().toLowerCase()
-    const toQ = toDrugFilter.trim().toLowerCase()
+  // Copy EHR note for Deprescribing Protocol
+  const handleCopyDeprescribeEhrNote = () => {
+    if (!deprescribeResult) return
+    const lines = [
+      `=== MEDICATION DEPRESCRIBING & TAPER NOTE ===`,
+      `Medication: ${deprescribeResult.drugName} (${deprescribeResult.subgroup || 'Psychotropic'})`,
+      `Strategy: ${deprescribeResult.strategy}`,
+      `Pace: ${deprescribeResult.pace.toUpperCase()} · Target Duration: ${deprescribeResult.duration}`,
+      `Core Mandate: ${deprescribeResult.coreMandate || ''}`,
+      '',
+      deprescribeResult.precaution ? `CRITICAL PRECAUTION: ${deprescribeResult.precaution}\n` : '',
+      `HYPERBOLIC PRINCIPLE: ${deprescribeResult.hyperbolicPrinciple || ''}`,
+      '',
+      'STEPPED TAPER SCHEDULE:',
+      ...(deprescribeResult.phases || []).map(ph => `• [${ph.timing}] ${ph.phase} (${ph.targetDoseLevel}): ${ph.instructions}`),
+      '',
+      'WITHDRAWAL RISKS TO MONITOR:',
+      ...(deprescribeResult.withdrawalRisks || []).map(wr => `• ${wr}`),
+      '',
+      'CLINICAL PEARLS & RESCUE:',
+      ...(deprescribeResult.rescuePearls || []).map(rp => `• ${rp}`),
+      '============================================'
+    ].filter(Boolean).join('\n')
 
-    return protocols.filter(p => {
-      if (selectedSwitchType !== 'ALL' && p.switchType !== selectedSwitchType) {
-        return false
-      }
-
-      if (fromQ) {
-        const titleMatch = p.transitionTitle && p.transitionTitle.toLowerCase().includes(fromQ)
-        const nameMatch = p.title.toLowerCase().includes(fromQ)
-        if (!titleMatch && !nameMatch) return false
-      }
-
-      if (toQ) {
-        const titleMatch = p.transitionTitle && p.transitionTitle.toLowerCase().includes(toQ)
-        const nameMatch = p.title.toLowerCase().includes(toQ)
-        if (!titleMatch && !nameMatch) return false
-      }
-
-      if (q) {
-        const titleMatch = p.title.toLowerCase().includes(q)
-        const transMatch = p.transitionTitle && p.transitionTitle.toLowerCase().includes(q)
-        const classMatch = p.classTransition && p.classTransition.toLowerCase().includes(q)
-        const mandateMatch = p.coreMandate && p.coreMandate.toLowerCase().includes(q)
-        const rationaleMatch = p.rationale && p.rationale.toLowerCase().includes(q)
-        return titleMatch || transMatch || classMatch || mandateMatch || rationaleMatch
-      }
-      return true
+    navigator.clipboard.writeText(lines).then(() => {
+      setToastMessage('Deprescribing protocol EHR note copied to clipboard!')
+    }).catch(() => {
+      setToastMessage('Failed to copy to clipboard')
     })
-  }, [protocols, searchQuery, selectedSwitchType, fromDrugFilter, toDrugFilter])
+  }
 
-  // If a protocol is selected, render the full authoritative protocol view
+  // If a specific protocolId is in the URL, render the full authoritative protocol view
   if (activeProtocol) {
     return <ProtocolDetailView protocol={activeProtocol} onBack={() => navigate('/cross-titration')} />
   }
 
-  // Otherwise render the Master Protocol Catalog
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
       <BackButton />
+      <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
-      {/* Header */}
+      {/* Simplified Header - subtitle removed */}
       <div className="mb-6">
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           Transition & Deprescribing Protocols
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1">
-          20 evidence-based switch algorithms with 4-phase timelines, receptor shift dynamics, risk stratification meters, and emergency rescue guides.
-        </p>
       </div>
 
+      <div className="space-y-6">
+        {/* ==================================================================== */}
+        {/* FUNCTION 1: SWITCH PROTOCOL (Direct Switch Protocol Matcher)        */}
+        {/* ==================================================================== */}
+        <div className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">🎯</span>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                Switch Protocol
+              </h2>
+            </div>
 
-      {/* Quick Direct Switch Finder Box */}
-      <div className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-5 mb-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-base">🎯</span>
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-            Direct Switch Protocol Matcher
-          </span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
-          <div>
-            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1.5">
-              Switching From (Current Drug):
-            </label>
-            <input
-              type="text"
-              value={fromDrugFilter}
-              onChange={e => setFromDrugFilter(e.target.value)}
-              placeholder="e.g. Sertraline, Paroxetine, Olanzapine, BZD..."
-              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+            {(switchFromDrug || switchToDrug) && (
+              <button
+                onClick={() => {
+                  setSwitchFromDrug(null)
+                  setSwitchToDrug(null)
+                }}
+                className="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+              >
+                Reset Switch
+              </button>
+            )}
+          </div>
+
+          {/* Two Drug Selectors Grouped by Family */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <DrugFamilySelect
+              label="Switching From (Current Drug):"
+              selectedDrug={switchFromDrug}
+              onSelect={setSwitchFromDrug}
+              placeholder="Select current medication..."
+              groupedFamilies={groupedDrugs}
+            />
+
+            <DrugFamilySelect
+              label="Switching To (Target Drug):"
+              selectedDrug={switchToDrug}
+              onSelect={setSwitchToDrug}
+              placeholder="Select target medication..."
+              groupedFamilies={groupedDrugs}
             />
           </div>
-          <div>
-            <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1.5">
-              Switching To (Target Drug):
-            </label>
-            <input
-              type="text"
-              value={toDrugFilter}
-              onChange={e => setToDrugFilter(e.target.value)}
-              placeholder="e.g. Venlafaxine, Aripiprazole, Clozapine..."
-              className="w-full bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
-            />
-          </div>
-        </div>
-        {(fromDrugFilter || toDrugFilter) && (
-          <div className="flex items-center justify-between pt-2 text-xs">
-            <span className="text-slate-700 dark:text-slate-300 font-semibold">
-              Matched {filteredProtocols.length} protocol{filteredProtocols.length !== 1 ? 's' : ''}
-            </span>
-            <button
-              onClick={() => {
-                setFromDrugFilter('')
-                setToDrugFilter('')
-              }}
-              className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-xs cursor-pointer"
-            >
-              Clear Matcher
-            </button>
-          </div>
-        )}
-      </div>
 
-      {/* Global Search Input */}
-      <div className="relative mb-4">
-        <svg
-          className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-4 top-4 pointer-events-none"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          placeholder="Filter by keyword (e.g. Ashton, MAOI, UGT, Clozapine, Akathisia)..."
-          className="w-full bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-900 dark:text-white rounded-2xl pl-11 pr-10 py-3.5 text-sm font-medium shadow-[0_1px_3px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
-        />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery('')}
-            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 text-xs rounded-full bg-slate-100 dark:bg-slate-800 cursor-pointer"
-          >
-            ✕
-          </button>
-        )}
-      </div>
+          {/* Prompt when incomplete */}
+          {(!switchFromDrug || !switchToDrug) && (
+            <p className="text-xs text-slate-400 dark:text-slate-500 italic text-center py-1">
+              Select both current and target medications to generate the cross-titration protocol.
+            </p>
+          )}
 
-      {/* Switch Type Filter Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-2 mb-5">
-        {switchTypes.map(st => {
-          const isSelected = selectedSwitchType === st
-          return (
-            <button
-              key={st}
-              onClick={() => setSelectedSwitchType(st)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border cursor-pointer ${
-                isSelected
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-sm'
-                  : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.03)]'
-              }`}
-            >
-              {st === 'ALL' ? `All Protocols (${protocols.length})` : st}
-            </button>
-          )
-        })}
-      </div>
+          {/* Answer Dropdown / Panel Unfolds Underneath */}
+          {switchResult && (
+            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 animate-in fade-in duration-200">
+              {switchResult.sameDrug ? (
+                <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 font-medium text-center">
+                  {switchResult.mandate}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Protocol Summary Header & Pace Switcher */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-[#0b0f19] p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                          {switchResult.title}
+                        </span>
+                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/60">
+                          {switchResult.switchType}
+                        </span>
+                      </div>
+                      <span className="text-xs font-semibold text-amber-700 dark:text-amber-400">
+                        ⏱️ Duration: {switchResult.duration}
+                      </span>
+                    </div>
 
-      {/* Protocol Cards List */}
-      {filteredProtocols.length > 0 ? (
-        <div className="space-y-3">
-          {filteredProtocols.map(proto => (
-            <div
-              key={proto.id}
-              onClick={() => navigate(`/cross-titration/${proto.id}`)}
-              className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md transition-all cursor-pointer group"
-            >
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-3">
-                  <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-extrabold text-xs flex items-center justify-center flex-shrink-0 border border-slate-200/60 dark:border-slate-700/60">
-                    #{proto.number < 10 ? `0${proto.number}` : proto.number}
-                  </span>
-                  <div>
-                    <h3 className="font-display font-bold text-base sm:text-lg text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {proto.title}
-                    </h3>
-                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-0.5">
-                      {proto.transitionTitle}
-                    </p>
+                    {/* Pace Toggle: Slow / Mid / Fast */}
+                    <div className="flex items-center gap-1 bg-white dark:bg-[#111827] p-1 rounded-xl border border-slate-200/80 dark:border-slate-700/80 self-start sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => setSwitchPace('slow')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          switchPace === 'slow'
+                            ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs'
+                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        }`}
+                        title="Conservative / High-Risk / Sensitive Taper"
+                      >
+                        🐢 Slow
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSwitchPace('mid')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          switchPace === 'mid'
+                            ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs'
+                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        }`}
+                        title="Standard Clinical Guideline Pace"
+                      >
+                        ⚖️ Mid
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSwitchPace('fast')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          switchPace === 'fast'
+                            ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs'
+                            : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                        }`}
+                        title="Rapid / Inpatient / Acute Switch"
+                      >
+                        ⚡ Fast
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Precaution / Red Flag Alert */}
+                  {switchResult.precaution && (
+                    <div className="bg-rose-50/80 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900/60 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-rose-900 dark:text-rose-200 leading-relaxed font-medium">
+                      <span className="text-base flex-shrink-0">⚠️</span>
+                      <div>
+                        <span className="font-bold block mb-0.5 text-rose-950 dark:text-rose-100 uppercase tracking-wide text-[10px]">
+                          Clinical Precaution
+                        </span>
+                        {switchResult.precaution}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Core Mandate */}
+                  {switchResult.coreMandate && (
+                    <div className="bg-indigo-50/50 dark:bg-indigo-950/30 rounded-xl p-3.5 border border-indigo-100 dark:border-indigo-900/40 text-xs text-slate-800 dark:text-slate-200 leading-relaxed">
+                      <span className="font-bold text-indigo-900 dark:text-indigo-300 mr-1.5 uppercase tracking-wide text-[10px] block mb-1">
+                        🎯 Core Mandate:
+                      </span>
+                      {switchResult.coreMandate}
+                    </div>
+                  )}
+
+                  {/* Phased Execution Timeline */}
+                  {switchResult.phases && switchResult.phases.length > 0 && (
+                    <div>
+                      <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-2">
+                        📅 Phased Execution Schedule:
+                      </span>
+                      <div className="space-y-2">
+                        {switchResult.phases.map((ph, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/70 dark:border-slate-800/70 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 font-bold text-[10px] flex items-center justify-center text-slate-700 dark:text-slate-300 flex-shrink-0">
+                                {idx + 1}
+                              </span>
+                              <div>
+                                <span className="font-bold text-slate-900 dark:text-white">
+                                  {ph.title}
+                                </span>
+                                {ph.notes && (
+                                  <p className="text-slate-600 dark:text-slate-400 text-[11px] mt-0.5">
+                                    {ph.notes}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <span className="font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap bg-white dark:bg-[#111827] px-2 py-0.5 rounded-md border border-slate-200/80 dark:border-slate-700/80 text-[10px] self-start sm:self-auto">
+                              {ph.timing}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Receptor Shift & Discontinuation Dynamics */}
+                  {switchResult.receptorDynamics && switchResult.receptorDynamics.length > 0 && (
+                    <div>
+                      <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-2">
+                        🧬 Receptor Dynamics & Vulnerability Windows:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {switchResult.receptorDynamics.map((rd, i) => (
+                          <div
+                            key={i}
+                            className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-2.5 border border-slate-200/60 dark:border-slate-800/60 text-xs"
+                          >
+                            <div className="flex items-center justify-between gap-1 mb-1">
+                              <span className="font-bold text-slate-900 dark:text-white">
+                                {rd.receptor}
+                              </span>
+                              {rd.riskLevel && (
+                                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
+                                  {rd.riskLevel}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                              {rd.hazard}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Emergency Rescue / Clinical Pearls */}
+                  {switchResult.rescuePearls && switchResult.rescuePearls.length > 0 && (
+                    <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/70 dark:border-slate-800/70">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
+                        💡 Clinical Rescue & Pearls:
+                      </span>
+                      <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
+                        {switchResult.rescuePearls.slice(0, 3).map((pearl, i) => (
+                          <li key={i} className="flex items-start gap-1.5">
+                            <span className="text-indigo-500 font-bold">•</span>
+                            <span className="text-[11px] leading-relaxed">{pearl}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Action Bar */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleCopySwitchEhrNote}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span>📋</span>
+                      <span>Copy EHR Note</span>
+                    </button>
+
+                    {switchResult.isCompendium && switchResult.compendiumId && (
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/cross-titration/${switchResult.compendiumId}`)}
+                        className="px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold transition-all shadow-xs hover:opacity-90 cursor-pointer flex items-center gap-1.5 ml-auto"
+                      >
+                        <span>View Compendium Protocol #{switchResult.number} →</span>
+                      </button>
+                    )}
                   </div>
                 </div>
+              )}
+            </div>
+          )}
+        </div>
 
-                <span className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors text-xl flex-shrink-0">
-                  →
-                </span>
+        {/* ==================================================================== */}
+        {/* FUNCTION 2: DEPRESCRIBING PROTOCOL                                  */}
+        {/* ==================================================================== */}
+        <div className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">📉</span>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                Deprescribing Protocol
+              </h2>
+            </div>
+
+            {deprescribeDrug && (
+              <button
+                onClick={() => setDeprescribeDrug(null)}
+                className="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+              >
+                Reset Deprescribing
+              </button>
+            )}
+          </div>
+
+          {/* Single Drug Selector Grouped by Family */}
+          <div className="mb-4">
+            <DrugFamilySelect
+              label="Medication to Deprescribe:"
+              selectedDrug={deprescribeDrug}
+              onSelect={setDeprescribeDrug}
+              placeholder="Select medication to taper / discontinue..."
+              groupedFamilies={groupedDrugs}
+            />
+          </div>
+
+          {/* Prompt when incomplete */}
+          {!deprescribeDrug && (
+            <p className="text-xs text-slate-400 dark:text-slate-500 italic text-center py-1">
+              Select a medication above to generate its tailored hyperbolic deprescribing and taper protocol.
+            </p>
+          )}
+
+          {/* Answer Dropdown / Panel Unfolds Underneath */}
+          {deprescribeResult && (
+            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 animate-in fade-in duration-200 space-y-4">
+              {/* Header & Pace Switcher */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-[#0b0f19] p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                      {deprescribeResult.drugName} Deprescribing
+                    </span>
+                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+                      {deprescribeResult.strategy}
+                    </span>
+                  </div>
+                  <span className="text-xs font-semibold text-amber-700 dark:text-amber-400">
+                    ⏱️ Target Timeline: {deprescribeResult.duration}
+                  </span>
+                </div>
+
+                {/* Pace Toggle: Slow / Mid / Fast */}
+                <div className="flex items-center gap-1 bg-white dark:bg-[#111827] p-1 rounded-xl border border-slate-200/80 dark:border-slate-700/80 self-start sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => setDeprescribePace('slow')}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      deprescribePace === 'slow'
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                    title="Extended / Hyperbolic / Ashton Paradigm"
+                  >
+                    🐢 Slow
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeprescribePace('mid')}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      deprescribePace === 'mid'
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                    title="Standard Evidence-Based Guideline"
+                  >
+                    ⚖️ Mid
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeprescribePace('fast')}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      deprescribePace === 'fast'
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xs'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                    title="Rapid / Inpatient / Toxicity-Driven"
+                  >
+                    ⚡ Fast
+                  </button>
+                </div>
               </div>
 
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-                {proto.classTransition}
-              </p>
+              {/* Precaution Warning */}
+              {deprescribeResult.precaution && (
+                <div className="bg-rose-50/80 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900/60 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-rose-900 dark:text-rose-200 leading-relaxed font-medium">
+                  <span className="text-base flex-shrink-0">⚠️</span>
+                  <div>
+                    <span className="font-bold block mb-0.5 text-rose-950 dark:text-rose-100 uppercase tracking-wide text-[10px]">
+                      Withdrawal Precaution
+                    </span>
+                    {deprescribeResult.precaution}
+                  </div>
+                </div>
+              )}
 
-              <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-700/60">
-                {proto.switchType && (
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">
-                    {proto.switchType}
+              {/* Hyperbolic Rationale */}
+              {deprescribeResult.hyperbolicPrinciple && (
+                <div className="bg-slate-50 dark:bg-[#0b0f19] p-3 rounded-xl border border-slate-200/70 dark:border-slate-800/70 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                  <span className="font-bold text-slate-900 dark:text-white uppercase tracking-wide text-[10px] block mb-1">
+                    🔬 Hyperbolic Biological Taper Principle:
                   </span>
-                )}
-                {proto.duration && (
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/80">
-                    ⏱️ {proto.duration}
+                  {deprescribeResult.hyperbolicPrinciple}
+                </div>
+              )}
+
+              {/* Stepped Taper Phases */}
+              {deprescribeResult.phases && deprescribeResult.phases.length > 0 && (
+                <div>
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-2">
+                    📅 Stepped De-escalation Schedule:
                   </span>
-                )}
-                {proto.coreMandate && (
-                  <span className="text-xs text-slate-600 dark:text-slate-400 italic ml-auto truncate max-w-xs">
-                    Mandate: {proto.coreMandate}
+                  <div className="space-y-2">
+                    {deprescribeResult.phases.map((ph, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/70 dark:border-slate-800/70 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] flex items-center justify-center flex-shrink-0">
+                            {idx + 1}
+                          </span>
+                          <div>
+                            <span className="font-bold text-slate-900 dark:text-white">
+                              {ph.phase} — {ph.targetDoseLevel}
+                            </span>
+                            <p className="text-slate-600 dark:text-slate-400 text-[11px] mt-0.5">
+                              {ph.instructions}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap bg-white dark:bg-[#111827] px-2 py-0.5 rounded-md border border-slate-200/80 dark:border-slate-700/80 text-[10px] self-start sm:self-auto">
+                          {ph.timing}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Specific Withdrawal Risks to Monitor */}
+              {deprescribeResult.withdrawalRisks && deprescribeResult.withdrawalRisks.length > 0 && (
+                <div>
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-2">
+                    🛡️ Discontinuation Vulnerabilities to Monitor:
                   </span>
-                )}
+                  <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/70 dark:border-slate-800/70">
+                    <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
+                      {deprescribeResult.withdrawalRisks.map((risk, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-amber-500 font-bold">•</span>
+                          <span className="text-[11px] leading-relaxed">{risk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {/* Tapering Pearls & Rescue */}
+              {deprescribeResult.rescuePearls && deprescribeResult.rescuePearls.length > 0 && (
+                <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/70 dark:border-slate-800/70">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
+                    💡 Clinician Tapering Pearls & Rescue Strategies:
+                  </span>
+                  <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
+                    {deprescribeResult.rescuePearls.map((pearl, i) => (
+                      <li key={i} className="flex items-start gap-1.5">
+                        <span className="text-emerald-500 font-bold">•</span>
+                        <span className="text-[11px] leading-relaxed">{pearl}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Action Bar */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleCopyDeprescribeEhrNote}
+                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>📋</span>
+                  <span>Copy EHR Deprescribing Note</span>
+                </button>
               </div>
             </div>
-          ))}
+          )}
         </div>
-      ) : (
-        <div className="bg-white dark:bg-[#111827] rounded-2xl p-8 text-center border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-          <p className="text-base font-bold text-slate-900 dark:text-white mb-1">No transition protocols found</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">Try clearing your switch matcher inputs or adjusting search keywords.</p>
-          <button
-            onClick={() => {
-              setSearchQuery('')
-              setFromDrugFilter('')
-              setToDrugFilter('')
-              setSelectedSwitchType('ALL')
-            }}
-            className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold shadow-xs hover:opacity-90 cursor-pointer"
-          >
-            Reset Filters
-          </button>
-        </div>
-
-      )}
+      </div>
     </div>
   )
 }
 
 function ProtocolDetailView({ protocol, onBack }) {
-  const navigate = useNavigate()
   const [toastMessage, setToastMessage] = useState('')
-  const [activePhaseIndex, setActivePhaseIndex] = useState(null) // null = all
+  const [activePhaseIndex, setActivePhaseIndex] = useState(null)
   const [starred, setStarred] = useState(isFavorite('protocol', protocol.id))
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
 
-  // Start Date for Patient Schedule Calculator (defaults to today)
   const todayStr = new Date().toISOString().split('T')[0]
   const [startDate, setStartDate] = useState(todayStr)
 
-  // Date calculation helper
   const calculatePhaseDates = (phaseIdx) => {
     try {
       const start = new Date(startDate + 'T00:00:00')
-      let dayOffsetStart = 0
-      let dayOffsetEnd = 6
-
-      if (phaseIdx === 0) {
-        dayOffsetStart = 0
-        dayOffsetEnd = 6
-      } else if (phaseIdx === 1) {
-        dayOffsetStart = 7
-        dayOffsetEnd = 13
-      } else if (phaseIdx === 2) {
-        dayOffsetStart = 14
-        dayOffsetEnd = 20
-      } else {
-        dayOffsetStart = 21
-        dayOffsetEnd = 27
-      }
+      let dayOffsetStart = phaseIdx * 7
+      let dayOffsetEnd = phaseIdx * 7 + 6
 
       const dStart = new Date(start)
       dStart.setDate(dStart.getDate() + dayOffsetStart)
@@ -307,7 +618,6 @@ function ProtocolDetailView({ protocol, onBack }) {
     }
   }
 
-  // Pre-calculate phases with calendar date strings for modal
   const phasesWithDates = useMemo(() => {
     return (protocol.phases || []).map((ph, idx) => ({
       ...ph,
@@ -315,7 +625,6 @@ function ProtocolDetailView({ protocol, onBack }) {
     }))
   }, [protocol.phases, startDate])
 
-  // Copy switch protocol with dates to clipboard
   const handleCopyProtocol = () => {
     const lines = [
       `=== MODULE 12: PROTOCOL #${protocol.number} - ${protocol.title.toUpperCase()} ===`,
@@ -343,7 +652,6 @@ function ProtocolDetailView({ protocol, onBack }) {
     })
   }
 
-  // Copy structured EHR Progress Note
   const handleCopyEhrNote = () => {
     const lines = [
       `=== MEDICATION CROSS-TITRATION / TRANSITION NOTE ===`,
@@ -353,7 +661,7 @@ function ProtocolDetailView({ protocol, onBack }) {
       `Core Mandate: ${protocol.coreMandate}`,
       '',
       `CLINICAL NEUROBIOLOGICAL RATIONALE:`,
-      protocol.rationale || 'Cross-titration indicated per clinical psychopharmacology assessment.',
+      protocol.rationale || 'Cross-titration indicated per clinical assessment.',
       '',
       `SCHEDULED PHASES & DOSING:`,
       ...(protocol.phases || []).map((ph, idx) =>
@@ -361,9 +669,9 @@ function ProtocolDetailView({ protocol, onBack }) {
       ),
       '',
       protocol.alertBox ? `CRITICAL PRECAUTION: ${protocol.alertBox}` : '',
-      protocol.emergencyRescue ? `EMERGENCY RESCUE INTERVENTION: ${protocol.emergencyRescue}` : '',
+      protocol.emergencyRescue ? `EMERGENCY RESCUE INTERVENTION: ${Array.isArray(protocol.emergencyRescue) ? protocol.emergencyRescue.join('; ') : protocol.emergencyRescue}` : '',
       '',
-      `COUNSELING & MONITORING: Patient and caregiver counseled on scheduled stepped titration, potential discontinuation/rebound vs shift symptoms, and emergency red flags. Calendar-stamped patient handout provided in writing.`,
+      `COUNSELING & MONITORING: Patient counseled on scheduled stepped titration and red flags.`,
       `====================================================`,
     ].filter(Boolean).join('\n')
 
@@ -374,7 +682,6 @@ function ProtocolDetailView({ protocol, onBack }) {
     })
   }
 
-  // Risk meter severity color helper
   const getRiskColor = (severity) => {
     const s = (severity || '').toUpperCase()
     if (s.includes('SEVERE') || s.includes('VERY HIGH')) return { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', bar: 'bg-red-500', width: '90%' }
@@ -397,7 +704,7 @@ function ProtocolDetailView({ protocol, onBack }) {
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
           </svg>
-          <span>All 20 Protocols</span>
+          <span>Return to Protocols</span>
         </button>
 
         <div className="flex flex-wrap items-center gap-1.5">
@@ -412,7 +719,6 @@ function ProtocolDetailView({ protocol, onBack }) {
                 ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800 shadow-2xs'
                 : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-800/90 hover:text-amber-600 dark:hover:text-amber-400'
             }`}
-            title={starred ? 'Starred in Favorites' : 'Add to Favorites'}
           >
             <span>{starred ? '★' : '☆'}</span>
             <span>{starred ? 'Starred' : 'Star'}</span>
@@ -421,7 +727,6 @@ function ProtocolDetailView({ protocol, onBack }) {
           <button
             onClick={() => setIsPrintModalOpen(true)}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
-            title="Generate printable patient handout with calendar instructions"
           >
             <span>🖨️</span>
             <span>Patient Handout</span>
@@ -430,7 +735,6 @@ function ProtocolDetailView({ protocol, onBack }) {
           <button
             onClick={handleCopyEhrNote}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
-            title="Copy structured clinical note for EHR documentation"
           >
             <span>📋</span>
             <span>Copy EHR Note</span>
@@ -439,7 +743,6 @@ function ProtocolDetailView({ protocol, onBack }) {
           <button
             onClick={handleCopyProtocol}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#111827] hover:border-slate-300 dark:hover:border-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-all border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] cursor-pointer"
-            title="Copy raw schedule to clipboard"
           >
             <span>Schedule</span>
           </button>
@@ -447,7 +750,7 @@ function ProtocolDetailView({ protocol, onBack }) {
       </div>
 
       {/* Protocol Header Card */}
-      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-6">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] mb-6">
         <div className="flex items-center gap-2 mb-2">
           <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-200/80 dark:border-slate-700">
             Protocol #{protocol.number < 10 ? `0${protocol.number}` : protocol.number}
@@ -457,47 +760,47 @@ function ProtocolDetailView({ protocol, onBack }) {
           </span>
         </div>
 
-        <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1.5">
+        <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1">
           {protocol.title}
         </h1>
 
-        <p className="text-base sm:text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">
+        <p className="text-base font-bold text-slate-700 dark:text-slate-200 mb-2">
           {protocol.transitionTitle}
         </p>
 
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
           {protocol.classTransition}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs">
-          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800/80">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/80 dark:border-slate-800/80">
             <span className="text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-0.5">
               Switch Paradigm
             </span>
-            <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+            <span className="font-bold text-slate-900 dark:text-white text-sm">
               {protocol.switchType}
             </span>
           </div>
-          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800/80">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/80 dark:border-slate-800/80">
             <span className="text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-0.5">
               Standard Duration
             </span>
-            <span className="font-bold text-amber-700 dark:text-amber-400 text-sm sm:text-base">
+            <span className="font-bold text-amber-700 dark:text-amber-400 text-sm">
               ⏱️ {protocol.duration}
             </span>
           </div>
-          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800/80">
+          <div className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3 border border-slate-200/80 dark:border-slate-800/80">
             <span className="text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-0.5">
               Core Clinical Mandate
             </span>
-            <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+            <span className="font-bold text-slate-900 dark:text-white text-sm">
               🎯 {protocol.coreMandate}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Critical Alert / Warning Callout if present */}
+      {/* Critical Precaution Alert */}
       {protocol.alertBox && (
         <div className="bg-red-50/80 dark:bg-red-950/40 border-2 border-red-500/80 dark:border-red-800 rounded-2xl p-4 mb-6 shadow-xs flex items-start gap-3">
           <span className="text-2xl flex-shrink-0">⚠️</span>
@@ -512,15 +815,15 @@ function ProtocolDetailView({ protocol, onBack }) {
         </div>
       )}
 
-      {/* Patient Transition Schedule Date Picker */}
-      <div className="bg-white dark:bg-[#111827] rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* Date Picker for Schedule Calculator */}
+      <div className="bg-white dark:bg-[#111827] rounded-2xl p-4 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
             <span>🗓️</span>
             <span>Patient Transition Schedule Calculator</span>
           </span>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Select patient start date to generate exact calendar dates for each phase
+            Select patient start date to generate exact calendar dates
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -529,49 +832,18 @@ function ProtocolDetailView({ protocol, onBack }) {
             type="date"
             value={startDate}
             onChange={e => setStartDate(e.target.value)}
-            className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-500"
+            className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-sm font-bold text-slate-900 dark:text-white focus:outline-none"
           />
         </div>
       </div>
 
-      {/* Clinical Rationale */}
-      {protocol.rationale && (
-        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <span>🔬</span>
-            <span>Clinical Neurobiological Rationale</span>
-          </h2>
-          <p className="text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
-            {protocol.rationale}
-          </p>
-        </div>
-      )}
-
-      {/* Pharmacokinetic Profile */}
-      {protocol.kinetics && protocol.kinetics.length > 0 && (
-        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <span>⏱️</span>
-            <span>Pharmacokinetic Considerations & Elimination Kinetics</span>
-          </h2>
-          <div className="space-y-2">
-            {protocol.kinetics.map((k, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#0b0f19]/60 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
-                <span className="text-slate-400 dark:text-slate-500 font-bold">•</span>
-                <span className="font-medium leading-relaxed">{k}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 4-Phase Execution Timeline with Interactive Tabs & Calculated Dates */}
+      {/* 4-Phase Execution Schedule */}
       {protocol.phases && protocol.phases.length > 0 && (
-        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
               <span>📅</span>
-              <span>Structured 4-Phase Execution Schedule</span>
+              <span>4-Phase Execution Schedule</span>
             </h2>
 
             <div className="flex bg-slate-100 dark:bg-slate-700/60 p-1 rounded-xl gap-1">
@@ -597,48 +869,39 @@ function ProtocolDetailView({ protocol, onBack }) {
             </div>
           </div>
 
-          <div className="relative border-l-2 border-slate-200 dark:border-slate-700 ml-4 pl-6 space-y-6">
+          <div className="space-y-3">
             {protocol.phases
               .filter((_, idx) => activePhaseIndex === null || activePhaseIndex === idx)
               .map((ph, idx) => {
                 const actualIndex = activePhaseIndex !== null ? activePhaseIndex : idx
                 const calculatedDateRange = calculatePhaseDates(actualIndex)
                 return (
-                  <div key={actualIndex} className="relative group">
-                    {/* Stepper Bullet */}
-                    <div className="absolute -left-[35px] top-0 w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-extrabold text-xs flex items-center justify-center shadow-md border-2 border-white dark:border-slate-800">
-                      {actualIndex + 1}
-                    </div>
-
-                    <div className="bg-slate-50/80 dark:bg-[#111827]/80 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-700/80 transition-colors">
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                          {ph.phase || `PHASE ${actualIndex + 1}`}
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          {calculatedDateRange && (
-                            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-                              🗓️ {calculatedDateRange}
-                            </span>
-                          )}
-                          {ph.timing && (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-xs">
-                              {ph.timing}
-                            </span>
-                          )}
-                        </div>
+                  <div key={actualIndex} className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-700/80">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                        Phase {actualIndex + 1}
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {calculatedDateRange && (
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                            🗓️ {calculatedDateRange}
+                          </span>
+                        )}
+                        {ph.timing && (
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                            {ph.timing}
+                          </span>
+                        )}
                       </div>
-
-                      <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 leading-snug">
-                        {ph.title}
-                      </h3>
-
-                      {ph.notes && (
-                        <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed bg-white dark:bg-[#0b0f19]/80 rounded-xl p-3.5 border border-slate-200 dark:border-slate-700 font-normal">
-                          {ph.notes}
-                        </p>
-                      )}
                     </div>
+                    <h3 className="font-bold text-sm text-slate-900 dark:text-white mb-1">
+                      {ph.title}
+                    </h3>
+                    {ph.notes && (
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {ph.notes}
+                      </p>
+                    )}
                   </div>
                 )
               })}
@@ -646,141 +909,31 @@ function ProtocolDetailView({ protocol, onBack }) {
         </div>
       )}
 
-      {/* Receptor Shift Dynamics Table */}
-      {protocol.receptorShiftDynamics && protocol.receptorShiftDynamics.length > 0 && (
-        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <span>🧬</span>
-            <span>Receptor Shift Dynamics & Vulnerability Windows</span>
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-            Pharmacodynamic differential as drug concentrations cross during the transition timeline:
-          </p>
-
-          <div className="space-y-3">
-            {protocol.receptorShiftDynamics.map((item, i) => {
-              const riskInfo = getRiskColor(item.riskLevel)
-              return (
-                <div key={i} className="bg-slate-50 dark:bg-[#0b0f19]/60 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80">
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="font-extrabold text-base text-slate-900 dark:text-white">
-                      {item.receptor}
-                    </span>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
-                      {item.riskLevel}
-                    </span>
-                  </div>
-
-                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
-                    Transition Shift: {item.shift}
-                  </div>
-
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    <span className="font-semibold text-slate-700 dark:text-slate-200">Clinical Impact:</span> {item.hazard}
-                  </p>
+      {/* Emergency Rescue Guidelines */}
+      {protocol.emergencyRescue && (
+        <div className="bg-rose-50/60 dark:bg-rose-950/30 rounded-2xl p-4 border border-rose-200 dark:border-rose-900/50 shadow-xs mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">🚨</span>
+            <h3 className="text-xs font-bold text-rose-950 dark:text-rose-200 uppercase tracking-wider">
+              Emergency Rescue & Discontinuation Management
+            </h3>
+          </div>
+          <div className="space-y-1.5 text-xs text-slate-800 dark:text-slate-200">
+            {Array.isArray(protocol.emergencyRescue) ? (
+              protocol.emergencyRescue.map((rescue, i) => (
+                <div key={i} className="flex items-start gap-1.5">
+                  <span className="text-rose-600 font-bold">•</span>
+                  <span>{rescue}</span>
                 </div>
-              )
-            })}
+              ))
+            ) : (
+              <p>{protocol.emergencyRescue}</p>
+            )}
           </div>
         </div>
       )}
 
-      {/* Adverse Risk Stratification Meters */}
-      {protocol.riskMeters && protocol.riskMeters.length > 0 && (
-        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <span>📊</span>
-            <span>Adverse Risk Stratification Meters</span>
-          </h2>
-
-          <div className="space-y-4">
-            {protocol.riskMeters.map((rm, i) => {
-              const riskInfo = getRiskColor(rm.severity)
-              return (
-                <div key={i} className="bg-slate-50 dark:bg-[#0b0f19]/60 rounded-2xl p-3.5 border border-slate-100 dark:border-slate-700">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                      {rm.domain}
-                    </span>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-md border ${riskInfo.bg} ${riskInfo.text} ${riskInfo.border}`}>
-                      {rm.severity}
-                    </span>
-                  </div>
-
-                  {/* Progress Bar Meter */}
-                  <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mb-2">
-                    <div className={`h-full rounded-full ${riskInfo.bar}`} style={{ width: riskInfo.width }} />
-                  </div>
-
-                  {rm.notes && (
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                      {rm.notes}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Emergency Rescue Actions */}
-      {protocol.emergencyRescue && protocol.emergencyRescue.length > 0 && (
-        <div className="bg-rose-50/60 dark:bg-rose-950/30 rounded-3xl p-5 sm:p-6 border border-rose-200 dark:border-rose-900/50 shadow-xs mb-6">
-          <div className="flex items-center gap-2.5 mb-3">
-            <span className="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-base shadow-xs">
-              🚨
-            </span>
-            <div>
-              <h2 className="text-xs font-bold text-rose-950 dark:text-rose-200 uppercase tracking-wider">
-                Emergency Rescue & Toxicity Intervention Guidelines
-              </h2>
-              <p className="text-xs text-rose-800 dark:text-rose-300">
-                Protocols for acute breakthrough symptoms, destabilization, or severe adverse events
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            {protocol.emergencyRescue.map((rescue, i) => (
-              <div key={i} className="bg-white dark:bg-[#0b0f19]/80 rounded-xl p-3.5 border border-rose-100 dark:border-rose-900/40 text-sm text-slate-800 dark:text-slate-200 shadow-2xs leading-relaxed font-medium">
-                <span className="font-bold text-rose-700 dark:text-rose-400 mr-1.5">⚡</span>
-                {rescue}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Clinical Practice Pearls */}
-      {protocol.clinicalPearls && protocol.clinicalPearls.length > 0 && (
-        <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-700/90 shadow-xs mb-6">
-          <h2 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <span>💡</span>
-            <span>High-Yield Clinical Practice Pearls</span>
-          </h2>
-          <div className="space-y-2.5">
-            {protocol.clinicalPearls.map((pearl, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#0b0f19]/60 rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-700/80">
-                <span className="text-slate-500 dark:text-slate-400 font-extrabold text-sm">✓</span>
-                <span className="leading-relaxed font-normal">{pearl}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Bottom Action Footer */}
-      <div className="text-center pt-4 pb-8">
-        <button
-          onClick={onBack}
-          className="px-6 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all inline-flex items-center gap-2"
-        >
-          ← Return to All 20 Protocols
-        </button>
-      </div>
-
-      {/* Printable Patient Handout Modal */}
+      {/* Printable Handout Modal */}
       <PatientHandoutModal
         isOpen={isPrintModalOpen}
         onClose={() => setIsPrintModalOpen(false)}
