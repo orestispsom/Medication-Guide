@@ -122,7 +122,7 @@ export default function CrossTitrationScreen() {
       {/* Simplified Header - subtitle removed */}
       <div className="mb-6">
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Transition & Deprescribing Protocols
+          Transition & Deprescribing
         </h1>
       </div>
 

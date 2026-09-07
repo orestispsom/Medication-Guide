@@ -16,17 +16,7 @@ const DRUG_FAMILIES = [
   { id: 'antidotes-interventional', name: 'Emergency Antidotes', icon: '🚨', color: '#E11D48', path: '/family/antidotes-interventional' },
 ]
 
-const BEDSIDE_TOOLS = [
-  { id: 'cpz', name: 'CPZ Antipsychotic Equivalence', icon: '🎭', color: '#8B5CF6', tab: 'cpz' },
-  { id: 'lithium', name: 'Lithium 12h TDM & Cockcroft-Gault', icon: '🧪', color: '#0EA5E9', tab: 'lithium' },
-  { id: 'clozapine', name: 'Clozapine REMS ANC & Rechallenge', icon: '🩸', color: '#E11D48', tab: 'clozapine' },
-  { id: 'cyp', name: 'CYP450 Interaction Matrix', icon: '⚡', color: '#F59E0B', tab: 'cyp' },
-  { id: 'qtc', name: 'QTc Prolongation Risk Stacker', icon: '❤️', color: '#EF4444', tab: 'qtc' },
-  { id: 'bzd', name: 'Ashton Benzodiazepine Taper', icon: '⚖️', color: '#10B981', tab: 'bzd' },
-  { id: 'metabolic', name: 'Metabolic Monitoring Tracker', icon: '📊', color: '#06B6D4', tab: 'metabolic' },
-  { id: 'emergency', name: 'Emergency Toxicity Playbook', icon: '🚨', color: '#DC2626', tab: 'emergency' },
-  { id: 'renal', name: 'Renal & Hepatic Dose Adjuster', icon: '🩺', color: '#6366F1', tab: 'renal' },
-]
+
 
 export default function HomeScreen() {
   const navigate = useNavigate()
@@ -238,6 +228,9 @@ export default function HomeScreen() {
             </button>
           ))}
 
+          {/* Small vertical gap between last drug family and Receptors & Targets */}
+          <div className="pt-2 sm:pt-2.5"></div>
+
           {/* Receptors & Targets bar in distinct color */}
           <button
             onClick={() => navigate('/receptors')}
@@ -265,101 +258,97 @@ export default function HomeScreen() {
               </svg>
             </div>
           </button>
-        </div>
-      </div>
 
-      {/* 2. POINT-OF-CARE BEDSIDE TOOLS */}
-      <div className="mb-9">
-        <div className="flex items-center justify-between mb-3.5">
-          <h2 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Point-of-Care Bedside Tools
-          </h2>
-          <button
-            onClick={() => navigate('/tools')}
-            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap"
-          >
-            Open Tools Hub →
-          </button>
-        </div>
-
-        <div className="flex flex-col gap-2.5">
-          {BEDSIDE_TOOLS.map(tool => (
-            <button
-              key={tool.id}
-              onClick={() => navigate(`/tools?tab=${tool.tab}`)}
-              className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
-            >
-              <div className="flex items-center gap-3.5 min-w-0">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border transition-transform duration-200 group-hover:scale-105"
-                  style={{
-                    backgroundColor: `${tool.color}14`,
-                    borderColor: `${tool.color}28`,
-                  }}
-                >
-                  <span>{tool.icon}</span>
-                </div>
-                <span className="font-display font-semibold text-[15px] sm:text-base text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
-                  {tool.name}
-                </span>
-              </div>
-
-              <div className="flex items-center pl-2 flex-shrink-0">
-                <svg
-                  className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 3. REFERENCE COMPENDIUM DIRECTORIES */}
-      <div className="mb-6">
-        <h2 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
-          Reference Compendium Directories
-        </h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <button
-            onClick={() => navigate('/all-drugs')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
-          >
-            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-2.5 border border-slate-200/60 dark:border-slate-700/60">📋</span>
-            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">A–Z Index</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">170+ Monographs</p>
-          </button>
-
-          <button
-            onClick={() => navigate('/cross-titration')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
-          >
-            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-2.5 border border-slate-200/60 dark:border-slate-700/60">🔄</span>
-            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Titration</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">20 Protocols</p>
-          </button>
-
+          {/* Clinical Comparison Matrix bar in the same style */}
           <button
             onClick={() => navigate('/comparison')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
+            className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
           >
-            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-2.5 border border-slate-200/60 dark:border-slate-700/60">⚖️</span>
-            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Compare</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Drug Matrices</p>
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border transition-transform duration-200 group-hover:scale-105"
+                style={{
+                  backgroundColor: '#D9770614',
+                  borderColor: '#D9770628',
+                }}
+              >
+                <span>⚖️</span>
+              </div>
+              <span className="font-display font-semibold text-[15px] sm:text-base text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                Clinical Comparison Matrix
+              </span>
+            </div>
+
+            <div className="flex items-center pl-2 flex-shrink-0">
+              <svg
+                className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
           </button>
 
+          {/* Transition & Deprescribing bar in the same style */}
           <button
-            onClick={() => navigate('/receptors')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-indigo-300 dark:hover:border-indigo-900/60 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
+            onClick={() => navigate('/cross-titration')}
+            className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
           >
-            <span className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-lg mb-2.5 border border-indigo-200/60 dark:border-indigo-900/60">🧬</span>
-            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Receptors</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">44 Targets & Ki</p>
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border transition-transform duration-200 group-hover:scale-105"
+                style={{
+                  backgroundColor: '#05966914',
+                  borderColor: '#05966928',
+                }}
+              >
+                <span>🔄</span>
+              </div>
+              <span className="font-display font-semibold text-[15px] sm:text-base text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                Transition & Deprescribing
+              </span>
+            </div>
+
+            <div className="flex items-center pl-2 flex-shrink-0">
+              <svg
+                className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </button>
+
+          {/* Tools Hub bar in different highlight color */}
+          <button
+            onClick={() => navigate('/tools')}
+            className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-emerald-50/30 hover:from-emerald-100/90 hover:to-teal-100/60 dark:from-[#092720] dark:via-[#0a2e26] dark:to-[#111827] dark:hover:from-[#0d3930] dark:hover:to-[#123e35] border-2 border-emerald-400/40 dark:border-emerald-500/40 hover:border-emerald-500 dark:hover:border-emerald-400 rounded-2xl shadow-[0_2px_8px_rgba(16,185,129,0.08)] hover:shadow-md hover:shadow-emerald-500/10 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-emerald-500/15 dark:bg-emerald-500/25 border border-emerald-500/35 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 group-hover:scale-105">
+                <span>🛠️</span>
+              </div>
+              <div className="flex items-center gap-2 truncate">
+                <span className="font-display font-bold text-[15px] sm:text-base text-emerald-950 dark:text-emerald-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors truncate">
+                  Tools Hub
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center pl-2 flex-shrink-0">
+              <svg
+                className="w-4 h-4 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-200 group-hover:translate-x-1 transition-all duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
           </button>
         </div>
       </div>
