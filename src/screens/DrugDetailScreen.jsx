@@ -13,6 +13,14 @@ export default function DrugDetailScreen() {
 
   const drug = data.drugs.find(d => d.id === drugId)
   const [starred, setStarred] = useState(drug ? isFavorite('drug', drug.id) : false)
+  const [expandedReceptors, setExpandedReceptors] = useState({})
+
+  const toggleReceptorExpand = (recId) => {
+    setExpandedReceptors(prev => ({
+      ...prev,
+      [recId]: !prev[recId]
+    }))
+  }
 
   if (!drug) {
     return (
@@ -281,7 +289,7 @@ export default function DrugDetailScreen() {
                 Receptor Binding Profile & Occupancy
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Molecular affinities (Ki) and target occupancies
+                Molecular affinities (Ki) and occupancies · Tap any row for clinical mechanism
               </p>
             </div>
             <button
@@ -297,46 +305,94 @@ export default function DrugDetailScreen() {
               const receptorObj = data.receptors.find(rec => rec.id === r.receptor)
               const recColor = receptorObj?.color || '#4f46e5'
               const width = Math.min(Math.max(r.occupancy || 50, 12), 100)
+              const isExpanded = !!expandedReceptors[r.receptor]
 
               return (
-                <div key={r.receptor} className="flex items-center gap-2 py-1.5 px-2 rounded-lg bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/60 dark:border-slate-800/60">
-                  {/* Receptor Symbol */}
-                  <button
-                    onClick={() => navigate(`/receptors/${r.receptor}`)}
-                    className="flex items-center gap-1.5 flex-shrink-0 min-w-[60px] cursor-pointer hover:opacity-80 transition-opacity"
-                  >
-                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: recColor }} />
-                    <span className="text-xs font-black" style={{ color: recColor }}>{r.receptor}</span>
-                  </button>
-
-                  {/* Occupancy Bar — compact */}
-                  <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${width}%`,
-                        backgroundColor: recColor,
+                <div
+                  key={r.receptor}
+                  onClick={() => r.clinicalAction && toggleReceptorExpand(r.receptor)}
+                  className={`py-1.5 px-2.5 rounded-lg border transition-all ${
+                    r.clinicalAction ? 'cursor-pointer hover:border-slate-300 dark:hover:border-slate-700' : ''
+                  } ${
+                    isExpanded
+                      ? 'border-indigo-300 dark:border-indigo-800/80 bg-indigo-50/20 dark:bg-indigo-950/20 shadow-xs'
+                      : 'border-slate-200/60 dark:border-slate-800/60 bg-slate-50 dark:bg-[#0b0f19]'
+                  }`}
+                  title={r.clinicalAction ? `${r.receptor}: ${r.clinicalAction}` : undefined}
+                >
+                  <div className="flex items-center gap-2">
+                    {/* Receptor Symbol */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/receptors/${r.receptor}`)
                       }}
-                    />
+                      className="flex items-center gap-1.5 flex-shrink-0 min-w-[60px] cursor-pointer hover:opacity-80 transition-opacity"
+                    >
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: recColor }} />
+                      <span className="text-xs font-black" style={{ color: recColor }}>{r.receptor}</span>
+                    </button>
+
+                    {/* Occupancy Bar — compact */}
+                    <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${width}%`,
+                          backgroundColor: recColor,
+                        }}
+                      />
+                    </div>
+
+                    {/* Occupancy % */}
+                    <span className="text-xs font-black w-9 text-right flex-shrink-0" style={{ color: recColor }}>
+                      {r.occupancy}%
+                    </span>
+
+                    {/* Ki badge — compact */}
+                    {r.ki && (
+                      <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 flex-shrink-0 w-16 text-right truncate">
+                        {r.ki.replace(/sub-?nanomolar/gi, '<1nM')}
+                      </span>
+                    )}
+
+                    {/* Action badge — compact */}
+                    {r.action && (
+                      <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex-shrink-0 hidden sm:block max-w-[80px] truncate">
+                        {r.action}
+                      </span>
+                    )}
+
+                    {/* Info / Expand Button */}
+                    {r.clinicalAction && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleReceptorExpand(r.receptor)
+                        }}
+                        className={`text-xs px-1 py-0.5 rounded-md transition-all flex items-center gap-0.5 flex-shrink-0 cursor-pointer ${
+                          isExpanded
+                            ? 'bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold'
+                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
+                        }`}
+                        title={isExpanded ? 'Collapse mechanism note' : 'View clinical mechanism note'}
+                      >
+                        <span className="text-[11px]">ℹ️</span>
+                        <span className={`text-[9px] transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                      </button>
+                    )}
                   </div>
 
-                  {/* Occupancy % */}
-                  <span className="text-xs font-black w-9 text-right flex-shrink-0" style={{ color: recColor }}>
-                    {r.occupancy}%
-                  </span>
-
-                  {/* Ki badge — compact */}
-                  {r.ki && (
-                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 flex-shrink-0 w-16 text-right truncate">
-                      {r.ki.replace(/sub-?nanomolar/gi, '<1nM')}
-                    </span>
-                  )}
-
-                  {/* Action badge — compact */}
-                  {r.action && (
-                    <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex-shrink-0 hidden sm:block max-w-[80px] truncate">
-                      {r.action}
-                    </span>
+                  {/* Expandable Clinical Mechanism Section */}
+                  {isExpanded && r.clinicalAction && (
+                    <div className="mt-2 pt-2 border-t border-slate-200/70 dark:border-slate-800/70 text-xs text-slate-700 dark:text-slate-300 leading-relaxed pl-1">
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400 mr-1.5">
+                        Clinical Mechanism:
+                      </span>
+                      <span>{r.clinicalAction}</span>
+                    </div>
                   )}
                 </div>
               )
