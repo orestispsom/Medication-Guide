@@ -15,6 +15,9 @@ import Navigation from './components/Navigation'
 import QuickSearchModal from './components/QuickSearchModal'
 import FavoritesDrawer from './components/FavoritesDrawer'
 
+// ARCHIVED: Set to true to instantly restore the floating bottom navigation bar
+const SHOW_BOTTOM_NAV = false
+
 function AppLayout() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false)
@@ -24,6 +27,18 @@ function AppLayout() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
+
+  // Global keyboard shortcut: Ctrl+K or Cmd+K to open search modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault()
+        setIsSearchOpen(prev => !prev)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-slate-900 selection:text-white dark:selection:bg-white dark:selection:text-slate-900 transition-colors font-sans antialiased">
@@ -45,11 +60,13 @@ function AppLayout() {
         </Routes>
       </main>
 
-      {/* Global Persistent Bottom Navigation Bar */}
-      <Navigation
-        onOpenSearch={() => setIsSearchOpen(true)}
-        onOpenFavorites={() => setIsFavoritesOpen(true)}
-      />
+      {/* Global Persistent Bottom Navigation Bar (ARCHIVED - toggle SHOW_BOTTOM_NAV to restore) */}
+      {SHOW_BOTTOM_NAV && (
+        <Navigation
+          onOpenSearch={() => setIsSearchOpen(true)}
+          onOpenFavorites={() => setIsFavoritesOpen(true)}
+        />
+      )}
 
       {/* Spotlight Command Palette Search Modal (Ctrl+K or /) */}
       <QuickSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
