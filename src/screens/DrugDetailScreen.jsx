@@ -328,7 +328,7 @@ export default function DrugDetailScreen() {
                   {/* Ki badge — compact */}
                   {r.ki && (
                     <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 flex-shrink-0 w-16 text-right truncate">
-                      {r.ki}
+                      {r.ki.replace(/sub-?nanomolar/gi, '<1nM')}
                     </span>
                   )}
 

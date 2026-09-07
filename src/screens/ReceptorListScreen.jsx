@@ -377,11 +377,6 @@ export default function ReceptorListScreen() {
                       <h3 className="font-display font-bold text-slate-900 dark:text-white text-base sm:text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {drug.name}
                       </h3>
-                      {drug.brand && (
-                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                          ({drug.brand.replace('US:', '').split('·')[0].trim()})
-                        </span>
-                      )}
                       <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70">
                         {drug.family}
                       </span>
@@ -397,68 +392,59 @@ export default function ReceptorListScreen() {
                 </div>
 
                 {/* Matching Receptor Bindings with Occupancy Bars in Family Color */}
-                <div className="space-y-2 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80">
+                <div className="space-y-1.5 mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80">
                   {drug.matchingBindings.map(b => {
                     const receptorObj = (data.receptors || []).find(rec => rec.id === b.receptor)
                     const famColor = getReceptorFamilyColor(b.receptor)
                     const occ = b.occupancy || 0
 
                     return (
-                      <div key={b.receptor} className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl p-2.5 border border-slate-200/70 dark:border-slate-800/70">
-                        <div className="flex items-center justify-between gap-2 mb-1.5">
-                          <div className="flex items-center gap-1.5">
-                            <span
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                navigate(`/receptors/${b.receptor}`)
-                              }}
-                              className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-md transition-transform hover:scale-105 border cursor-pointer"
-                              style={{
-                                backgroundColor: `${famColor}18`,
-                                color: famColor,
-                                borderColor: `${famColor}40`,
-                              }}
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
-                              <span>{b.receptor}</span>
-                            </span>
-                            {receptorObj?.fullName && (
-                              <span className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[180px] hidden sm:inline">
-                                {receptorObj.fullName}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            {b.ki && (
-                              <span className="text-xs font-bold px-2 py-0.5 rounded bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800/80">
-                                Ki: {b.ki}
-                              </span>
-                            )}
-                            <span className="text-xs font-black w-10 text-right" style={{ color: famColor }}>
-                              {occ}%
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Occupancy Progress Bar in Family Color */}
-                        <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-1">
-                          <div
-                            className="h-full rounded-full transition-all"
-                            style={{
-                              width: `${Math.min(Math.max(occ, 8), 100)}%`,
-                              backgroundColor: famColor,
+                      <div key={b.receptor} className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl px-3 py-2 border border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              navigate(`/receptors/${b.receptor}`)
                             }}
-                          />
+                            className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-md transition-transform hover:scale-105 border cursor-pointer"
+                            style={{
+                              backgroundColor: `${famColor}18`,
+                              color: famColor,
+                              borderColor: `${famColor}40`,
+                            }}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
+                            <span>{b.receptor}</span>
+                          </span>
+                          {receptorObj?.fullName && (
+                            <span className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[180px] hidden sm:inline">
+                              {receptorObj.fullName}
+                            </span>
+                          )}
                         </div>
 
-                        {/* Clinical Action Directive */}
-                        {b.clinicalAction && (
-                          <p className="text-xs text-slate-600 dark:text-slate-300 font-normal leading-relaxed mt-1">
-                            <span className="font-semibold text-slate-800 dark:text-slate-200">Clinical Mechanism: </span>
-                            {b.clinicalAction}
-                          </p>
-                        )}
+                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                          {b.ki && (
+                            <span className="text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800/80 whitespace-nowrap">
+                              Ki: {b.ki.replace(/sub-?nanomolar/gi, '<1nM')}
+                            </span>
+                          )}
+
+                          {/* Small inline occupancy progress bar */}
+                          <div className="w-14 sm:w-24 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex-shrink-0">
+                            <div
+                              className="h-full rounded-full transition-all"
+                              style={{
+                                width: `${Math.min(Math.max(occ, 8), 100)}%`,
+                                backgroundColor: famColor,
+                              }}
+                            />
+                          </div>
+
+                          <span className="text-xs sm:text-sm font-black w-8 sm:w-10 text-right flex-shrink-0" style={{ color: famColor }}>
+                            {occ}%
+                          </span>
+                        </div>
                       </div>
                     )
                   })}

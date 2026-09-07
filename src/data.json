@@ -1609,7 +1609,7 @@
           "occupancy": 70,
           "ki": "0.34 nM",
           "action": "Partial Agonist (~30%)",
-          "clinicalAction": "Sub-nanomolar affinity easily displaces full dopamine and other antipsychotics, achieving > 85% occupancy with"
+          "clinicalAction": "<1nM affinity easily displaces full dopamine and other antipsychotics, achieving > 85% occupancy with"
         },
         {
           "receptor": "5HT2A",
@@ -1788,7 +1788,7 @@
           "occupancy": 95,
           "ki": "0.085 nM",
           "action": "Ultra-Potent Partial Agonist",
-          "clinicalAction": "Sub-nanomolar partial agonism enhances prefrontal cognition, executive function, mood, and social motivation."
+          "clinicalAction": "<1nM partial agonism enhances prefrontal cognition, executive function, mood, and social motivation."
         },
         {
           "receptor": "D2",
@@ -2515,7 +2515,7 @@
           "occupancy": 95,
           "ki": "0.06 nM",
           "action": "Ultra-Potent Block",
-          "clinicalAction": "Sub-nanomolar antagonism provides robust dopamine disinhibition in striatum and prefrontal cortex."
+          "clinicalAction": "<1nM antagonism provides robust dopamine disinhibition in striatum and prefrontal cortex."
         },
         {
           "receptor": "D2",
@@ -2952,7 +2952,7 @@
           "occupancy": 75,
           "ki": "0.087 nM",
           "action": "Receptor Ligand",
-          "clinicalAction": "Sub-nanomolar selectivity (40x higher than 5-HT2C); eliminates visual hallucinations and delusions in Parkinson's"
+          "clinicalAction": "<1nM selectivity (40x higher than 5-HT2C); eliminates visual hallucinations and delusions in Parkinson's"
         },
         {
           "receptor": "5HT2C",
@@ -3397,14 +3397,6 @@
         }
       ],
       "receptors": [
-        {
-          "receptor": "DAT",
-          "rawTarget": "Low Weight & Sedation",
-          "occupancy": 95,
-          "ki": "Fluphenazine possesses intense sub-nanomolar affinity for Dopamine D2 receptors with minimal autonomic binding:",
-          "action": "High-Potency Striatal Blockade",
-          "clinicalAction": "Active modulation of Low Weight & Sedation contributes to clinical efficacy and tolerability."
-        },
         {
           "receptor": "D2",
           "rawTarget": "Dopamine D2 Receptor",
@@ -3855,7 +3847,7 @@
           "occupancy": 85,
           "ki": "0.29 nM",
           "action": "Very High",
-          "clinicalAction": "Sub-nanomolar SERT inhibition drives primary antidepressant, anxiolytic, and anti-obsessional therapeutic actions."
+          "clinicalAction": "<1nM SERT inhibition drives primary antidepressant, anxiolytic, and anti-obsessional therapeutic actions."
         },
         {
           "receptor": "DAT",
@@ -4111,7 +4103,7 @@
       "benchmarkMetrics": [
         {
           "label": "SEROTONIN TRANSPORTER",
-          "value": "Sub-Nanomolar Affinity",
+          "value": "<1nM Affinity",
           "detail": "Highest Potency SSRI"
         },
         {
@@ -4137,7 +4129,7 @@
           "occupancy": 75,
           "ki": "0.1 nM",
           "action": "Ultra-High",
-          "clinicalAction": "Sub-nanomolar SERT inhibition produces rapid calming and robust efficacy in panic disorder and severe social"
+          "clinicalAction": "<1nM SERT inhibition produces rapid calming and robust efficacy in panic disorder and severe social"
         },
         {
           "receptor": "M1",
@@ -4691,7 +4683,7 @@
           "occupancy": 85,
           "ki": "4.6 nM",
           "action": "Very High",
-          "clinicalAction": "Sub-nanomolar SERT inhibition delivers robust antidepressant and generalized anxiolytic efficacy at 60 mg/day."
+          "clinicalAction": "<1nM SERT inhibition delivers robust antidepressant and generalized anxiolytic efficacy at 60 mg/day."
         },
         {
           "receptor": "NET",
@@ -5080,7 +5072,7 @@
           "occupancy": 75,
           "ki": "0.14 nM",
           "action": "Extremely High",
-          "clinicalAction": "Sub-nanomolar H1 blockade drives intense sedation, rapid sleep onset, and hypothalamic hyperphagia / carbohydrate"
+          "clinicalAction": "<1nM H1 blockade drives intense sedation, rapid sleep onset, and hypothalamic hyperphagia / carbohydrate"
         },
         {
           "receptor": "5HT2A",
@@ -5169,7 +5161,7 @@
           "title": "TARGET",
           "dose": "30 to 45 mg Bedtime · Weeks 3-4+",
           "timing": "",
-          "directive": "Primary target dose for major depressive disorder; provides maximal antidepressant response. SOLTAB (ODT) 15, 30, 45 mg · Wafer Form Dissolves on tongue in seconds without water; prevents pill cheeking in acute inpatient units. THE PARADOXICAL INVERSE SEDATION DYNAMICS: 15 MG VS 45 MG Clinical Paradox LOW DOSE: PURE HISTAMINERGIC COMA 7.5 - 15 mg/day: At low doses, Mirtazapine's sub-nanomolar H1 antagonism completely dominates, producing profound sleepiness, next-day hangover, and intense midnight carbohydrate binging with minimal noradrenergic counter-balance. HIGH DOSE: NORADRENERGIC OVERRIDE 30 - 45 mg/day: As the dose is escalated, presynaptic alpha-2 antagonism reaches therapeutic threshold, flooding the cortex with norepinephrine. This central noradrenergic activation counteracts H1 sedation, reducing daytime grogginess! ⚖️ SEVERE WEIGHT GAIN LIABILITY Combined H1 and 5-HT2C antagonism disrupts hypothalamic satiety signaling, triggering uncontrollable cravings for sugars and carbohydrates. Patients can gain 5-10 kg within weeks! Counsel on nutritional monitoring and exercise before initiating. 🩸 AGRANULOCYTOSIS MONITORING Severe neutropenia or agranulocytosis occurs rarely (< 1 in 1,000). Instruct patients to report signs of infection immediately (fever, chills, sore throat, stomatitis). Obtain a complete blood count (CBC) stat if infectious symptoms appear! PEARLS"
+          "directive": "Primary target dose for major depressive disorder; provides maximal antidepressant response. SOLTAB (ODT) 15, 30, 45 mg · Wafer Form Dissolves on tongue in seconds without water; prevents pill cheeking in acute inpatient units. THE PARADOXICAL INVERSE SEDATION DYNAMICS: 15 MG VS 45 MG Clinical Paradox LOW DOSE: PURE HISTAMINERGIC COMA 7.5 - 15 mg/day: At low doses, Mirtazapine's <1nM H1 antagonism completely dominates, producing profound sleepiness, next-day hangover, and intense midnight carbohydrate binging with minimal noradrenergic counter-balance. HIGH DOSE: NORADRENERGIC OVERRIDE 30 - 45 mg/day: As the dose is escalated, presynaptic alpha-2 antagonism reaches therapeutic threshold, flooding the cortex with norepinephrine. This central noradrenergic activation counteracts H1 sedation, reducing daytime grogginess! ⚖️ SEVERE WEIGHT GAIN LIABILITY Combined H1 and 5-HT2C antagonism disrupts hypothalamic satiety signaling, triggering uncontrollable cravings for sugars and carbohydrates. Patients can gain 5-10 kg within weeks! Counsel on nutritional monitoring and exercise before initiating. 🩸 AGRANULOCYTOSIS MONITORING Severe neutropenia or agranulocytosis occurs rarely (< 1 in 1,000). Instruct patients to report signs of infection immediately (fever, chills, sore throat, stomatitis). Obtain a complete blood count (CBC) stat if infectious symptoms appear! PEARLS"
         }
       ],
       "blackBox": null,
@@ -7806,7 +7798,7 @@
           "occupancy": 95,
           "ki": "0.06 nM",
           "action": "Ultra-Potent Block",
-          "clinicalAction": "Sub-nanomolar antagonism provides robust dopamine disinhibition in striatum and prefrontal cortex."
+          "clinicalAction": "<1nM antagonism provides robust dopamine disinhibition in striatum and prefrontal cortex."
         },
         {
           "receptor": "D2",
@@ -7949,7 +7941,7 @@
           "occupancy": 70,
           "ki": "0.34 nM",
           "action": "Partial Agonist (~30%)",
-          "clinicalAction": "Sub-nanomolar affinity easily displaces full dopamine and other antipsychotics, achieving > 85% occupancy with"
+          "clinicalAction": "<1nM affinity easily displaces full dopamine and other antipsychotics, achieving > 85% occupancy with"
         },
         {
           "receptor": "5HT2A",
@@ -8695,7 +8687,7 @@
           "receptor": "Alpha2A",
           "rawTarget": "GABA-A Alpha2 Subunit (Anxiolytic)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Potent Antipanic Quenching",
           "clinicalAction": "Instantly terminates paroxysmal panic surges, smothering amygdaloid fear circuits and acute hyperventilation."
         },
@@ -8703,7 +8695,7 @@
           "receptor": "GABAA",
           "rawTarget": "GABA-A Alpha2 Subunit (Anxiolytic)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Potent Antipanic Quenching",
           "clinicalAction": "Instantly terminates paroxysmal panic surges, smothering amygdaloid fear circuits and acute hyperventilation."
         },
@@ -8829,7 +8821,7 @@
           "receptor": "Alpha2A",
           "rawTarget": "GABA-A Alpha2 Subunit (Anxiolytic)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Long half-life provides seamless 24-hour panic prophylaxis without the jagged peaks and troughs of alprazolam."
         },
@@ -8837,7 +8829,7 @@
           "receptor": "GABAA",
           "rawTarget": "GABA-A Alpha2 Subunit (Anxiolytic)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Long half-life provides seamless 24-hour panic prophylaxis without the jagged peaks and troughs of alprazolam."
         },
@@ -9653,7 +9645,7 @@
           "receptor": "Alpha1",
           "rawTarget": "GABA-A Alpha1 Subunit (Sedative)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Instantly drives chloride influx across cortical and thalamic networks, collapsing sleep latency within 15-20 minutes."
         },
@@ -9661,7 +9653,7 @@
           "receptor": "GABAA",
           "rawTarget": "GABA-A Alpha1 Subunit (Sedative)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Instantly drives chloride influx across cortical and thalamic networks, collapsing sleep latency within 15-20 minutes."
         },
@@ -9669,7 +9661,7 @@
           "receptor": "DAT",
           "rawTarget": "GABA-A Alpha1 Subunit (Sedative)",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Receptor Ligand",
           "clinicalAction": "Instantly drives chloride influx across cortical and thalamic networks, collapsing sleep latency within 15-20 minutes."
         }
@@ -24471,7 +24463,7 @@
         {
           "label": "SEROTONIN TRANSPORTER (SERT)",
           "value": "Ki = 0.14 nM",
-          "detail": "Unrivaled sub-nanomolar SERT potency (gold standard in OCD)"
+          "detail": "Unrivaled <1nM SERT potency (gold standard in OCD)"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -24496,7 +24488,7 @@
           "occupancy": 95,
           "ki": "0.14 nM",
           "action": "Ultra-Potent Inhibitor",
-          "clinicalAction": "Sub-nanomolar SERT inhibition delivers peerless clinical efficacy in treatment-resistant OCD, severe melancholic depression, and cataplexy."
+          "clinicalAction": "<1nM SERT inhibition delivers peerless clinical efficacy in treatment-resistant OCD, severe melancholic depression, and cataplexy."
         },
         {
           "receptor": "NET",
@@ -24872,7 +24864,7 @@
           "occupancy": 95,
           "ki": "0.8 nM",
           "action": "Ultra-Potent Selective Inhibitor",
-          "clinicalAction": "Sub-nanomolar NET blockade drives intense noradrenergic vigilance, executive activation, psychomotor energy, and analgesic gating."
+          "clinicalAction": "<1nM NET blockade drives intense noradrenergic vigilance, executive activation, psychomotor energy, and analgesic gating."
         },
         {
           "receptor": "SERT",
@@ -25029,7 +25021,7 @@
         {
           "label": "HISTAMINE H1 AFFINITY",
           "value": "Ki = 0.24 nM",
-          "detail": "Sub-nanomolar H1 potency gives pure hypnotic action at 3-6 mg"
+          "detail": "<1nM H1 potency gives pure hypnotic action at 3-6 mg"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -25053,7 +25045,7 @@
           "rawTarget": "Histamine H1 Receptor",
           "occupancy": 95,
           "ki": "0.24 nM",
-          "action": "Ultra-Potent Sub-Nanomolar Antagonist",
+          "action": "Ultra-Potent <1nM Antagonist",
           "clinicalAction": "Unsurpassed H1 selectivity at low doses (3-6 mg) induces and maintains sleep without anticholinergic, antiadrenergic, or habit-forming liabilities."
         },
         {
@@ -25525,7 +25517,7 @@
           "receptor": "MAO-B",
           "rawTarget": "Monoamine Oxidase B",
           "occupancy": 95,
-          "ki": "Sub-nanomolar",
+          "ki": "<1nM",
           "action": "Irreversible Selective Inactivation",
           "clinicalAction": "High-affinity MAO-B suicide inhibition spares dopamine and PEA in the basal ganglia and frontal cortex."
         },
@@ -27606,7 +27598,7 @@
       "receptorShiftDynamics": [
         {
           "receptor": "Mu-Opioid Receptor (MOR)",
-          "shift": "Sub-Nanomolar Affinity Partial Ag­",
+          "shift": "<1nM Affinity Partial Ag­",
           "riskLevel": "",
           "hazard": "Displaces full agonists immediately; lower intrinsic activity triggers precipitated drop."
         },
