@@ -708,7 +708,7 @@
         {
           "label": "DOPAMINE D2 OCCUPANCY",
           "value": "Weak Block (30-60%)",
-          "detail": "Rapid 'Hit-and-Run' Off-Rate"
+          "detail": "Sub-EPS Threshold (<65%); Sparing Prolactin"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",
@@ -1414,7 +1414,7 @@
         {
           "label": "DOPAMINE D2 OCCUPANCY",
           "value": "Weak Block (< 60%)",
-          "detail": "Rapid 'Hit-and-Run' Off-Rate"
+          "detail": "Sub-EPS Threshold (<65%); Sparing Prolactin"
         },
         {
           "label": "ELIMINATION HALF-LIFE (t½)",

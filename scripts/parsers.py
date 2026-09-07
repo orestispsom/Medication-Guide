@@ -677,6 +677,8 @@ def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, 
         lbl = lines1[idx]
         val = lines1[idx+1] if idx+1 < len(lines1) else ''
         det = lines1[idx+2] if idx+2 < len(lines1) else ''
+        if "Hit-and-Run" in det:
+            det = "Sub-EPS Threshold (<65%); Sparing Prolactin"
         benchmarks.append({
             'label': lbl,
             'value': val,

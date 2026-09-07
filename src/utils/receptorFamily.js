@@ -159,3 +159,88 @@ export const getReceptorColor = (recId) => {
 export const getReceptorFamilyColor = (recId) => {
   return getReceptorColor(recId)
 }
+
+export const DOMAIN_RECEPTOR_MAP = [
+  {
+    pattern: /sedat|somnol|drowsi|sleep/i,
+    receptors: ['H1', 'Alpha1', 'M1', '5HT2A'],
+    mechanism: 'H₁ / α₁ antagonism',
+  },
+  {
+    pattern: /weight|metabol|hyperphag|insulin|lipid|glucose|diabetes|triglyceride/i,
+    receptors: ['H1', '5HT2C', 'M3'],
+    mechanism: 'H₁ + 5-HT₂c blockade',
+  },
+  {
+    pattern: /anticholinergic|constipat|gastric|dry mouth/i,
+    receptors: ['M1', 'M3', 'M2'],
+    mechanism: 'M₁ / M₃ antagonism',
+  },
+  {
+    pattern: /orthosta|hypotension|dizzin|syncope/i,
+    receptors: ['Alpha1', 'Alpha2A'],
+    mechanism: 'α₁ adrenergic blockade',
+  },
+  {
+    pattern: /extrapyramidal|eps|parkinson|rigid|dyston|akathisi|tardive/i,
+    receptors: ['D2', '5HT2A'],
+    mechanism: 'Striatal D₂ block vs 5-HT₂A',
+  },
+  {
+    pattern: /prolactin/i,
+    receptors: ['D2'],
+    mechanism: 'Tuberoinfundibular D₂ block',
+  },
+  {
+    pattern: /qtc|cardiac|torsade/i,
+    receptors: ['hERG'],
+    mechanism: 'hERG (IKr) channel block',
+  },
+  {
+    pattern: /seizur|convuls/i,
+    receptors: ['GABAA', 'H1'],
+    mechanism: 'Cortical threshold modulation',
+  },
+  {
+    pattern: /nausea|vomit|diarrhea|dyspepsia|gastrointestinal|gi distress/i,
+    receptors: ['5HT3', 'SERT'],
+    mechanism: '5-HT₃ / SERT stimulation',
+  },
+  {
+    pattern: /sexual|anorgasm|erectile|impoten/i,
+    receptors: ['5HT2A', 'SERT', 'Alpha1'],
+    mechanism: '5-HT₂A / SERT stimulation',
+  },
+  {
+    pattern: /insomnia|activat|agitat|anxiety|restless/i,
+    receptors: ['NET', 'DAT', '5HT2A'],
+    mechanism: 'Noradrenergic / dopaminergic tone',
+  },
+  {
+    pattern: /tachycardia|pulse|blood pressure|hypertension|sweat|diaphore/i,
+    receptors: ['NET', 'Alpha1', 'M2'],
+    mechanism: 'Noradrenergic excess / vagolytic',
+  },
+  {
+    pattern: /urinary|retention|hesitancy/i,
+    receptors: ['M3', 'Alpha1'],
+    mechanism: 'M₃ detrusor block / α₁ tone',
+  }
+]
+
+export const getDomainReceptorTies = (domainName, drugReceptors = []) => {
+  if (!domainName) return null
+  const match = DOMAIN_RECEPTOR_MAP.find(m => m.pattern.test(domainName))
+  if (!match) return null
+
+  const drugRecIds = new Set((drugReceptors || []).map(r => (r.receptor || '').toUpperCase()))
+  const matchedRecs = match.receptors.filter(rid => drugRecIds.has(rid.toUpperCase()))
+
+  const targetRecs = matchedRecs.length > 0 ? matchedRecs : match.receptors.slice(0, 2)
+
+  return targetRecs.map(rid => ({
+    id: rid,
+    color: getReceptorColor(rid),
+    mechanism: match.mechanism,
+  }))
+}
