@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import data from '../data.json'
 import BackButton from '../components/BackButton'
-import { getReceptorFamily, getReceptorFamilyColor } from '../utils/receptorFamily'
+import { getReceptorFamily, getReceptorFamilyColor, getShortSubgroup } from '../utils/receptorFamily'
 
 // Helper to parse numerical Ki in nM for tie-breaking
 function parseKiValue(kiStr) {
@@ -45,25 +45,58 @@ export default function ReceptorDetailScreen() {
   const [viewLayout, setViewLayout] = useState('ranked') // 'ranked' | 'grouped'
   const [sortBy, setSortBy] = useState('affinity') // 'affinity' | 'name'
 
-  // Drugs binding this target, sorted strictly by affinity (occupancy desc, Ki asc)
+  // Drugs binding this target, deduplicated by drug name and sorted strictly by affinity (occupancy desc, Ki asc)
   const drugsWithBinding = useMemo(() => {
-    return data.drugs
+    const rawMatches = data.drugs
       .filter(d => (d.receptors || []).some(r => r.receptor === receptorId))
       .map(d => ({
         ...d,
         binding: d.receptors.find(r => r.receptor === receptorId),
       }))
-      .sort((a, b) => {
-        if (sortBy === 'affinity') {
-          const occDiff = (b.binding?.occupancy || 0) - (a.binding?.occupancy || 0)
-          if (occDiff !== 0) return occDiff
-          const aKi = parseKiValue(a.binding?.ki)
-          const bKi = parseKiValue(b.binding?.ki)
-          if (aKi !== bKi) return aKi - bKi
-          return a.name.localeCompare(b.name)
-        }
-        return a.name.localeCompare(b.name)
+
+    // Deduplicate cross-listed monographs by drug name
+    const byName = new Map()
+    rawMatches.forEach(d => {
+      const key = d.name.trim().toLowerCase()
+      if (!byName.has(key)) {
+        byName.set(key, [d])
+      } else {
+        byName.get(key).push(d)
+      }
+    })
+
+    const uniqueDrugs = Array.from(byName.values()).map(candidates => {
+      if (candidates.length === 1) return candidates[0]
+
+      // Sort so canonical primary monograph comes first (non-hyphenated ID preferred)
+      candidates.sort((a, b) => {
+        const aHyphen = a.id.includes('-')
+        const bHyphen = b.id.includes('-')
+        if (aHyphen !== bHyphen) return aHyphen ? 1 : -1
+        return a.id.length - b.id.length
       })
+
+      const primary = { ...candidates[0] }
+      // Pick best binding data if another entry has higher occupancy
+      for (const cand of candidates) {
+        if ((cand.binding?.occupancy || 0) > (primary.binding?.occupancy || 0)) {
+          primary.binding = cand.binding
+        }
+      }
+      return primary
+    })
+
+    return uniqueDrugs.sort((a, b) => {
+      if (sortBy === 'affinity') {
+        const occDiff = (b.binding?.occupancy || 0) - (a.binding?.occupancy || 0)
+        if (occDiff !== 0) return occDiff
+        const aKi = parseKiValue(a.binding?.ki)
+        const bKi = parseKiValue(b.binding?.ki)
+        if (aKi !== bKi) return aKi - bKi
+        return a.name.localeCompare(b.name)
+      }
+      return a.name.localeCompare(b.name)
+    })
   }, [receptorId, sortBy])
 
   // Optional grouping by drug class
@@ -268,16 +301,15 @@ export default function ReceptorDetailScreen() {
                         #{index + 1}
                       </span>
 
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
-                            {drug.name}
+                      <div className="min-w-0 flex items-center gap-2 flex-wrap">
+                        <span className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                          {drug.name}
+                        </span>
+                        {drug.subgroup && (
+                          <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70 whitespace-nowrap">
+                            {getShortSubgroup(drug.subgroup)}
                           </span>
-                          <span className="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70 whitespace-nowrap">
-                            {drug.family}
-                          </span>
-                        </div>
-                        <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">{drug.subgroup}</p>
+                        )}
                       </div>
                     </div>
 
@@ -346,11 +378,15 @@ export default function ReceptorDetailScreen() {
                         className="bg-white dark:bg-[#111827] rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer group"
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <div className="min-w-0">
-                            <span className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate block">
+                          <div className="min-w-0 flex items-center gap-2 flex-wrap">
+                            <span className="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
                               {drug.name}
                             </span>
-                            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">{drug.subgroup}</p>
+                            {drug.subgroup && (
+                              <span className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70 whitespace-nowrap">
+                                {getShortSubgroup(drug.subgroup)}
+                              </span>
+                            )}
                           </div>
 
                           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">

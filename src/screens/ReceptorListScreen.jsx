@@ -22,15 +22,29 @@ export default function ReceptorListScreen() {
 
   const initialCat = searchParams.get('family') || 'ALL'
   const initialTarget = searchParams.get('target') || 'ALL'
-  const initialView = searchParams.get('view') || 'receptors' // default to receptors double-column view
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState(initialCat)
   const [selectedTarget, setSelectedTarget] = useState(initialTarget)
-  const [viewMode, setViewMode] = useState(initialView) // 'receptors' | 'drugs'
-  const [drugSortBy, setDrugSortBy] = useState('occupancy') // 'occupancy' | 'name' | 'family'
 
-  // Pre-calculate count of drugs binding each category
+  // Pre-calculate count of unique drugs binding each target
+  const receptorUniqueDrugCounts = useMemo(() => {
+    const map = {}
+    data.drugs.forEach(d => {
+      const canonicalName = d.name.trim().toLowerCase()
+      ;(d.receptors || []).forEach(r => {
+        if (!map[r.receptor]) map[r.receptor] = new Set()
+        map[r.receptor].add(canonicalName)
+      })
+    })
+    const counts = {}
+    for (const [recId, set] of Object.entries(map)) {
+      counts[recId] = set.size
+    }
+    return counts
+  }, [])
+
+  // Pre-calculate count of unique drugs binding each category
   const categoryDrugCounts = useMemo(() => {
     const counts = {}
     data.drugs.forEach(d => {
@@ -69,58 +83,10 @@ export default function ReceptorListScreen() {
     })
   }, [categoryReceptors, selectedTarget, searchQuery])
 
-  // Drugs matching current category & target
-  const correspondingDrugs = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase()
-
-    return data.drugs
-      .map(drug => {
-        const matchingBindings = (drug.receptors || []).filter(r => {
-          if (selectedTarget !== 'ALL') {
-            return r.receptor === selectedTarget
-          }
-          if (selectedCategory !== 'ALL') {
-            return categorizeReceptor(r.receptor) === selectedCategory
-          }
-          return true
-        })
-
-        if (matchingBindings.length === 0) return null
-
-        const maxOccupancy = Math.max(...matchingBindings.map(b => b.occupancy || 0), 0)
-        const primaryBinding = matchingBindings[0]
-
-        if (q) {
-          const nameMatch = drug.name.toLowerCase().includes(q)
-          const brandMatch = drug.brand && drug.brand.toLowerCase().includes(q)
-          const classMatch = drug.subgroup && drug.subgroup.toLowerCase().includes(q)
-          const recMatch = matchingBindings.some(b => b.receptor.toLowerCase().includes(q))
-          if (!nameMatch && !brandMatch && !classMatch && !recMatch) return null
-        }
-
-        return {
-          ...drug,
-          matchingBindings,
-          primaryBinding,
-          maxOccupancy,
-        }
-      })
-      .filter(Boolean)
-      .sort((a, b) => {
-        if (drugSortBy === 'occupancy') {
-          return b.maxOccupancy - a.maxOccupancy
-        }
-        if (drugSortBy === 'family') {
-          return (a.family || '').localeCompare(b.family || '') || a.name.localeCompare(b.name)
-        }
-        return a.name.localeCompare(b.name)
-      })
-  }, [selectedCategory, selectedTarget, searchQuery, drugSortBy])
-
   const handleCategoryChange = (catId) => {
     setSelectedCategory(catId)
     setSelectedTarget('ALL')
-    setSearchParams({ family: catId, view: viewMode })
+    setSearchParams({ family: catId })
   }
 
   const handleTargetChange = (targetId) => {
@@ -222,7 +188,7 @@ export default function ReceptorListScreen() {
           {categoryReceptors.map(r => {
             const isSelected = selectedTarget === r.id
             const famColor = getReceptorFamilyColor(r.id)
-            const drugCount = data.drugs.filter(d => (d.receptors || []).some(rec => rec.receptor === r.id)).length
+            const drugCount = receptorUniqueDrugCounts[r.id] || 0
             return (
               <button
                 key={r.id}
@@ -246,231 +212,78 @@ export default function ReceptorListScreen() {
         </div>
       )}
 
-      {/* Dual Mode Switcher Bar: Receptors Double Column vs Drugs List */}
-      <div className="flex items-center justify-between gap-3 mb-4 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 p-1.5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setViewMode('receptors')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              viewMode === 'receptors'
-                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <span>🧬</span>
-            <span>Receptor Targets ({filteredReceptors.length})</span>
-          </button>
-          <button
-            onClick={() => setViewMode('drugs')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              viewMode === 'drugs'
-                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <span>💊</span>
-            <span>Binding Drugs ({correspondingDrugs.length})</span>
-          </button>
+      {/* SCROLLABLE DOUBLE COLUMN OF RECEPTOR TARGETS */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+          <span className="font-semibold">
+            Showing {filteredReceptors.length} {filteredReceptors.length === 1 ? 'target' : 'targets'}
+          </span>
+          <span>Click target to view binding drugs</span>
         </div>
 
-        {viewMode === 'drugs' && (
-          <div className="flex items-center gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400 mr-1">
-            <span>Sort:</span>
-            <select
-              value={drugSortBy}
-              onChange={e => setDrugSortBy(e.target.value)}
-              className="bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800/80 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none cursor-pointer"
-            >
-              <option value="occupancy">Highest Affinity</option>
-              <option value="name">Drug Name (A–Z)</option>
-              <option value="family">Drug Family</option>
-            </select>
-          </div>
-        )}
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+          {filteredReceptors.map(receptor => {
+            const family = getReceptorFamily(receptor.id)
+            const famColor = family.color
+            const drugCount = receptorUniqueDrugCounts[receptor.id] || 0
 
-      {/* VIEW 1: SCROLLABLE DOUBLE COLUMN OF RECEPTORS (DEFAULT) */}
-      {viewMode === 'receptors' && (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
-            <span className="font-semibold">
-              Showing {filteredReceptors.length} {filteredReceptors.length === 1 ? 'target' : 'targets'}
-            </span>
-            <span>Click card to inspect binding drugs ranked by affinity</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
-            {filteredReceptors.map(receptor => {
-              const family = getReceptorFamily(receptor.id)
-              const famColor = family.color
-              const drugCount = data.drugs.filter(d =>
-                (d.receptors || []).some(r => r.receptor === receptor.id)
-              ).length
-
-              return (
+            return (
+              <div
+                key={receptor.id}
+                onClick={() => navigate(`/receptors/${receptor.id}`)}
+                className="rounded-xl px-3 py-2.5 border transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer group flex items-center gap-2.5"
+                style={{
+                  backgroundColor: `${famColor}0C`,
+                  borderColor: `${famColor}35`,
+                }}
+              >
+                {/* Color dot + Symbol */}
                 <div
-                  key={receptor.id}
-                  onClick={() => navigate(`/receptors/${receptor.id}`)}
-                  className="rounded-xl px-3 py-2.5 border transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer group flex items-center gap-2.5"
-                  style={{
-                    backgroundColor: `${famColor}0C`,
-                    borderColor: `${famColor}35`,
-                  }}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-white font-black text-xs shadow-2xs"
+                  style={{ backgroundColor: famColor }}
                 >
-                  {/* Color dot + Symbol */}
-                  <div className="flex items-center gap-1.5 flex-shrink-0 min-w-[55px]">
-                    <span
-                      className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: famColor }}
-                    />
-                    <span
-                      className="font-display font-black text-sm tracking-tight"
-                      style={{ color: famColor }}
-                    >
+                  {receptor.id.slice(0, 3)}
+                </div>
+
+                {/* Name + Target Details */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {receptor.id}
                     </span>
-                  </div>
-
-                  {/* Full Name — truncated */}
-                  <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 truncate flex-1 leading-tight">
-                    {receptor.fullName}
-                  </span>
-
-                  {/* Drug count badge */}
-                  <span
-                    className="text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
-                    style={{
-                      backgroundColor: `${famColor}18`,
-                      color: famColor,
-                    }}
-                  >
-                    {drugCount}
-                  </span>
-
-                  {/* Arrow */}
-                  <span
-                    className="text-xs font-bold flex-shrink-0 group-hover:translate-x-0.5 transition-transform"
-                    style={{ color: famColor }}
-                  >
-                    →
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* VIEW 2: CORRESPONDING DRUGS LIST WITH FAMILY-COLORED BARS */}
-      {viewMode === 'drugs' && (
-        <div className="space-y-3">
-          {correspondingDrugs.length > 0 ? (
-            correspondingDrugs.map(drug => (
-              <div
-                key={drug.id}
-                onClick={() => navigate(`/drug/${drug.id}`)}
-                className="bg-white dark:bg-[#111827] rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all cursor-pointer group"
-              >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-display font-bold text-slate-900 dark:text-white text-base sm:text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {drug.name}
-                      </h3>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70">
-                        {drug.family}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">{drug.subgroup}</p>
-                  </div>
-
-                  <div className="text-right flex-shrink-0">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform inline-block">
-                      Monograph →
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold truncate">
+                      · {receptor.fullName}
                     </span>
                   </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                    {receptor.action || family.name}
+                  </p>
                 </div>
 
-                {/* Matching Receptor Bindings with Occupancy Bars in Family Color */}
-                <div className="space-y-1.5 mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80">
-                  {drug.matchingBindings.map(b => {
-                    const receptorObj = (data.receptors || []).find(rec => rec.id === b.receptor)
-                    const famColor = getReceptorFamilyColor(b.receptor)
-                    const occ = b.occupancy || 0
+                {/* Drug Count Badge */}
+                <span
+                  className="text-[11px] font-bold px-2 py-0.5 rounded-full border flex-shrink-0"
+                  style={{
+                    backgroundColor: `${famColor}15`,
+                    color: famColor,
+                    borderColor: `${famColor}30`,
+                  }}
+                >
+                  {drugCount} {drugCount === 1 ? 'drug' : 'drugs'}
+                </span>
 
-                    return (
-                      <div key={b.receptor} className="bg-slate-50 dark:bg-[#0b0f19] rounded-xl px-3 py-2 border border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              navigate(`/receptors/${b.receptor}`)
-                            }}
-                            className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-md transition-transform hover:scale-105 border cursor-pointer"
-                            style={{
-                              backgroundColor: `${famColor}18`,
-                              color: famColor,
-                              borderColor: `${famColor}40`,
-                            }}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: famColor }} />
-                            <span>{b.receptor}</span>
-                          </span>
-                          {receptorObj?.fullName && (
-                            <span className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[180px] hidden sm:inline">
-                              {receptorObj.fullName}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-                          {b.ki && (
-                            <span className="text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800/80 whitespace-nowrap">
-                              Ki: {b.ki.replace(/sub-?nanomolar/gi, '<1nM')}
-                            </span>
-                          )}
-
-                          {/* Small inline occupancy progress bar */}
-                          <div className="w-14 sm:w-24 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex-shrink-0">
-                            <div
-                              className="h-full rounded-full transition-all"
-                              style={{
-                                width: `${Math.min(Math.max(occ, 8), 100)}%`,
-                                backgroundColor: famColor,
-                              }}
-                            />
-                          </div>
-
-                          <span className="text-xs sm:text-sm font-black w-8 sm:w-10 text-right flex-shrink-0" style={{ color: famColor }}>
-                            {occ}%
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
+                {/* Arrow */}
+                <span
+                  className="text-xs font-bold flex-shrink-0 group-hover:translate-x-0.5 transition-transform"
+                  style={{ color: famColor }}
+                >
+                  →
+                </span>
               </div>
-            ))
-          ) : (
-            <div className="bg-white dark:bg-[#111827] rounded-2xl p-8 text-center border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-              <p className="text-base font-bold text-slate-900 dark:text-white mb-1">No matching medications</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                No medications documented with affinity for the selected receptor target. Try clearing filters.
-              </p>
-              <button
-                onClick={() => {
-                  setSelectedCategory('ALL')
-                  setSelectedTarget('ALL')
-                  setSearchQuery('')
-                }}
-                className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-bold shadow-xs hover:opacity-90 cursor-pointer"
-              >
-                Reset Receptor Filters
-              </button>
-            </div>
-          )}
+            )
+          })}
         </div>
-      )}
+      </div>
     </div>
   )
 }

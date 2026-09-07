@@ -71,23 +71,30 @@ export const RECEPTOR_FAMILIES = [
   {
     id: 'Serotonergic',
     name: 'Serotonin (5-HT & SERT)',
-    shortName: '5-HT Serotonin',
+    shortName: '5-HT',
     color: '#0EA5E9', // Light Blue
     description: 'Mood, anxiety, cognition, impulsivity, and sleep architecture',
   },
   {
     id: 'Dopaminergic',
     name: 'Dopamine (D & DAT)',
-    shortName: 'D Dopamine',
+    shortName: 'D',
     color: '#EC4899', // Pink
     description: 'Motivation, reward, motor gating, and prefrontal executive function',
   },
   {
-    id: 'Transporters',
-    name: 'Transporters (NET / VMAT2 / SV2A)',
-    shortName: 'Transporters',
-    color: '#CA8A04', // Brimstone Yellow / Transporters
-    description: 'Presynaptic monoamine reuptake clearance and vesicular packaging',
+    id: 'Histaminergic',
+    name: 'Histamine (H)',
+    shortName: 'H',
+    color: '#EAB308', // Light Yellow
+    description: 'Wakefulness, sedation threshold, appetite, and metabolic regulation',
+  },
+  {
+    id: 'Muscarinic',
+    name: 'Muscarinic (M)',
+    shortName: 'M',
+    color: '#0D9488', // Teal / Turquoise
+    description: 'Parasympathetic tone, secretions, memory, and striatal balance',
   },
   {
     id: 'Adrenergic',
@@ -97,41 +104,85 @@ export const RECEPTOR_FAMILIES = [
     description: 'Arousal, blood pressure tone, vigilance, and autonomic feedback',
   },
   {
-    id: 'Histaminergic',
-    name: 'Histamine (H)',
-    shortName: 'Histamine',
-    color: '#EAB308', // Light Yellow
-    description: 'Wakefulness, sedation threshold, appetite, and metabolic regulation',
-  },
-  {
-    id: 'Muscarinic',
-    name: 'Muscarinic (M)',
-    shortName: 'Muscarinic',
-    color: '#0D9488', // Teal / Turquoise
-    description: 'Parasympathetic tone, secretions, memory, and striatal balance',
+    id: 'Transporters',
+    name: 'Transporters (NET / VMAT2 / SV2A)',
+    shortName: 'Transporters',
+    color: '#CA8A04', // Brimstone Yellow / Transporters
+    description: 'Presynaptic monoamine reuptake clearance and vesicular packaging',
   },
   {
     id: 'GABA & Glutamate',
     name: 'GABA & Glutamate',
-    shortName: 'GABA/Glutamate',
+    shortName: 'GABA / Glu',
     color: '#7C3AED', // Royal Purple
     description: 'Major inhibitory (GABA) and excitatory (Glutamate) neurotransmission',
   },
   {
     id: 'Opioid & Neuropeptides',
     name: 'Opioid & Neuropeptides',
-    shortName: 'Opioids/Peptides',
+    shortName: 'Opioids / Peptides',
     color: '#E11D48', // Ruby Crimson / Peptides
     description: 'Endorphin hedonic tone, analgesia, circadian timing, and orexin gating',
   },
   {
     id: 'Enzymes & Channels',
     name: 'Enzymes & Ion Channels',
-    shortName: 'Enzymes/Channels',
+    shortName: 'Channels / Enzymes',
     color: '#DC2626', // Red / Emerald
     description: 'Voltage-gated cardiac/neuronal channels, monoamine catabolism, and release',
   }
 ]
+
+export const SHORT_SUBGROUP_MAP = {
+  'Second-Generation Antipsychotics (SGAs / Atypicals)': 'SGA',
+  'Third-Generation & Novel Muscarinic Antipsychotics': 'Third-Gen SGA',
+  'First-Generation Antipsychotics (FGAs / Typicals)': 'FGA',
+  'Selective Serotonin Reuptake Inhibitors (SSRIs)': 'SSRI',
+  'Serotonin-Norepinephrine Reuptake Inhibitors (SNRIs)': 'SNRI',
+  'Norepinephrine-Dopamine Reuptake Inhibitors (NDRIs)': 'NDRI',
+  'Multimodal Serotonergic Agents (SPARI / SMS)': 'SPARI / SMS',
+  'NDRI & Serotonin Antagonist / Reuptake Modulators': 'NDRI / Modulator',
+  'Serotonin Antagonist & Reuptake Inhibitors (SARIs)': 'SARI',
+  'Rapid-Acting Antidepressants (NMDA Antagonists & Neurosteroids)': 'NMDA Modulator',
+  'Melatonergic Antidepressants (MT1/MT2 & 5-HT2C)': 'Melatonergic',
+  'Lithium Carbonate & Salts': 'Lithium',
+  'Anticonvulsant Mood Stabilizers': 'Anticonvulsant',
+  'Atypical Antipsychotics in Bipolar Disorder': 'Bipolar SGA',
+  'Benzodiazepines (BZDs)': 'BZD',
+  'Non-Benzodiazepine Hypnotics (Z-Drugs)': 'Z-Drug',
+  'Dual Orexin Receptor Antagonists (DORAs)': 'DORA',
+  'Non-BZD Anxiolytics & Gabapentinoids': 'Non-BZD Anxiolytic',
+  'Central Nervous System Stimulants (MPH & AMPH)': 'CNS Stimulant',
+  'Non-Stimulant ADHD Therapeutics': 'Non-Stimulant ADHD',
+  'Wakefulness-Promoting Agents & Eugeroics': 'Eugeroic',
+  'Opioid Use Disorder Therapeutics (MAT)': 'OUD MAT',
+  'Acute Toxidrome & Overdose Resuscitation': 'Antidote',
+  'Alcohol Use Disorder Therapeutics': 'AUD Treatment',
+  'Nicotine Cessation Pharmacotherapies': 'Smoking Cessation',
+  'Centrally-Acting Anticholinergics & Pro-Dopaminergic': 'Anticholinergic',
+  'Beta-Adrenergic Blockers & Akathisia Interventions': 'Beta-Blocker',
+  'Catatonia, NMS & Tourette Specialists': 'Catatonia / Movement',
+  'VMAT2 Inhibitors (Tardive Dyskinesia)': 'VMAT2 Inhibitor',
+  'Rapid-Acting NMDA Modulators & Neurosteroids': 'Neurosteroid',
+  'Antiseizure Medications & SV2A / Channel Blockers': 'Antiseizure',
+  'Cholinesterase Inhibitors & NMDA Neuroprotection': 'AChE Inhibitor',
+  'Neurobehavioral & Headache Therapies': 'CGRP / Headache',
+  'Dopamine Agonists & Parkinsonian Therapies': 'Dopamine Agonist',
+  'Rapid Interventional Infusions & Ketamines': 'Ketamine / Infusion',
+  'ECT Anesthetic & Neuromuscular Agents': 'ECT / Anesthetic',
+  'Targeted Toxidrome Antidotes & Receptor Blockers': 'Antidote',
+  'Critical Care, Encephalopathy & Metabolic Rescue': 'Metabolic Rescue',
+  'Tricyclic Antidepressants (TCAs)': 'TCA',
+  'Monoamine Oxidase Inhibitors (MAOIs)': 'MAOI'
+}
+
+export const getShortSubgroup = (subgroup) => {
+  if (!subgroup) return ''
+  if (SHORT_SUBGROUP_MAP[subgroup]) return SHORT_SUBGROUP_MAP[subgroup]
+  const match = subgroup.match(/\(([^)]+)\)/)
+  if (match) return match[1].split('/')[0].trim()
+  return subgroup.length > 25 ? subgroup.slice(0, 22) + '...' : subgroup
+}
 
 export const categorizeReceptor = (recId) => {
   const u = (recId || '').toUpperCase()
