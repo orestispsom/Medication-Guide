@@ -1,19 +1,31 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import data from '../data.json'
-import FamilyCard from '../components/FamilyCard'
 import ReceptorNavModal from '../components/ReceptorNavModal'
 import { useTheme } from '../context/ThemeContext'
 
-const QUICK_CHIPS = [
-  { label: 'Clozapine Titration', query: 'Clozapine' },
-  { label: 'Lithium Level', query: 'Lithium' },
-  { label: 'Cobenfy (Dual Muscarinic)', query: 'Cobenfy' },
-  { label: 'Ashton BZD Taper', path: '/cross-titration/protocol-10-long-term-benzodiazepine-deprescribing-the-ashton-manual-paradigm' },
-  { label: 'MAOI Safe Washout', path: '/cross-titration/protocol-03-ssri-to-maoi-cross-titration' },
-  { label: 'Auvelity (NMDA)', query: 'Auvelity' },
-  { label: 'Cariprazine D3', query: 'Cariprazine' },
-  { label: 'Emergency Antidotes', path: '/family/antidotes-interventional' },
+const DRUG_FAMILIES = [
+  { id: 'antipsychotics', name: 'Antipsychotics', icon: '🧠', color: '#8E44AD', path: '/family/antipsychotics' },
+  { id: 'antidepressants', name: 'Antidepressants', icon: '💊', color: '#2563EB', path: '/family/antidepressants' },
+  { id: 'mood-stabilizers', name: 'Mood Stabilizers', icon: '⚖️', color: '#D97706', path: '/family/mood-stabilizers' },
+  { id: 'anxiolytics', name: 'Anxiolytics, Sedatives & Hypnotics', icon: '🌙', color: '#059669', path: '/family/anxiolytics' },
+  { id: 'adhd', name: 'ADHD, Wakefulness & Cognitive Enhancers', icon: '⚡', color: '#DC2626', path: '/family/adhd' },
+  { id: 'substance-use', name: 'SUD & Addiction Medicine', icon: '🛡️', color: '#0D9488', path: '/family/substance-use' },
+  { id: 'neuropsychiatry', name: 'Neuropsychiatry & Movement Disorders', icon: '🩺', color: '#7C3AED', path: '/family/neuropsychiatry' },
+  { id: 'neurology', name: 'Neurology Essentials for Psychiatry', icon: '🔬', color: '#4F46E5', path: '/family/neurology' },
+  { id: 'antidotes-interventional', name: 'Emergency Antidotes', icon: '🚨', color: '#E11D48', path: '/family/antidotes-interventional' },
+]
+
+const BEDSIDE_TOOLS = [
+  { id: 'cpz', name: 'CPZ Antipsychotic Equivalence', icon: '🎭', color: '#8B5CF6', tab: 'cpz' },
+  { id: 'lithium', name: 'Lithium 12h TDM & Cockcroft-Gault', icon: '🧪', color: '#0EA5E9', tab: 'lithium' },
+  { id: 'clozapine', name: 'Clozapine REMS ANC & Rechallenge', icon: '🩸', color: '#E11D48', tab: 'clozapine' },
+  { id: 'cyp', name: 'CYP450 Interaction Matrix', icon: '⚡', color: '#F59E0B', tab: 'cyp' },
+  { id: 'qtc', name: 'QTc Prolongation Risk Stacker', icon: '❤️', color: '#EF4444', tab: 'qtc' },
+  { id: 'bzd', name: 'Ashton Benzodiazepine Taper', icon: '⚖️', color: '#10B981', tab: 'bzd' },
+  { id: 'metabolic', name: 'Metabolic Monitoring Tracker', icon: '📊', color: '#06B6D4', tab: 'metabolic' },
+  { id: 'emergency', name: 'Emergency Toxicity Playbook', icon: '🚨', color: '#DC2626', tab: 'emergency' },
+  { id: 'renal', name: 'Renal & Hepatic Dose Adjuster', icon: '🩺', color: '#6366F1', tab: 'renal' },
 ]
 
 export default function HomeScreen() {
@@ -66,7 +78,7 @@ export default function HomeScreen() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-32">
-      {/* Top Header: Single Line per user directive */}
+      {/* Top Header */}
       <header className="flex items-center justify-between mb-5 pb-3 border-b border-slate-200/80 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center font-bold text-base shadow-xs">
@@ -76,9 +88,6 @@ export default function HomeScreen() {
             <h1 className="font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
               Psychiatric Medication App
             </h1>
-            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
-              12-Module Master Clinical Psychopharmacology Compendium
-            </p>
           </div>
         </div>
 
@@ -93,7 +102,7 @@ export default function HomeScreen() {
       </header>
 
       {/* Global Command Bar / Spotlight Search */}
-      <div className="relative mb-3">
+      <div className="relative mb-6">
         <div className="relative flex items-center bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800/90 shadow-[0_2px_8px_rgba(0,0,0,0.04)] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
           <svg
             className="w-5 h-5 text-slate-400 dark:text-slate-500 absolute left-4 pointer-events-none"
@@ -180,194 +189,177 @@ export default function HomeScreen() {
         )}
       </div>
 
-      {/* High-Yield Clinical Quick Prescribing Chips with mousewheel support */}
-      <div
-        onWheel={(e) => {
-          if (e.deltaY !== 0) {
-            e.currentTarget.scrollLeft += e.deltaY
-          }
-        }}
-        className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 mb-8"
-      >
-        <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap mr-1">
-          Quick Picks:
-        </span>
-        {QUICK_CHIPS.map(chip => (
-          <button
-            key={chip.label}
-            onClick={() => {
-              if (chip.path) {
-                navigate(chip.path)
-              } else if (chip.query) {
-                setSearchQuery(chip.query)
-              }
-            }}
-            className="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:text-blue-600 dark:hover:text-blue-400 shadow-2xs transition-all cursor-pointer"
-          >
-            {chip.label}
-          </button>
-        ))}
-      </div>
-
-      {/* 1. CLINICAL DOMAINS & DRUG FAMILIES FIRST */}
-      <div className="mb-10">
-        <div className="flex items-end justify-between mb-4">
-          <div>
-            <h2 className="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Clinical Domains & Drug Families
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              170+ monographs across 12 psychopharmacologic classes
-            </p>
-          </div>
+      {/* 1. CLINICAL DOMAINS & DRUG FAMILIES */}
+      <div className="mb-9">
+        <div className="flex items-center justify-between mb-3.5">
+          <h2 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Drug Families
+          </h2>
           <button
             onClick={() => navigate('/all-drugs')}
-            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap pb-0.5"
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap"
           >
-            View All 170+ →
+            View All A–Z →
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          {data.families.map(family => (
-            <FamilyCard key={family.id} family={family} />
+        <div className="flex flex-col gap-2.5">
+          {DRUG_FAMILIES.map(item => (
+            <button
+              key={item.id}
+              onClick={() => navigate(item.path)}
+              className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border transition-transform duration-200 group-hover:scale-105"
+                  style={{
+                    backgroundColor: `${item.color}14`,
+                    borderColor: `${item.color}28`,
+                  }}
+                >
+                  <span>{item.icon}</span>
+                </div>
+                <span className="font-display font-semibold text-[15px] sm:text-base text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                  {item.name}
+                </span>
+              </div>
+
+              <div className="flex items-center pl-2 flex-shrink-0">
+                <svg
+                  className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </button>
           ))}
 
-          {/* Last Box in Clinical Domains: Molecular Receptor Navigation */}
+          {/* Receptors & Targets bar in distinct color */}
           <button
-            onClick={() => setIsReceptorNavOpen(true)}
-            className="bg-white dark:bg-[#111827] rounded-2xl p-5 border-2 border-indigo-500/40 dark:border-indigo-500/50 shadow-[0_2px_10px_rgba(99,102,241,0.06)] hover:shadow-md hover:border-indigo-500 dark:hover:border-indigo-400 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between text-left group w-full cursor-pointer relative"
+            onClick={() => navigate('/receptors')}
+            className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-gradient-to-r from-indigo-50/90 via-purple-50/50 to-indigo-50/30 hover:from-indigo-100/90 hover:to-purple-100/60 dark:from-[#171633] dark:via-[#13172e] dark:to-[#111827] dark:hover:from-[#1f1d44] dark:hover:to-[#161a35] border-2 border-indigo-400/40 dark:border-indigo-500/40 hover:border-indigo-500 dark:hover:border-indigo-400 rounded-2xl shadow-[0_2px_8px_rgba(99,102,241,0.08)] hover:shadow-md hover:shadow-indigo-500/10 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
           >
-            <div>
-              {/* Top Row: Tinted Icon & Count Pill */}
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-xl border transition-transform group-hover:scale-105 duration-200 bg-indigo-500/10 dark:bg-indigo-500/20 border-indigo-500/30 text-indigo-600 dark:text-indigo-400"
-                >
-                  <span>🧬</span>
-                </div>
-
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80">
-                  44 Targets · 9 Families
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-indigo-500/15 dark:bg-indigo-500/25 border border-indigo-500/35 text-indigo-600 dark:text-indigo-400 transition-transform duration-200 group-hover:scale-105">
+                <span>🧬</span>
+              </div>
+              <div className="flex items-center gap-2 truncate">
+                <span className="font-display font-bold text-[15px] sm:text-base text-indigo-950 dark:text-indigo-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors truncate">
+                  Receptors & Targets
                 </span>
               </div>
+            </div>
 
-              {/* Title */}
-              <div className="flex items-center justify-between gap-2 mb-1.5">
-                <h3 className="font-display font-bold text-slate-900 dark:text-white text-lg group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                  Molecular Receptor Targets
-                </h3>
-                <span className="text-indigo-500 dark:text-indigo-400 group-hover:translate-x-0.5 transition-all text-sm font-bold flex-shrink-0">
-                  →
-                </span>
-              </div>
-
-              {/* Description */}
-              <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
-                Double-column navigator across 44 targets (5-HT, D, SERT, NET, M, H, GABA) with drug binding affinity rankings.
-              </p>
+            <div className="flex items-center pl-2 flex-shrink-0">
+              <svg
+                className="w-4 h-4 text-indigo-500 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-200 group-hover:translate-x-1 transition-all duration-200"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
+              </svg>
             </div>
           </button>
         </div>
       </div>
 
-      {/* 2. POINT-OF-CARE CLINICAL TOOLS */}
-      <div className="mb-10">
-        <div className="flex items-end justify-between mb-4">
-          <div>
-            <h2 className="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Point-of-Care Bedside Tools
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Calculators, therapeutic drug monitoring, and cross-titration engines
-            </p>
-          </div>
+      {/* 2. POINT-OF-CARE BEDSIDE TOOLS */}
+      <div className="mb-9">
+        <div className="flex items-center justify-between mb-3.5">
+          <h2 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Point-of-Care Bedside Tools
+          </h2>
           <button
             onClick={() => navigate('/tools')}
-            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap pb-0.5"
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer whitespace-nowrap"
           >
-            All 9 Tools →
+            Open Tools Hub →
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          {[
-            { id: 'cpz', name: 'CPZ Antipsychotic Equivalence', desc: 'Calculate chlorpromazine equivalents, cumulative D2 exposure, and switch targets.', icon: '🎭' },
-            { id: 'lithium', name: 'Lithium 12h TDM & Cockcroft-Gault', desc: 'Predict steady-state trough levels, dose adjustments, and eGFR safety clearance.', icon: '🧪' },
-            { id: 'clozapine', name: 'Clozapine REMS ANC & Rechallenge', desc: 'Neutropenia triage, ANC monitoring schedules, and benign ethnic neutropenia rules.', icon: '🩸' },
-            { id: 'cyp', name: 'CYP450 Interaction Matrix', desc: 'Screen 1A2, 2D6, 3A4, 2C19 inhibitors and inducers with dose-adjustment guidance.', icon: '⚡' },
-            { id: 'bzd', name: 'Ashton Benzodiazepine Taper', desc: 'Diazepam substitution and gradual 10%–25% stepped reduction timelines.', icon: '⚖️' },
-            { id: 'emergency', name: 'Emergency Toxicity Playbook', desc: 'Stepwise resuscitation orders for NMS, Serotonin Syndrome, and Catatonia.', icon: '🚨' },
-          ].map(tool => (
+        <div className="flex flex-col gap-2.5">
+          {BEDSIDE_TOOLS.map(tool => (
             <button
               key={tool.id}
-              onClick={() => navigate(`/tools?tab=${tool.id}`)}
-              className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all duration-200 text-left group cursor-pointer"
+              onClick={() => navigate(`/tools?tab=${tool.tab}`)}
+              className="w-full flex items-center justify-between px-4 py-3 sm:px-4.5 sm:py-3.5 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 group text-left cursor-pointer"
             >
-              <div className="flex items-center justify-between gap-2 mb-2.5">
-                <span className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center text-xl border border-slate-200/60 dark:border-slate-700/60">
-                  {tool.icon}
-                </span>
-                <span className="text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all text-sm font-bold">
-                  →
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0 border transition-transform duration-200 group-hover:scale-105"
+                  style={{
+                    backgroundColor: `${tool.color}14`,
+                    borderColor: `${tool.color}28`,
+                  }}
+                >
+                  <span>{tool.icon}</span>
+                </div>
+                <span className="font-display font-semibold text-[15px] sm:text-base text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                  {tool.name}
                 </span>
               </div>
 
-              <h3 className="font-display font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5">
-                {tool.name}
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
-                {tool.desc}
-              </p>
+              <div className="flex items-center pl-2 flex-shrink-0">
+                <svg
+                  className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </button>
           ))}
         </div>
       </div>
 
-      {/* 3. KEY CLINICAL REFERENCE DIRECTORIES */}
+      {/* 3. REFERENCE COMPENDIUM DIRECTORIES */}
       <div className="mb-6">
-        <h2 className="font-display text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
+        <h2 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
           Reference Compendium Directories
         </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-          Direct access to cross-cutting compendium directories and matrices
-        </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <button
             onClick={() => navigate('/all-drugs')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">📋</span>
-            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">A–Z Index</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">170+ Monographs</p>
+            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-2.5 border border-slate-200/60 dark:border-slate-700/60">📋</span>
+            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">A–Z Index</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">170+ Monographs</p>
           </button>
 
           <button
             onClick={() => navigate('/cross-titration')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">🔄</span>
-            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Titration</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">20 Protocols</p>
+            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-2.5 border border-slate-200/60 dark:border-slate-700/60">🔄</span>
+            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Titration</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">20 Protocols</p>
           </button>
 
           <button
-            onClick={() => setIsReceptorNavOpen(true)}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
+            onClick={() => navigate('/comparison')}
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-3 border border-slate-200/60 dark:border-slate-700/60">🧬</span>
-            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Receptors</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">44 Targets & Ki</p>
+            <span className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg mb-2.5 border border-slate-200/60 dark:border-slate-700/60">⚖️</span>
+            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Compare</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Drug Matrices</p>
           </button>
 
           <button
-            onClick={() => navigate('/family/antidotes-interventional')}
-            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-rose-300 dark:hover:border-rose-900/60 rounded-2xl p-4 sm:p-5 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
+            onClick={() => navigate('/receptors')}
+            className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800/90 hover:border-indigo-300 dark:hover:border-indigo-900/60 rounded-2xl p-4 text-left shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md hover:-translate-y-0.5 transition-all group cursor-pointer"
           >
-            <span className="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center text-lg mb-3 border border-rose-200/60 dark:border-rose-900/60">🚨</span>
-            <span className="font-display text-base font-bold text-slate-900 dark:text-white block group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Antidotes</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Emergency Guides</p>
+            <span className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-lg mb-2.5 border border-indigo-200/60 dark:border-indigo-900/60">🧬</span>
+            <span className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white block group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Receptors</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">44 Targets & Ki</p>
           </button>
         </div>
       </div>
