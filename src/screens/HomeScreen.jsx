@@ -227,10 +227,18 @@ export default function HomeScreen() {
               </div>
             </button>
           ))}
+        </div>
+      </div>
 
-          {/* Small vertical gap between last drug family and Receptors & Targets */}
-          <div className="pt-2 sm:pt-2.5"></div>
+      {/* 2. CLINICAL TOOLS */}
+      <div className="mb-9">
+        <div className="flex items-center justify-between mb-3.5">
+          <h2 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Clinical Tools
+          </h2>
+        </div>
 
+        <div className="flex flex-col gap-2.5">
           {/* Receptors & Targets bar in distinct color */}
           <button
             onClick={() => navigate('/receptors')}
