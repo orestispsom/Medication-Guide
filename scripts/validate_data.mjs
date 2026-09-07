@@ -45,7 +45,11 @@ const VALID_DOSE_ENDINGS = [
   'Lumryz', 'Extended-Release', 'Bipolar I', 'Bipolar Depression', 'Negative Symptoms',
   'Trigeminal Neuralgia', 'Seizures', 'Impulsivity', 'Essential Tremor',
   'Encephalopathy', 'Syndrome', 'Administration', 'Therapy', 'Disease',
-  'Tourette', 'Fibromyalgia', 'Pain', ')', '.'
+  'Tourette', 'Fibromyalgia', 'Pain', ')', '.',
+  'Max', 'Sublingual', 'IM', 'IV', 'Oral', 'Meals', 'Prophylaxis', 'Controlled',
+  'Absence', 'Binge Eating', 'Course', 'Adults', 'Anxiety', 'Hyperactivity',
+  'Epilepsy', 'Gold Standard', 'Propranolol', 'NMS', 'Pre-Drinking',
+  'Adherence', 'Titration', 'Parasitosis'
 ]
 
 const countChar = (str, ch) => (str.match(new RegExp(`\\${ch}`, 'g')) || []).length
@@ -66,9 +70,9 @@ for (const drug of drugs) {
         errors.push(`[A1] ${id}.${field}: unbalanced parentheses (${openParens} '(' vs ${closeParens} ')'): "${val}"`)
       }
 
-      // Trailing soft hyphen or hyphen indicating truncated word
-      if (/[\xad\-]\s*$/.test(trimmed) || /[\xad]/.test(trimmed)) {
-        errors.push(`[A1] ${id}.${field}: contains soft hyphen or trailing hyphen: "${val}"`)
+      // Trailing soft hyphen, hyphen, dangling & or :
+      if (/[\xad\-&:]\s*$/.test(trimmed) || /[\xad]/.test(trimmed)) {
+        errors.push(`[A1] ${id}.${field}: contains soft hyphen or dangling ending (&, :, -): "${val}"`)
       }
 
       // Abrupt bare number ending (e.g. "Off-label to 30")

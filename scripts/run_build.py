@@ -9,7 +9,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 from taxonomy import FAMILIES, SUBGROUPS
 from receptors import RECEPTORS
 from catalog import MONOGRAPH_ENTRIES
-from parsers import parse_monograph, parse_protocol
+from parsers import parse_monograph, parse_protocol, INN_MAP
 
 PDF_PATH = r'C:\Users\orest\OneDrive\Υπολογιστής\Master Psychopharm.pdf'
 OUTPUT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'data.json'))
@@ -38,11 +38,32 @@ for p1, p2, fam_id, fam_name, sgroup, sgroup_id in MONOGRAPH_ENTRIES:
         if drug['id'] in seen_ids:
             drug['id'] = f"{drug['id']}-{fam_id}"
         seen_ids.add(drug['id'])
+        drug['inn'] = INN_MAP.get(drug['id'], drug['inn'])
         parsed_drugs.append(drug)
     except Exception as e:
         print(f"Error parsing monograph at p.{p1}-{p2}: {e}")
 
 print(f"Successfully parsed {len(parsed_drugs)} drug monographs.")
+
+# Dose Guard & INN Validation before saving
+guard_errors = []
+for d in parsed_drugs:
+    did = d['id']
+    if not d.get('inn'):
+        guard_errors.append(f"{did}: missing INN")
+    for fld in ['targetDose', 'maxDose']:
+        val = d.get(fld)
+        if val and isinstance(val, str):
+            if val.count('(') != val.count(')'):
+                guard_errors.append(f"{did}.{fld}: unbalanced parentheses: '{val}'")
+            if val.strip().endswith(('-', '\xad')):
+                guard_errors.append(f"{did}.{fld}: trailing hyphen/soft-hyphen: '{val}'")
+
+if guard_errors:
+    print(f"CRITICAL: Dose Guard failed with {len(guard_errors)} errors:")
+    for ge in guard_errors:
+        print(f"  ❌ {ge}")
+    raise RuntimeError(f"Build aborted due to {len(guard_errors)} dose guard failures.")
 
 print("Parsing Module 12 Cross-Titration Protocols...")
 parsed_protocols = []

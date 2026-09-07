@@ -93,6 +93,301 @@ def extract_receptor_ids(raw_name):
     
     return list(dict.fromkeys(found))
 
+KNOWN_CARD_HEADERS = [
+    'OCCUPANCY', 'HALF-LIFE', 'METABOLISM', 'WINDOW', 'BIOAVAILABILITY',
+    'PROFILE', 'ELIMINATION', 'TRANSPORTER', 'SELECTIVITY', 'MECHANISM',
+    'BENCHMARK', 'TARGETS', 'PHARMACODYNAMICS', 'FIRST FDA', 'SPARI',
+    'NON-SEROTONERGIC', 'SLOW-WAVE', 'MOTOR', 'CARDIAC', 'BBB PENETRATION',
+    '14-HOUR', 'ABUSE', 'DUAL INDICATION', 'ULTRA-RAPID', 'HIGH RECEPTOR',
+    'CYP3A4 SENSITIVITY', 'TUBULAR', 'ANTI-SUICIDE', 'FOOD REQUIREMENT',
+    'RAPID BRAIN', 'PRODRUG', 'SL BIOAVAILABILITY', 'HIGH LIPOPHILICITY',
+    'SV2A', 'PRIMARY MECHANISM', 'MEAL RESTRICTION', 'ACTIVE METABOLITE',
+    'RECEPTOR BINDING', 'VISUAL SAFETY', 'ADVERSE EFFECT', 'STEP 1',
+    'ENDOCRINE PROFILE', 'HISTORIC BREAKTHROUGH', 'RAPID CLINICAL ONSET',
+    'METABOLIC BIO-SHIELD', 'SYSTEMIC EXPOSURE', 'SEIZURE THRESHOLD',
+    'EXTREME D2 POTENCY', 'FOOD ABSORPTION MANDATE', 'CONTINUOUS IV INFUSION',
+    'ZERO-ORDER', 'REVERSIBLE MAO-A', 'POTENT 5-HT2A BLOCKER', 'AMPK ACTIVATION',
+    'GUT-SELECTIVE', 'SELECTIVE AGONIST', '5-HT1B/1D AGONIST', 'CENTRAL D2 AGONISM',
+    'COMPETITIVE ANTAGONIST', 'OPIOID MODULATOR', 'TWO ACTIVE METABOLITES',
+    'CLOMIPRAMINE SERT', 'SLOW INACTIVATION', 'DEPOT ENGINE', 'SUBLINGUAL ROUTE',
+    'PLASMA STABILITY', 'EXTENDED HALF-LIFE', 'ZERO DIVERSION', 'RECEPTOR SIGNATURES',
+    'RECEPTOR PROFILES', 'ISOMER COMPOSITION', 'MICROTROL BEADS', 'HIGH EFFECT SIZE',
+    'PERIPHERAL LOAD', 'DENDRITIC STRENGTHENING', 'NON-SELECTIVE AGONIST',
+    'BEDTIME CALMING', 'RAPID ABSORPTION', '70% RENAL CLEARANCE', 'RAPID ONSET',
+    'RYANODEX FORMULATION', 'ENTERAL ONLY', 'LOW BIOAVAILABILITY', 'RAPID PARENTERAL',
+    'CLEAN CLEARANCE', 'SHORT DURATION', 'RAPID BIOAVAILABILITY', 'RENAL EXCRETION',
+    '14-DAY PROTOCOL', 'FATTY MEAL EFFECT', 'MULTI-TARGET MOA', 'DOPAMAX',
+    'BLACK BOX RASH', 'CLEAN PSYCH PROFILE', 'ALPHA-2-DELTA LIGAND', 'SATURABLE LAT1',
+    'VGCC AFFINITY', 'LINEAR ABSORPTION', 'BETA-1 & BETA-2', 'ESSENTIAL TREMOR',
+    '1,5-BENZODIAZEPINE', 'PERIPHERAL ACTION', 'EXTREME D2 AFFINITY', 'MITOCHONDRIAL SHUTTLE',
+    'RACEMIC MIXTURE', 'TERTIARY AMINE', 'PURE ANTAGONIST', 'COLONIC TRAPPING',
+    'MEMBRANE STABILIZER', 'TOPICAL SUBLINGUAL', 'ONSET OF ACTION', 'QUATERNARY AMMONIUM',
+    'DIRECT GLUCURONIDATION', 'FIRST SYNTHESIZED', 'pH-DEPENDENT', 'SUBUNIT SELECTIVE',
+    'BALANCED 6-HOUR', 'REVERSIBLE AChEI', 'BROAD SPECTRUM', 'AUTOINDUCTION',
+    'FDA PBA INDICATION', 'POTENCY SPECTRUM', 'BIPOLAR DEPRESSION', 'PRODRUG TO ACTIVE',
+    'BIPHASIC ACTION', 'THE HISTORICAL PROTOTYPE', 'THE CATIE BENCHMARK', 'FIXED DOSE',
+    'MANDATORY:'
+]
+
+def is_card_header(line, prev_has_open_paren=False):
+    if prev_has_open_paren:
+        return False
+    u = line.upper().strip()
+    for h in KNOWN_CARD_HEADERS:
+        if h in u:
+            return True
+    if line.strip().isupper() and 3 <= len(line.strip()) <= 35:
+        if not re.search(r'\b(MG|BID|TID|QID|QHS|QAM|OROS|XR|IR|PO|IV|PRN|LAI|TDM|MAX|MCG|DAILY)\b', u):
+            if not re.match(r'^\d+\s*[\-–]\s*\d+', line.strip()):
+                return True
+    return False
+
+DANGLING_ENDINGS = (
+    '&', ':', ',', '/', '-', '·', '•', '\xad',
+    'and', 'or', 'for', 'in', 'to', 'with', 'without', 'at', 'of', 'by', 'from',
+    'over', 'under', 'into', 'per', 'vs', 'up', 'max', 'target', 'heart', 'tbi',
+    'seizure', 'postherpetic', 'neuropathic', 'essential', 'ischemic', 'alternative',
+    'refractory', 'severe', 'inpatient', 'finite', 'evening', 'first-line', 'slow',
+    'mg/', 'mcg/', 'g/'
+)
+
+CONTINUATION_START = re.compile(r'^(mg|g|mcg|kg|mEq|mL|tabs?|caps?|tablets?|capsules?|drops?|days?|daily|hours?|hr|min|minutes?|weeks?|night|bedtime|meals?|bolus|infusion|administration|prophylaxis|disease|disorder|syndrome|epilepsy|seizures?|depression|mania|absence|anxiety|fibromyalgia|akathisia|hyperactivity|pain|alternative|oros|lumryz|controlled|sublingual|oral|ng|iv|im|sq|max|maintenance|course|treatment|extended-release)\b', re.I)
+
+def join_wrapped_lines(raw_lines):
+    if not raw_lines:
+        return []
+    joined = []
+    for line in raw_lines:
+        line = line.strip()
+        if not line:
+            continue
+        if not joined:
+            joined.append(line)
+            continue
+        prev = joined[-1]
+        needs_continuation = prev.count('(') > prev.count(')') or prev.count('[') > prev.count(']')
+        last_word = prev.rstrip().split()[-1].lower() if prev.rstrip().split() else ''
+        needs_continuation = needs_continuation or prev.rstrip().endswith(('&', ':', ',', '/', '-', '·', '•', '\xad'))
+        needs_continuation = needs_continuation or last_word in DANGLING_ENDINGS
+        needs_continuation = needs_continuation or line.startswith(('&', '/', ')', ']', '•', '·'))
+        needs_continuation = needs_continuation or line[0].islower()
+        needs_continuation = needs_continuation or bool(CONTINUATION_START.search(line))
+        needs_continuation = needs_continuation or bool(re.match(r'^\d+[\-–\d]*\s*(mg|g|mcg|kg)\b', line, re.I) and prev.rstrip().endswith(':'))
+
+        if needs_continuation:
+            if prev.rstrip().endswith('\xad') or (prev.rstrip().endswith('-') and not prev.rstrip().endswith(' -')):
+                joined[-1] = prev.rstrip()[:-1] + line
+            elif prev.rstrip().endswith('/'):
+                joined[-1] = prev.rstrip() + ' ' + line
+            else:
+                joined[-1] = prev.rstrip() + ' ' + line
+        else:
+            joined.append(line)
+    return joined
+
+INN_MAP = {
+    # SGAs / Atypicals
+    'clozapine': 'clozapine',
+    'olanzapine': 'olanzapine',
+    'risperidone': 'risperidone',
+    'paliperidone': 'paliperidone',
+    'quetiapine': 'quetiapine',
+    'quetiapine-mood-stabilizers': 'quetiapine',
+    'aripiprazole': 'aripiprazole',
+    'aripiprazole-mood-stabilizers': 'aripiprazole',
+    'cariprazine': 'cariprazine',
+    'cariprazine-mood-stabilizers': 'cariprazine',
+    'brexpiprazole': 'brexpiprazole',
+    'ziprasidone': 'ziprasidone',
+    'lurasidone': 'lurasidone',
+    'lurasidone-mood-stabilizers': 'lurasidone',
+    'lumateperone': 'lumateperone',
+    'lumateperone-mood-stabilizers': 'lumateperone',
+    'asenapine': 'asenapine',
+    'asenapine-mood-stabilizers': 'asenapine',
+    'amisulpride': 'amisulpride',
+    'cobenfy': 'xanomeline-trospium',
+    'pimavanserin': 'pimavanserin',
+    
+    # FGAs / Typicals
+    'haloperidol': 'haloperidol',
+    'chlorpromazine': 'chlorpromazine',
+    'fluphenazine': 'fluphenazine',
+    'perphenazine': 'perphenazine',
+    'specialty-fgas': 'specialty-fgas',
+    
+    # SSRIs
+    'fluoxetine': 'fluoxetine',
+    'sertraline': 'sertraline',
+    'escitalopram': 'escitalopram',
+    'paroxetine': 'paroxetine',
+    'fluvoxamine': 'fluvoxamine',
+    'citalopram': 'citalopram',
+    
+    # SNRIs & Multimodal
+    'venlafaxine': 'venlafaxine',
+    'duloxetine': 'duloxetine',
+    'duloxetine-neurology': 'duloxetine',
+    'desvenlafaxine-milnacipran': 'desvenlafaxine-milnacipran',
+    'bupropion': 'bupropion',
+    'bupropion-sr': 'bupropion',
+    'mirtazapine': 'mirtazapine',
+    'vortioxetine': 'vortioxetine',
+    'vilazodone': 'vilazodone',
+    'trazodone-nefazodone': 'trazodone-nefazodone',
+    'esketamine': 'esketamine',
+    'esketamine-antidotes-interventional': 'esketamine',
+    'auvelity': 'dextromethorphan-bupropion',
+    'zuranolone': 'zuranolone',
+    'zuranolone-antidepressants': 'zuranolone',
+    'agomelatine': 'agomelatine',
+    'tricyclic-antidepressants': 'tricyclic-antidepressants',
+    'maois-emsam-patch': 'selegiline',
+    
+    # Mood Stabilizers
+    'lithium': 'lithium',
+    'valproate': 'valproate',
+    'valproate-neurology': 'valproate',
+    'lamotrigine': 'lamotrigine',
+    'lamotrigine-neuropsychiatry': 'lamotrigine',
+    'lamotrigine-neurology': 'lamotrigine',
+    'carbamazepine': 'carbamazepine',
+    'carbamazepine-neurology': 'carbamazepine',
+    'oxcarbazepine': 'oxcarbazepine',
+    'oxcarbazepine-neuropsychiatry': 'oxcarbazepine',
+    'oxcarbazepine-neurology': 'oxcarbazepine',
+    'eslicarbazepine': 'eslicarbazepine',
+    'topiramate': 'topiramate',
+    'topiramate-substance-use': 'topiramate',
+    'topiramate-neurology': 'topiramate',
+    'gabapentin': 'gabapentin',
+    'gabapentin-neurology': 'gabapentin',
+    'pregabalin': 'pregabalin',
+    'pregabalin-neurology': 'pregabalin',
+    'ofc-symbyax': 'olanzapine-fluoxetine',
+    'levetiracetam': 'levetiracetam',
+    'levetiracetam-neuropsychiatry': 'levetiracetam',
+    'levetiracetam-neurology': 'levetiracetam',
+    'lacosamide': 'lacosamide',
+    'lacosamide-neurology': 'lacosamide',
+    'zonisamide': 'zonisamide',
+    'rational-combinations': 'rational-combinations',
+    
+    # Anxiolytics, Sedatives & Hypnotics
+    'diazepam': 'diazepam',
+    'lorazepam': 'lorazepam',
+    'lorazepam-neuropsychiatry': 'lorazepam',
+    'alprazolam': 'alprazolam',
+    'clonazepam': 'clonazepam',
+    'oxazepam': 'oxazepam',
+    'temazepam': 'temazepam',
+    'chlordiazepoxide': 'chlordiazepoxide',
+    'clorazepate': 'clorazepate',
+    'clobazam': 'clobazam',
+    'clobazam-neurology': 'clobazam',
+    'bromazepam': 'bromazepam',
+    'triazolam': 'triazolam',
+    'midazolam': 'midazolam',
+    'zolpidem': 'zolpidem',
+    'zolpidem-neuropsychiatry': 'zolpidem',
+    'eszopiclone-zopiclone': 'eszopiclone-zopiclone',
+    'zaleplon': 'zaleplon',
+    'daridorexant': 'daridorexant',
+    'lemborexant-suvorexant': 'lemborexant-suvorexant',
+    'ramelteon-tasimelteon': 'ramelteon-tasimelteon',
+    'buspirone': 'buspirone',
+    'hydroxyzine': 'hydroxyzine',
+    
+    # ADHD & Wakefulness
+    'methylphenidate-ir': 'methylphenidate',
+    'methylphenidate-er': 'methylphenidate',
+    'dexmethylphenidate': 'dexmethylphenidate',
+    'dextroamphetamine': 'dextroamphetamine',
+    'mixed-amphetamine-salts': 'mixed-amphetamine-salts',
+    'lisdexamfetamine': 'lisdexamfetamine',
+    'methamphetamine': 'methamphetamine',
+    'atomoxetine': 'atomoxetine',
+    'viloxazine-er': 'viloxazine',
+    'guanfacine-er': 'guanfacine',
+    'clonidine-er': 'clonidine',
+    'clonidine': 'clonidine',
+    'modafinil': 'modafinil',
+    'armodafinil': 'armodafinil',
+    'solriamfetol': 'solriamfetol',
+    'pitolisant': 'pitolisant',
+    'sodium-oxybate': 'sodium-oxybate',
+    'donepezil': 'donepezil',
+    
+    # Substance Use Disorders
+    'methadone': 'methadone',
+    'buprenorphine-naloxone': 'buprenorphine-naloxone',
+    'buprenorphine-depot': 'buprenorphine',
+    'naltrexone': 'naltrexone',
+    'naloxone': 'naloxone',
+    'naloxone-antidotes-interventional': 'naloxone',
+    'nalmefene': 'nalmefene',
+    'nalmefene-antidotes-interventional': 'nalmefene',
+    'lofexidine': 'lofexidine',
+    'disulfiram': 'disulfiram',
+    'acamprosate': 'acamprosate',
+    'baclofen': 'baclofen',
+    'varenicline': 'varenicline',
+    'nicotine-replacement': 'nicotine',
+    'dantrolene': 'dantrolene',
+    'dantrolene-antidotes-interventional': 'dantrolene',
+    'cyproheptadine': 'cyproheptadine',
+    'cyproheptadine-antidotes-interventional': 'cyproheptadine',
+    'bromocriptine': 'bromocriptine',
+    'bromocriptine-antidotes-interventional': 'bromocriptine',
+    'physostigmine': 'physostigmine',
+    'physostigmine-antidotes-interventional': 'physostigmine',
+    'phentolamine': 'phentolamine',
+    'hydroxocobalamin': 'hydroxocobalamin',
+    
+    # Neuropsychiatry & Movement Disorders
+    'biperiden': 'biperiden',
+    'trihexyphenidyl': 'trihexyphenidyl',
+    'benztropine': 'benztropine',
+    'diphenhydramine': 'diphenhydramine',
+    'amantadine': 'amantadine',
+    'valbenazine': 'valbenazine',
+    'deutetrabenazine': 'deutetrabenazine',
+    'tetrabenazine': 'tetrabenazine',
+    'propranolol': 'propranolol',
+    'propranolol-neurology': 'propranolol',
+    'metoprolol': 'metoprolol',
+    'pramipexole': 'pramipexole',
+    'ropinirole': 'ropinirole',
+    'primidone': 'primidone',
+    'primidone-neurology': 'primidone',
+    'pimozide': 'pimozide',
+    'brexanolone': 'brexanolone',
+    
+    # Neurology
+    'brivaracetam': 'brivaracetam',
+    'phenytoin': 'phenytoin',
+    'milnacipran': 'milnacipran',
+    'sumatriptan': 'sumatriptan',
+    'rimegepant': 'rimegepant',
+    'erenumab': 'erenumab',
+    'dextromethorphan-quinidine': 'dextromethorphan-quinidine',
+    
+    # Antidotes & Interventional
+    'dexmedetomidine': 'dexmedetomidine',
+    'methohexital': 'methohexital',
+    'succinylcholine': 'succinylcholine',
+    'glycopyrrolate': 'glycopyrrolate',
+    'cabergoline': 'cabergoline',
+    'levocarnitine': 'levocarnitine',
+    'metformin': 'metformin',
+    'ketamine-iv': 'ketamine',
+    'flumazenil': 'flumazenil',
+    'lactulose': 'lactulose',
+    'rifaximin': 'rifaximin',
+    'magnesium-sulfate': 'magnesium-sulfate',
+    'atropine-sublingual': 'atropine'
+}
+
 def parse_protocol(doc, p1, p2, index):
     t1 = doc[p1-1].get_text()
     t2 = doc[p2-1].get_text()
@@ -280,21 +575,89 @@ def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, 
             break
 
     target_dose = prev_drug.get('targetDose', '')
-    max_dose = prev_drug.get('maxDose', '')
-    for i, l in enumerate(lines1):
-        if 'TARGET' in l.upper() and ('DOSE' in l.upper() or 'RANGE' in l.upper() or 'WINDOW' in l.upper()):
-            if i+1 < len(lines1):
-                target_dose = lines1[i+1]
-            if i+2 < len(lines1) and any(kw in lines1[i+2].lower() for kw in ['max', 'ceiling', 'window', 'target', 'inpatient', 'bolus', 'range', 'divided']):
-                max_dose = lines1[i+2]
+    max_dose = prev_drug.get('maxDose', None)
+
+    TARGET_CONT_START = re.compile(r'^(min|minutes?|meals?|weekly|monthly|bolus|sion|utes|tid|bid|qid|qhs|qam|intranasal|sublingually?|daily|sq\)?|patch|tablets?|capsules?|infusion|\()\b', re.I)
+    TARGET_ENDS_WRAP = re.compile(r'\b(over|with|twice|once|infused|loading|slow|po|iv|im|sq|or|and|every|up to|\d+)\s*$', re.I)
+
+    MAX_DOSE_KEYWORDS = ['max', 'ceiling', 'approved:', 'therapeutic range', 'up to', 'divided into', 'divided bid', 'divided tid', 'divided qid', 'divided twice', 'acute mania', 'inpatient', 'target range', 'window', 'cap']
+
+    # Robust multi-line extraction of the TARGET DOSE benchmark card
+    for i, l in enumerate(lines1[:40]):
+        if ('TARGET' in l.upper() and ('DOSE' in l.upper() or 'RANGE' in l.upper() or 'WINDOW' in l.upper())) or 'TARGET DOSING:' in l.upper():
+            if 'TARGET DOSING:' in l.upper():
+                parts = l.split(':', 1)[-1].strip()
+                target_dose = parts
+                max_dose = None
+                break
+            raw_card = []
+            open_p = False
+            for j in range(i + 1, min(len(lines1), i + 8)):
+                if is_card_header(lines1[j], prev_has_open_paren=open_p):
+                    break
+                raw_card.append(lines1[j])
+                tot_text = ' '.join(raw_card)
+                open_p = tot_text.count('(') > tot_text.count(')')
+            joined = join_wrapped_lines(raw_card)
+            if joined:
+                if len(joined) > 1 and (TARGET_ENDS_WRAP.search(joined[0]) or TARGET_CONT_START.search(joined[1])) and not any(k in joined[1].lower() for k in ['max', 'ceiling', 'approved:', 'therapeutic range']):
+                    target_dose = joined[0] + ' ' + joined[1]
+                    rem_lines = joined[2:]
+                else:
+                    target_dose = joined[0]
+                    rem_lines = joined[1:]
+                
+                max_lines = []
+                for rl in rem_lines:
+                    if any(k in rl.lower() for k in MAX_DOSE_KEYWORDS):
+                        max_lines.append(rl)
+                if max_lines:
+                    max_dose = ' • '.join(max_lines)
+                else:
+                    max_dose = None
             break
 
+    # Robust extraction of ELIMINATION HALF-LIFE benchmark card
     half_life = prev_drug.get('halfLife', '')
-    for i, l in enumerate(lines1):
+    half_life_parent = prev_drug.get('halfLifeParent', None)
+    half_life_active = prev_drug.get('halfLifeActiveMetabolites', None)
+
+    for i, l in enumerate(lines1[:30]):
         if 'HALF-LIFE' in l.upper():
-            if i+1 < len(lines1):
-                half_life = lines1[i+1]
+            raw_hl = []
+            open_p = False
+            for j in range(i + 1, min(len(lines1), i + 8)):
+                if is_card_header(lines1[j], prev_has_open_paren=open_p):
+                    break
+                raw_hl.append(lines1[j])
+                tot_text = ' '.join(raw_hl)
+                open_p = tot_text.count('(') > tot_text.count(')')
+            joined_hl = join_wrapped_lines(raw_hl)
+            if joined_hl:
+                half_life = joined_hl[0]
             break
+
+    # Clinical split for drugs with parent / active metabolite distinction
+    if drug_id == 'cariprazine':
+        half_life = '2 to 4 days (active metabolite DDCAR: 1 to 3 weeks)'
+        half_life_parent = '2 to 4 days'
+        half_life_active = '1 to 3 weeks (DDCAR)'
+    elif drug_id == 'fluoxetine':
+        half_life = 'Parent: 2–4 d · Active: 7–15 d'
+        half_life_parent = '2 to 4 days'
+        half_life_active = '7 to 15 days (Norfluoxetine)'
+    elif drug_id == 'bupropion':
+        half_life = 'Parent: 14 h · Active: 20–37 h'
+        half_life_parent = '14 hours'
+        half_life_active = '20 to 37 hours (Hydroxybupropion)'
+    elif drug_id == 'venlafaxine':
+        half_life = 'Parent: 5 h · Active: 11 h'
+        half_life_parent = '5 hours'
+        half_life_active = '11 hours (O-desmethylvenlafaxine)'
+    elif drug_id == 'risperidone':
+        half_life = '20–24 Hours (Parent: 3h, Active 9-OH: 21h)'
+        half_life_parent = '3 hours'
+        half_life_active = '21 hours (9-hydroxy-risperidone / Paliperidone)'
 
     benchmarks = []
     bm_indices = []
@@ -473,17 +836,58 @@ def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, 
         'organImpairment': 'Adjust dose based on renal GFR and hepatic Child-Pugh classification.'
     })
 
-    cyp = prev_drug.get('cyp450', {
-        'substrate': [],
-        'inhibits': [],
-        'induces': []
-    })
+    # Clearance and CYP450 pathways from Master Compendium
+    if drug_id == 'ziprasidone':
+        cyp = {
+            'substrate': ['CYP3A4', 'Aldehyde Oxidase'],
+            'inhibits': [],
+            'induces': [],
+            'note': 'Aldehyde Oxidase (~66%), CYP3A4; low CYP-mediated drug interactions'
+        }
+    elif drug_id in ['lumateperone', 'lumateperone-mood-stabilizers']:
+        cyp = {
+            'substrate': ['CYP3A4', 'UGT'],
+            'inhibits': [],
+            'induces': [],
+            'note': 'CYP3A4 (Major), UGT; contraindicated with strong 3A4 inducers/inhibitors'
+        }
+    elif drug_id == 'amisulpride':
+        cyp = {
+            'substrate': [],
+            'inhibits': [],
+            'induces': [],
+            'note': 'Minimal hepatic CYP metabolism (<5%); ~70% excreted unchanged in urine; adjust for eGFR'
+        }
+    elif drug_id == 'paliperidone':
+        cyp = {
+            'substrate': [],
+            'inhibits': [],
+            'induces': [],
+            'note': 'Minimal hepatic CYP metabolism (non-CYP); 59% excreted unchanged in urine'
+        }
+    else:
+        existing_cyp = prev_drug.get('cyp450')
+        if existing_cyp and (existing_cyp.get('substrate') or existing_cyp.get('inhibits') or existing_cyp.get('induces') or existing_cyp.get('note')):
+            cyp = existing_cyp
+        else:
+            # Distinguish unrecorded from known negative: unrecorded is null, not an empty array
+            cyp = None
+
+    # Canonical International Nonproprietary Name (INN)
+    inn = INN_MAP.get(drug_id)
+    if not inn:
+        base = drug_id
+        for s in ['-mood-stabilizers', '-substance-use', '-neuropsychiatry', '-neurology', '-antidotes-interventional', '-antidepressants']:
+            if base.endswith(s):
+                base = base[:-len(s)]
+        inn = base
 
     indications = prev_drug.get('indications', [f"{family_name} indicated conditions"])
     off_label = prev_drug.get('offLabel', [])
 
     return {
         'id': drug_id,
+        'inn': inn,
         'name': name,
         'brand': brand,
         'family': family_name,
@@ -493,6 +897,8 @@ def parse_monograph(doc, p1, p2, family_id, family_name, subgroup, subgroup_id, 
         'targetDose': target_dose,
         'maxDose': max_dose,
         'halfLife': half_life,
+        'halfLifeParent': half_life_parent,
+        'halfLifeActiveMetabolites': half_life_active,
         'benchmarkMetrics': benchmarks,
         'receptors': receptors,
         'adverseFootprint': adverse_footprint,
