@@ -65,7 +65,7 @@ The budget is an editorial constraint, not a mandate to crowd pages. If readabil
 Stage 1A uses four working views:
 
 ### Page inventory
-One row per source page, recording module, page role, source type, topic, editorial unit, canonical chunk/destination, action, and proposed representation. This is the provenance/coverage layer.
+Every source page was classified by module, page role, source type, topic, editorial unit, canonical chunk/destination, action, and proposed representation. The source-page provenance is carried into the chunk files below as source page/range fields; detailed rewriting should continue to preserve these source ranges.
 
 ### Editorial units
 The primary Stage 1B+ work queue. Consecutive pages that represent one conceptual spread/monograph/protocol are grouped into one editorial unit. Rewriting should proceed from these units, not sequential PDF pages.
@@ -75,6 +75,19 @@ Repeated monograph headings are mapped to a single preferred home. Later appeara
 
 ### Cuts and merges queue
 Explicit list of standalone pages or units already judged to require deletion, merging, relocation, or a different representation.
+
+## Editorial-unit files
+
+- [`C1-foundations-units.md`](C1-foundations-units.md)
+- [`C2-antipsychotics-units.md`](C2-antipsychotics-units.md)
+- [`C3-antidepressants-units.md`](C3-antidepressants-units.md)
+- [`C4-bipolar-mood-stabilizers-units.md`](C4-bipolar-mood-stabilizers-units.md)
+- [`C5-anxiety-sleep-adhd-units.md`](C5-anxiety-sleep-adhd-units.md)
+- [`C6-sud-movement-catatonia-units.md`](C6-sud-movement-catatonia-units.md)
+- [`C7-special-populations-neuro-organ-units.md`](C7-special-populations-neuro-organ-units.md)
+- [`C8-switching-deprescribing-units.md`](C8-switching-deprescribing-units.md)
+
+Together these are the durable Stage 1A rewrite queue. They preserve the source page ranges and planned editorial disposition needed to resume the project from GitHub alone.
 
 ## Stage 1B entry condition
 
